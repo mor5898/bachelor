@@ -1,9 +1,9 @@
 import google.generativeai as genai
-import json
 import os
 from datasets import load_dataset
 import csv
 import re
+import time
 
 genai.configure(api_key="AIzaSyCRZ7NHAT23Ecth7A2AEC_M4fB1OqdbzNE ")
 
@@ -61,7 +61,7 @@ def generate_sql_queries():
     
     # Loop through each example in the validation set
     for idx, example in enumerate(dataset['validation']):
-        if idx >= 5:  # Stop after the first five examples
+        if idx >= 250:  # Stop after the first five examples
             break
         db_id = example['db_id']
         question = example['question']
@@ -86,9 +86,13 @@ def generate_sql_queries():
         print(f"Generated SQL Query: {generated_sql_query}")
         print(f"Gold SQL Query: {gold_sql_query}")
         print("-" * 40)
-    
+
+        save_results_to_csv(results)
+
+        time.sleep(15)
+
     # Persist results
-    save_results_to_csv(results)
+    #save_results_to_csv(results)
 
 if __name__ == "__main__":
     generate_sql_queries()
