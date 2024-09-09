@@ -39,12 +39,10 @@ def execute_sqlite_query(db_id, query):
         return None
     
     try:
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        cursor.execute(query)
-        results = cursor.fetchall()
-        conn.close()
-        return results
+        with sqlite3.connect(db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute(query)
+            return cursor.fetchall()
     except sqlite3.Error as e:
         print(f"SQLite error: {e}")
         return None
