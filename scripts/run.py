@@ -61,10 +61,21 @@ def execute_bigquery_query(query, project_id):
         return None
     
 def normalize_query(query):
-    # Remove SQL formatting blocks and normalize whitespace
     query = re.sub(r'```sql|```', '', query).strip()
     query = re.sub(r'\s+', ' ', query).lower().strip()
     return query
+
+def normalize_query_from_deep_seek(query):
+    sql_code_block = re.search(r'```sql(.*?)```', query, re.DOTALL)
+    
+    if sql_code_block:
+        sql_query = sql_code_block.group(1).strip()
+    else:
+        sql_query = ''
+    
+    sql_query = re.sub(r'\s+', ' ', sql_query).lower().strip()
+    
+    return sql_query
 
 def save_results_to_csv(results, base_filename, formatted_time): 
     file_path = f"{base_filename}_{formatted_time}.csv"
@@ -169,7 +180,7 @@ def generate_sql_queries(dataset_name, base_filename, prompt_templates, model, l
                     schema=schema, 
                     prompt_template=prompt_template))
             elif model == 'deepseek':
-                generated_sql_query = normalize_query(get_sql_query_from_ollama_deepSeek(
+                generated_sql_query = normalize_query_from_deep_seek(get_sql_query_from_ollama_deepSeek(
                     question=question, 
                     schema=schema, 
                     prompt_template=prompt_template))
@@ -200,7 +211,7 @@ def generate_sql_queries(dataset_name, base_filename, prompt_templates, model, l
                 base_filename=base_filename, 
                 formatted_time=formatted_time)
 
-            time.sleep(30)  # Sleep to avoid API rate limits; value can be adjusted
+           # time.sleep(30)  # Sleep to avoid API rate limits; value can be adjusted
         break    
 
 if __name__ == "__main__":
@@ -220,14 +231,14 @@ if __name__ == "__main__":
     #     limit=2
     # )    
 
-    # # For SPIDER dataset
-    # generate_sql_queries(
-    #     dataset_name='spider',
-    #     base_filename='GEMINI_generated_sql_queries_spider',
-    #     prompt_templates=prompt_schemas,
-    #     model='gemini',
-    #     limit=2
-    # )
+    # For SPIDER dataset
+    generate_sql_queries(
+        dataset_name='spider',
+        base_filename='GEMINI_generated_sql_queries_spider',
+        prompt_templates=prompt_schemas,
+        model='gemini',
+        limit=2
+    )
 
     generate_sql_queries(
         dataset_name='spider',
