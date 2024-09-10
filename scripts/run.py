@@ -8,12 +8,15 @@ from datetime import datetime
 import sqlite3
 from google.cloud import bigquery
 from langchain_community.llms.ollama import Ollama
+import requests
 
 # Big Query credentials for SPIDER2-lite
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./spider2-lite/credentials/bigquery_credential.json"
 
 # Configure the Gemini API key
 genai.configure(api_key="AIzaSyCRZ7NHAT23Ecth7A2AEC_M4fB1OqdbzNE ")
+
+HUGGING_FACE_API_URL = "https://api-inference.huggingface.co/models/google/flan-t5-base"
 
 # Model config
 generation_config = {
@@ -109,6 +112,19 @@ def get_sql_query_from_ollama_deepSeek(schema, question, prompt_template):
         return response
     except Exception as e:
         print(f"Error querying deepSeek: {e}")
+        return None
+    
+def get_sql_query_from_hugging_face_api(schema, question, prompt_template):
+    headers = {"Authorization": "Bearer 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"}
+    payload = {
+	    "inputs": "The answer to the universe is", 
+        "options": {"wait_for_model": True}
+    } # more parameters can be set here
+    try:
+        response = requests.post(HUGGING_FACE_API_URL, headers=headers, json=payload)
+        return response.json()
+    except Exception as e:
+        print(f"Error interacting with the Hugging Face API: {e}")
         return None
 
 # Factory for handling dataset-specific logic
@@ -211,7 +227,7 @@ def generate_sql_queries(dataset_name, base_filename, prompt_templates, model, l
                 base_filename=base_filename, 
                 formatted_time=formatted_time)
 
-           # time.sleep(30)  # Sleep to avoid API rate limits; value can be adjusted
+            time.sleep(30)  # Sleep to avoid API rate limits; value can be adjusted
         break    
 
 if __name__ == "__main__":
@@ -222,28 +238,29 @@ if __name__ == "__main__":
         """Generate an SQL query for the given database schema and the user's question. Schema:\n{schema}\n\nQuestion:\n{question}"""
     ]
 
-    # # For SPIDER2-lite dataset
+    # For SPIDER2-lite dataset and Gemini model
     # generate_sql_queries(
     #     dataset_name='spider2-lite',
     #     base_filename='GEMINI_generated_sql_queries_spider2-lite',
     #     prompt_templates=prompt_schemas,
     #     model='gemini',
-    #     limit=2
+    #     limit=5
     # )    
 
-    # For SPIDER dataset
+    # For SPIDER dataset and Gemini model
     generate_sql_queries(
         dataset_name='spider',
         base_filename='GEMINI_generated_sql_queries_spider',
         prompt_templates=prompt_schemas,
         model='gemini',
-        limit=2
+        limit=5
     )
 
+    # For SPIDER dataset and deepSeek-Coder-V2 model
     generate_sql_queries(
         dataset_name='spider',
         base_filename='DEEPSEEK-CODER_generated_sql_queries_spider',
         prompt_templates=prompt_schemas,
         model='deepseek',
-        limit=2
+        limit=5
     )
