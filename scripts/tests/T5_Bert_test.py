@@ -7,7 +7,6 @@ import time
 from datetime import datetime 
 import sqlite3
 from google.cloud import bigquery
-from langchain_community.llms.ollama import Ollama
 
 # Big Query credentials for SPIDER2-lite
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./spider2-lite/credentials/bigquery_credential.json"
@@ -89,16 +88,6 @@ def get_sql_query_from_gemini(question, schema, prompt_template):
         print(f"Error during query generation: {e}")
         return None
 
-def get_sql_query_from_ollama_deepSeek(schema, question, prompt_template):
-    ollama = Ollama(model="deepseek-coder-v2")
-    prompt = prompt_template.format(schema=schema, question=question)
-    try:
-        # Make the request using the Ollama wrapper
-        response = ollama.invoke(prompt)
-        return response
-    except Exception as e:
-        print(f"Error querying deepSeek: {e}")
-        return None
 
 # Factory for handling dataset-specific logic
 class DatasetFactory:
@@ -142,7 +131,7 @@ class DatasetFactory:
             return normalize_query(example['query'])
 
 # Main function to run SQL generation
-def generate_sql_queries(dataset_name, base_filename, prompt_templates, model, limit=5):
+def generate_sql_queries(dataset_name, base_filename, prompt_templates, limit=5):
     factory = DatasetFactory(dataset_name)
     results = []
     current_time = datetime.now()
@@ -162,17 +151,11 @@ def generate_sql_queries(dataset_name, base_filename, prompt_templates, model, l
             # Get the schema for the current database
             schema = factory.get_database_schema(db_id)
 
-            # Generate SQL query from model
-            if model == 'gemini':
-                generated_sql_query = normalize_query(get_sql_query_from_gemini(
-                    question=question, 
-                    schema=schema, 
-                    prompt_template=prompt_template))
-            elif model == 'deepseek':
-                generated_sql_query = normalize_query(get_sql_query_from_ollama_deepSeek(
-                    question=question, 
-                    schema=schema, 
-                    prompt_template=prompt_template))
+            # Generate SQL query from the Gemini API
+            generated_sql_query = normalize_query(get_sql_query_from_gemini(
+                question=question, 
+                schema=schema, 
+                prompt_template=prompt_template))
 
             if dataset_name == 'spider2-lite':
                 execution_result = execute_bigquery_query(generated_sql_query, project_id="vital-reef-433920-s5")
@@ -211,28 +194,18 @@ if __name__ == "__main__":
         """Generate an SQL query for the given database schema and the user's question. Schema:\n{schema}\n\nQuestion:\n{question}"""
     ]
 
-    # # For SPIDER2-lite dataset
-    # generate_sql_queries(
-    #     dataset_name='spider2-lite',
-    #     base_filename='GEMINI_generated_sql_queries_spider2-lite',
-    #     prompt_templates=prompt_schemas,
-    #     model='gemini',
-    #     limit=2
-    # )    
-
-    # # For SPIDER dataset
-    # generate_sql_queries(
-    #     dataset_name='spider',
-    #     base_filename='GEMINI_generated_sql_queries_spider',
-    #     prompt_templates=prompt_schemas,
-    #     model='gemini',
-    #     limit=2
-    # )
-
+    # For SPIDER2-lite dataset
     generate_sql_queries(
-        dataset_name='spider',
-        base_filename='DEEPSEEK-CODER_generated_sql_queries_spider',
+        dataset_name="spider2-lite",
+        base_filename='GEMINI_generated_sql_queries_spider2-lite',
         prompt_templates=prompt_schemas,
-        model='deepseek',
+        limit=2
+    )    
+
+    # For SPIDER dataset
+    generate_sql_queries(
+        dataset_name="spider",
+        base_filename='GEMINI_generated_sql_queries_spider',
+        prompt_templates=prompt_schemas,
         limit=2
     )
