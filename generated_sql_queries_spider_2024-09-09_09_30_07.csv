@@ -1,3 +1,0 @@
-db_id|question|generated_sql_query|gold_sql_query
-concert_singer|How many singers do we have?|select count(*) from singer;|select count(*) from singer
-concert_singer|What is the total number of singers?|select count(distinct singer_id) from singer;|select count(*) from singer

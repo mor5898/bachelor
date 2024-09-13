@@ -65,7 +65,7 @@ def execute_bigquery_query(query, project_id):
     
 def normalize_query(query):
     query = re.sub(r'```sql|```', '', query).strip()
-    query = re.sub(r'\s+', ' ', query).lower().strip()
+    query = re.sub(r'\s+', ' ', query).strip()
     return query
 
 def normalize_query_from_deep_seek(query):
@@ -161,12 +161,12 @@ class DatasetFactory:
             gold_query_file_path = f"./spider2-lite/evaluation_suite/gold/sql/{instance_id}.sql"
             if os.path.exists(gold_query_file_path):
                 with open(gold_query_file_path, 'r', encoding='utf-8') as gold_query_file:
-                    return normalize_query(gold_query_file.read())
+                    return gold_query_file.read()
             else:
                 print(f"Gold query not found for instance {instance_id}")
                 return None
         else:
-            return normalize_query(example['query'])
+            return example['query']
 
 # Main function to run SQL generation
 def generate_sql_queries(dataset_name, base_filename, prompt_templates, model, limit=5):
@@ -227,7 +227,7 @@ def generate_sql_queries(dataset_name, base_filename, prompt_templates, model, l
                 base_filename=base_filename, 
                 formatted_time=formatted_time)
 
-            time.sleep(30)  # Sleep to avoid API rate limits; value can be adjusted
+            #time.sleep(30)  # Sleep to avoid API rate limits; value can be adjusted
         break    
 
 if __name__ == "__main__":
