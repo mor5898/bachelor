@@ -10,7 +10,7 @@ genai.configure(api_key="AIzaSyCRZ7NHAT23Ecth7A2AEC_M4fB1OqdbzNE ")
 
 # Model config
 generation_config = {
-  "temperature": 1, # Controls randomness; low value -> deterministic; high value -> more creative
+  "temperature": 0, # Controls randomness; low value -> deterministic; high value -> more creative
   "top_p": 0.95, # Impements nucleus sampling
   "top_k": 64, # Tokens are taken from the top k most probable tokens -> K-Nearest Neighbour
   "max_output_tokens": 8192,
@@ -64,6 +64,8 @@ def create_eval_files(gen_query, gold_query, db_id, gen_file='gen.txt', gold_fil
 
 def get_sql_query_from_gemini(question, schema, prompt_template):
     prompt = prompt_template.format(schema=schema, question=question)
+    print(schema)
+    print(prompt)
     try:
         response = model.generate_content(prompt)
         #print(f"Raw API Response: {response}")
@@ -101,8 +103,13 @@ class DatasetFactory:
 
     def get_database_schema(self, db_id):
         schema_file_path = f"./spider/database/{db_id}/schema.sql"
-        
+        schema_file_path_alternative = f"./spider/database/{db_id}/schema.sql"
+
         if os.path.exists(schema_file_path):
+            with open(schema_file_path, 'r', encoding='utf-8') as schema_file:
+                schema = schema_file.read()
+            return schema
+        elif os.path.exists(schema_file_path_alternative):
             with open(schema_file_path, 'r', encoding='utf-8') as schema_file:
                 schema = schema_file.read()
             return schema
@@ -153,7 +160,6 @@ def generate_sql_queries(dataset_name, prompt_templates, model, limit=5):
             print(f"Question: {question}")
             print(f"Generated SQL Query: {generated_sql_query}")
             print(f"Gold SQL Query: {gold_sql_query}"),
-            print("-" * 40)
 
             create_eval_files(
                 gen_query=generated_sql_query,
@@ -163,7 +169,8 @@ def generate_sql_queries(dataset_name, prompt_templates, model, limit=5):
                 gold_file=base_filename_gold
             )
 
-            time.sleep(30)  # Sleep to avoid API rate limits; value can be adjusted
+            print("-" * 40)
+            time.sleep(20)  # Sleep to avoid API rate limits; value can be adjusted
         break    
 
 if __name__ == "__main__":
@@ -179,7 +186,7 @@ if __name__ == "__main__":
         dataset_name='spider',
         prompt_templates=prompt_schemas,
         model='gemini',
-        limit=30
+        limit=1034
     )
 
     # For SPIDER dataset and deepSeek-Coder-V2 model

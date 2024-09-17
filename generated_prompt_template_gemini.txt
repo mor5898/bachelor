@@ -1,5 +1,0 @@
-SELECT COUNT(DISTINCT Singer_ID) FROM singer;
-SELECT COUNT(DISTINCT Singer_ID) FROM singer;
-SELECT Name, Country, Age FROM singer ORDER BY Age DESC;
-SELECT Name, Country, Age FROM singer ORDER BY Age DESC;
-SELECT AVG(Age), MIN(Age), MAX(Age) FROM singer WHERE Country = 'France';
