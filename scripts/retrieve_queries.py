@@ -171,7 +171,7 @@ def generate_sql_queries(dataset_name, prompt_templates, model, limit=5):
             )
 
             print("-" * 40)
-            time.sleep(20)  # Sleep to avoid API rate limits; value can be adjusted
+            #time.sleep(20)  # Sleep to avoid API rate limits; value can be adjusted
         break    
 
 if __name__ == "__main__":
@@ -179,21 +179,21 @@ if __name__ == "__main__":
 #        "Translate the following question into an SQL query:\nSchema: {schema}\nQuestion: {question}",
 #        "Please generate an SQL query based on this schema: {schema}, and the question: {question}",
 #        """Create a valid SQL query for the given schema and question:\n\nSchema:\n{schema}\n\nQuestion:\n{question}""",
-        ["example_prompt_key", """Generate an SQL query for the given database schema and the user's question. Schema:\n{schema}\n\nQuestion:\n{question}"""]
+        ["example_prompt_key", """/* Given the following database schema : */\n{schema}\n\n/* Answer the following :\n{question}*/"""]
     ]  
 
     # For SPIDER dataset and Gemini model
-    generate_sql_queries(
-        dataset_name='spider',
-        prompt_templates=prompt_schemas,
-        model='gemini',
-        limit=1034
-    )
-
-    # For SPIDER dataset and deepSeek-Coder-V2 model
     # generate_sql_queries(
     #     dataset_name='spider',
     #     prompt_templates=prompt_schemas,
-    #     model='deepseek',
-    #     limit=5
+    #     model='gemini',
+    #     limit=1034
     # )
+
+    # For SPIDER dataset and deepSeek-Coder-V2 model
+    generate_sql_queries(
+        dataset_name='spider',
+        prompt_templates=prompt_schemas,
+        model='deepseek',
+        limit=1034
+    )
