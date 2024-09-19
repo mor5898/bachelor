@@ -4,6 +4,7 @@ from datasets import load_dataset
 import re
 from langchain_community.llms.ollama import Ollama
 import time
+import json
 
 # Configure the Gemini API key
 genai.configure(api_key="AIzaSyCRZ7NHAT23Ecth7A2AEC_M4fB1OqdbzNE ")
@@ -128,13 +129,15 @@ def generate_sql_queries(dataset_name, prompt_templates, model, limit=5):
     factory = DatasetFactory(dataset_name)
 
     # Loop through different prompts
-    for prompt_key, prompt_template in prompt_templates:    
+    for prompt_key, prompt_template in prompt_templates.items(): 
+        # if prompt_key != "prompt_2":  
+        #     continue   
         base_filename_gen = f'generated_{prompt_key}_{model}.txt'
         base_filename_gold = f'gold_{prompt_key}_{model}.txt'
         # Loop through the dataset examples
         for idx, example in enumerate(factory.dataset):
-            if idx < 444:  
-                continue
+            # if idx < 134:  
+            #     continue
             if idx >= limit:
                 break
             
@@ -175,12 +178,8 @@ def generate_sql_queries(dataset_name, prompt_templates, model, limit=5):
         break    
 
 if __name__ == "__main__":
-    prompt_schemas = [
-#        "Translate the following question into an SQL query:\nSchema: {schema}\nQuestion: {question}",
-#        "Please generate an SQL query based on this schema: {schema}, and the question: {question}",
-#        """Create a valid SQL query for the given schema and question:\n\nSchema:\n{schema}\n\nQuestion:\n{question}""",
-        ["example_prompt_key", """/* Given the following database schema : */\n{schema}\n\n/* Answer the following :\n{question}*/"""]
-    ]  
+    with open('prompts.json', 'r') as f:
+        prompt_schemas = json.load(f)
 
     # For SPIDER dataset and Gemini model
     # generate_sql_queries(

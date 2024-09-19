@@ -1,0 +1,4 @@
+{
+    "prompt_1": "Translate the following question into an SQL query:\nSchema: {schema}\nQuestion: {question}",
+    "prompt_2": "/* Given the following database schema : */\n{schema}\n\n/* Answer the following :\n{question}*/"
+}
