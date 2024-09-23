@@ -1,7 +1,7 @@
                      easy                 medium               hard                 extra                all
 count                107                  192                  74                   70                   443
 =====================   EXECUTION ACCURACY     =====================
-execution            0.701                0.573                0.270                0.229                0.499
+execution            0.916                0.823                0.730                0.614                0.797
 
 ====================== EXACT MATCHING ACCURACY =====================
 exact match          0.692                0.443                0.149                0.057                0.393
@@ -39,7 +39,6 @@ order                1.000                0.651                0.308            
 and/or               1.000                0.987                0.972                0.915                0.977
 IUEN                 1.000                1.000                0.417                0.353                0.381
 keywords             0.821                0.715                0.485                0.383                0.643
-
-prompt = "Generate an SQL query for the given database schema and the user's question. Schema:\n{schema}\n\nQuestion:\n{question}"
+--------------------------------------------------------------------------------------------------------------
+prompt = "/* Given the following database schema : */\n{schema}\n\n/* Answer the following :\n{question}*/"
 model = gemini-1.5-flash (Temperature = 0)
-eval_err_num = 159
