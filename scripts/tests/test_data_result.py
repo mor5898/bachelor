@@ -38,14 +38,14 @@ def execute_bigquery_query(db_id, query, project_id):
 
 # Testing execution function
 if __name__ == "__main__":
-    spider_db_id = "student_transcripts_tracking"  
-    spider_query = "SELECT MIN(transcript_date), transcript_id, other_details FROM Transcripts WHERE transcript_date IS NOT NULL;"
+    spider_db_id = "museum_visit"  
+    spider_query = "SELECT count(*) FROM museum WHERE open_year  >  2013 OR open_year  <  2008;"
     sqlite_results = execute_sqlite_query(spider_db_id, spider_query)
     if sqlite_results:
         print("SQLite Results:", sqlite_results)
     else:
         print("ERROR!!!!!!!!!!!!!!!!!!!!!!")
-
+    # SELECT COUNT(Museum_ID) FROM museum WHERE CAST(SUBSTR(Open_Year, 1, 4) AS INTEGER) > 2013 OR CAST(SUBSTR(Open_Year, 1, 4) AS INTEGER) < 2008;
     # #Test BigQuery query execution for SPIDER2-lite dataset
     # spider2lite_db_id = "bigquery-public-data"  
     # spider2lite_query = """

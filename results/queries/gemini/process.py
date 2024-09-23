@@ -35,8 +35,7 @@ def process_sql_file(input_file, output_file):
             outfile.write(processed_query + '\n')
 
 if __name__ == '__main__':
-    input_file = 'results/queries/deepseek/generated_prompt_2_deepseek_18_09_n1034_temp_1.txt'
+    input_file = 'results/queries/gemini/test.txt'
     output_file = 'processed_sql_queries.txt'
     
-    # Process the file
     process_sql_file(input_file, output_file)
