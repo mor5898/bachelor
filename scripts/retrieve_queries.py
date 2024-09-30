@@ -7,7 +7,7 @@ import time
 import json
 
 # Configure the Gemini API key
-genai.configure(api_key="AIzaSyCRZ7NHAT23Ecth7A2AEC_M4fB1OqdbzNE ")
+genai.configure(api_key="AIzaSyCpD91ZQhn_GKxWlhK8sUqGq3Op3utpa1Y")
 
 # Model config
 generation_config = {
@@ -136,8 +136,8 @@ def generate_sql_queries(dataset_name, prompt_templates, model, limit=5):
         base_filename_gold = f'gold_{prompt_key}_{model}.txt'
         # Loop through the dataset examples
         for idx, example in enumerate(factory.dataset):
-            # if idx < 134:  
-            #     continue
+            if idx < 445:  
+                continue
             if idx >= limit:
                 break
             
@@ -174,7 +174,7 @@ def generate_sql_queries(dataset_name, prompt_templates, model, limit=5):
             )
 
             print("-" * 40)
-            #time.sleep(20)  # Sleep to avoid API rate limits; value can be adjusted
+            time.sleep(30)  # Sleep to avoid API rate limits; value can be adjusted
         break    
 
 if __name__ == "__main__":
@@ -182,17 +182,17 @@ if __name__ == "__main__":
         prompt_schemas = json.load(f)
 
     # For SPIDER dataset and Gemini model
-    # generate_sql_queries(
-    #     dataset_name='spider',
-    #     prompt_templates=prompt_schemas,
-    #     model='gemini',
-    #     limit=1034
-    # )
-
-    # For SPIDER dataset and deepSeek-Coder-V2 model
     generate_sql_queries(
         dataset_name='spider',
         prompt_templates=prompt_schemas,
-        model='deepseek',
+        model='gemini',
         limit=1034
     )
+
+    # For SPIDER dataset and deepSeek-Coder-V2 model
+    # generate_sql_queries(
+    #     dataset_name='spider',
+    #     prompt_templates=prompt_schemas,
+    #     model='deepseek',
+    #     limit=1034
+    # )
