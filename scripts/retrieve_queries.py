@@ -30,7 +30,7 @@ def normalize_query(query):
     query = re.sub(r'\s+', ' ', query).strip()
     return query
 
-def normalize_query_from_deep_seek(query):
+def normalize_query_from_llama(query):
     sql_code_block = re.search(r'```sql(.*?)```', query, re.DOTALL)
     
     if sql_code_block:
@@ -78,15 +78,15 @@ def get_sql_query_from_gemini(question, schema, prompt_template):
         print(f"Error during query generation: {e}")
         return None
 
-def get_sql_query_from_ollama_deepSeek(schema, question, prompt_template):
-    ollama = Ollama(model="deepseek-coder-v2")
+def get_sql_query_from_ollama_llama(schema, question, prompt_template):
+    ollama = Ollama(model="llama3.1")
     prompt = prompt_template.format(schema=schema, question=question)
     try:
         # Make the request using the Ollama wrapper
         response = ollama.invoke(prompt)
         return response
     except Exception as e:
-        print(f"Error querying deepSeek: {e}")
+        print(f"Error querying llama: {e}")
         return None
     
 # Factory for handling dataset-specific logic
@@ -154,8 +154,8 @@ def generate_sql_queries(dataset_name, prompt_templates, model, limit=5):
                     question=question, 
                     schema=schema, 
                     prompt_template=prompt_template))
-            elif model == 'deepseek':
-                generated_sql_query = normalize_query_from_deep_seek(get_sql_query_from_ollama_deepSeek(
+            elif model == 'llama':
+                generated_sql_query = normalize_query_from_llama(get_sql_query_from_ollama_llama(
                     question=question, 
                     schema=schema, 
                     prompt_template=prompt_template))
@@ -189,10 +189,10 @@ if __name__ == "__main__":
         limit=1034
     )
 
-    # For SPIDER dataset and deepSeek-Coder-V2 model
+    # For SPIDER dataset and llama model
     # generate_sql_queries(
     #     dataset_name='spider',
     #     prompt_templates=prompt_schemas,
-    #     model='deepseek',
+    #     model='llama',
     #     limit=1034
     # )
