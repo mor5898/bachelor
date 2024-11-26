@@ -65,10 +65,11 @@ def create_eval_files(gen_query, gold_query, db_id, gen_file='gen.txt', gold_fil
 
 def get_sql_query_from_gemini(question, schema, prompt_template):
     prompt = prompt_template.format(schema=schema, question=question)
+    print(prompt)
     try:
         response = model.generate_content(prompt)
         #print(f"Raw API Response: {response}")
-        print(response)
+        #print(response)
         if response and hasattr(response, 'text'):
             return response.text
         else:
@@ -81,8 +82,9 @@ def get_sql_query_from_gemini(question, schema, prompt_template):
 def get_sql_query_from_ollama_llama(schema, question, prompt_template):
     ollama = Ollama(model="llama3.1")
     prompt = prompt_template.format(schema=schema, question=question)
+    print(prompt)
     try:
-        # Make the request using the Ollama wrapper
+        # Make the request ursing the Ollama wrapper
         response = ollama.invoke(prompt)
         return response
     except Exception as e:
@@ -101,6 +103,17 @@ class DatasetFactory:
         else:
             raise ValueError(f"Unknown dataset: {self.dataset_name}")
 
+    def remove_insert_statements(self, schema):
+        insert_pattern = re.compile(r'INSERT\s+INTO\s+.*?;', re.IGNORECASE | re.DOTALL)
+
+        # Removes INSERT INTO Statements
+        cleaned_content = re.sub(insert_pattern, '', schema)
+
+        # Optional
+        cleaned_content = re.sub(r'\n\s*\n', '\n\n', cleaned_content)
+
+        return cleaned_content
+    
     def get_database_schema(self, db_id):
         schema_file_path = f"./spider/database/{db_id}/schema.sql"
         schema_file_path_alternative = f"./spider/database/{db_id}/{db_id}.sql"
@@ -108,11 +121,13 @@ class DatasetFactory:
         if os.path.exists(schema_file_path):
             with open(schema_file_path, 'r', encoding='utf-8') as schema_file:
                 schema = schema_file.read()
-            return schema
+                cleaned_schema = self.remove_insert_statements(schema=schema)
+            return cleaned_schema
         elif os.path.exists(schema_file_path_alternative):
             with open(schema_file_path_alternative, 'r', encoding='utf-8') as schema_file:
                 schema = schema_file.read()
-            return schema
+                cleaned_schema = self.remove_insert_statements(schema=schema)
+            return cleaned_schema
         else:
             print(f"Schema file not found for database {db_id}")
             return None
@@ -127,27 +142,26 @@ class DatasetFactory:
 # Main function to run SQL generation
 def generate_sql_queries(dataset_name, prompt_templates, model, limit=5):
     factory = DatasetFactory(dataset_name)
-
+    
     # Loop through different prompts
     for prompt_key, prompt_template in prompt_templates.items(): 
         # if prompt_key != "prompt_2":  
-        #     continue   
+        #     continue    
         base_filename_gen = f'generated_{prompt_key}_{model}.txt'
         base_filename_gold = f'gold_{prompt_key}_{model}.txt'
         # Loop through the dataset examples
         for idx, example in enumerate(factory.dataset):
-            if idx < 445:  
-                continue
-            if idx >= limit:
+            # if idx < 445:  
+            #     continue
+            if idx > limit:
                 break
             
             db_id = example['db_id']
             question = example['question']
             gold_sql_query = factory.get_gold_query_for_instance(example)
-
             # Get the schema for the current database
             schema = factory.get_database_schema(db_id)
-
+            
             # Generate SQL query from model
             if model == 'gemini':
                 generated_sql_query = normalize_query(get_sql_query_from_gemini(
@@ -164,6 +178,7 @@ def generate_sql_queries(dataset_name, prompt_templates, model, limit=5):
             print(f"Question: {question}")
             print(f"Generated SQL Query: {generated_sql_query}")
             print(f"Gold SQL Query: {gold_sql_query}"),
+            print(f"N = {idx}")
 
             create_eval_files(
                 gen_query=generated_sql_query,
@@ -180,13 +195,13 @@ def generate_sql_queries(dataset_name, prompt_templates, model, limit=5):
 if __name__ == "__main__":
     with open('prompts.json', 'r') as f:
         prompt_schemas = json.load(f)
-
+    
     # For SPIDER dataset and Gemini model
     generate_sql_queries(
         dataset_name='spider',
         prompt_templates=prompt_schemas,
         model='gemini',
-        limit=1034
+        limit=1
     )
 
     # For SPIDER dataset and llama model
@@ -194,5 +209,9 @@ if __name__ == "__main__":
     #     dataset_name='spider',
     #     prompt_templates=prompt_schemas,
     #     model='llama',
-    #     limit=1034
+    #     limit=1
     # )
+
+
+
+    # "prompt_2": "/* Given the following database schema : */\n{schema}\n\n/* Answer the following :\n{question}*/"
