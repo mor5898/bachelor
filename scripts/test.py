@@ -1,40 +1,45 @@
-# import re
-# import os
+import sqlite3
+import os
 
-# def remove_insert_statements(input_file_path):
-#     """
-#     Entfernt alle INSERT INTO Statements aus einer .sql Datei und speichert das Ergebnis in einer neuen Datei.
+def get_sqlite_schema(db_file_path):
+    if not os.path.isfile(db_file_path):
+        raise FileNotFoundError(f"Die SQLite-Datei wurde nicht gefunden: {db_file_path}")
 
-#     Parameters:
-#     - input_file_path (str): Der Pfad zur ursprünglichen .sql Datei.
-#     - output_file_path (str): Der Pfad zur bereinigten .sql Datei ohne INSERT INTO Statements.
+    conn = sqlite3.connect(db_file_path)
+    cursor = conn.cursor()
 
-#     Returns:
-#     - None
-#     """
+    cursor.execute("SELECT sql FROM sqlite_master WHERE type IN ('table', 'index', 'trigger', 'view') AND sql NOT NULL;")
+    schema_items = cursor.fetchall()
 
-#     # Überprüfe, ob die Eingabedatei existiert
-#     if not os.path.isfile(input_file_path):
-#         raise FileNotFoundError(f"Die Eingabedatei wurde nicht gefunden: {input_file_path}")
+    conn.close()
 
-#     # Lese den Inhalt der Eingabedatei
-#     with open(input_file_path, 'r', encoding='utf-8') as file:
-#         content = file.read()
+    schema = "\n\n".join(item[0] for item in schema_items)
+    return schema
 
-#     # Definiere das Muster für INSERT INTO Statements
-#     # Dieses Muster sucht nach 'INSERT INTO', gefolgt von beliebigen Zeichen bis zum nächsten Semikolon
-#     insert_pattern = re.compile(r'INSERT\s+INTO\s+.*?;', re.IGNORECASE | re.DOTALL)
+def remove_insert_statements(schema):
+    import re
 
-#     # Entferne alle INSERT INTO Statements
-#     cleaned_content = re.sub(insert_pattern, '', content)
+    insert_pattern = re.compile(r'INSERT\s+INTO\s+.*?;', re.IGNORECASE | re.DOTALL)
 
-#     # Optional: Entferne überschüssige Leerzeilen, die durch das Entfernen entstehen könnten
-#     cleaned_content = re.sub(r'\n\s*\n', '\n\n', cleaned_content)
+    cleaned_content = re.sub(insert_pattern, '', schema)
 
-#     return cleaned_content
+    cleaned_content = re.sub(r'\n\s*\n', '\n\n', cleaned_content)
 
-# if __name__ == "__main__":
-#     remove_insert_statements("./spider/database/singer/schema.sql", "test.sql")
-import nltk
+    return cleaned_content
 
-nltk.download('punkt_tab')
+if __name__ == "__main__":
+    sqlite_file = 'spider/database/voter_1/voter_1.sqlite'
+
+    try:
+        schema = get_sqlite_schema(sqlite_file)
+        print("Originales Schema:")
+        print(schema)
+
+        cleaned_schema = remove_insert_statements(schema)
+        print("\nBereinigtes Schema (ohne INSERT INTO Statements):")
+        print(cleaned_schema)
+
+    except FileNotFoundError as e:
+        print(e)
+    except sqlite3.Error as e:
+        print(f"SQLite-Fehler: {e}")

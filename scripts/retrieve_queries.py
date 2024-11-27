@@ -5,6 +5,7 @@ import re
 from langchain_community.llms.ollama import Ollama
 import time
 import json
+import sqlite3
 
 # Configure the Gemini API key
 genai.configure(api_key="AIzaSyCpD91ZQhn_GKxWlhK8sUqGq3Op3utpa1Y")
@@ -20,7 +21,7 @@ generation_config = {
 
 # Define Gemini model 
 model = genai.GenerativeModel(
-    model_name='gemini-1.5-flash',
+    model_name='gemini-1.5-pro',
     generation_config=generation_config
     # Safety settings could be set here
 )
@@ -71,10 +72,11 @@ def get_sql_query_from_gemini(question, schema, prompt_template):
         #print(f"Raw API Response: {response}")
         #print(response)
         if response and hasattr(response, 'text'):
+            print(response.text)
             return response.text
         else:
             print("No text content returned from API.")
-            return None
+            return ''
     except Exception as e:
         print(f"Error during query generation: {e}")
         return None
@@ -117,6 +119,7 @@ class DatasetFactory:
     def get_database_schema(self, db_id):
         schema_file_path = f"./spider/database/{db_id}/schema.sql"
         schema_file_path_alternative = f"./spider/database/{db_id}/{db_id}.sql"
+        sqlite_file_path = f"./spider/database/{db_id}/{db_id}.sqlite"
 
         if os.path.exists(schema_file_path):
             with open(schema_file_path, 'r', encoding='utf-8') as schema_file:
@@ -127,6 +130,18 @@ class DatasetFactory:
             with open(schema_file_path_alternative, 'r', encoding='utf-8') as schema_file:
                 schema = schema_file.read()
                 cleaned_schema = self.remove_insert_statements(schema=schema)
+            return cleaned_schema
+        elif os.path.exists(sqlite_file_path):
+            conn = sqlite3.connect(sqlite_file_path)
+            cursor = conn.cursor()
+
+            cursor.execute("SELECT sql FROM sqlite_master WHERE type IN ('table', 'index', 'trigger', 'view') AND sql NOT NULL;")
+            schema_items = cursor.fetchall()
+
+            conn.close()
+
+            schema = "\n\n".join(item[0] for item in schema_items)
+            cleaned_schema = self.remove_insert_statements(schema=schema)
             return cleaned_schema
         else:
             print(f"Schema file not found for database {db_id}")
@@ -151,7 +166,7 @@ def generate_sql_queries(dataset_name, prompt_templates, model, limit=5):
         base_filename_gold = f'gold_{prompt_key}_{model}.txt'
         # Loop through the dataset examples
         for idx, example in enumerate(factory.dataset):
-            # if idx < 445:  # last = idx = 1033
+            # if idx < 748:  # last = idx = 1033
             #     continue
             if idx > limit:
                 break
@@ -160,7 +175,7 @@ def generate_sql_queries(dataset_name, prompt_templates, model, limit=5):
             question = example['question']
             gold_sql_query = factory.get_gold_query_for_instance(example)
             # Get the schema for the current database
-            schema = factory.get_database_schema(db_id)
+            schema = factory.get_database_schema(db_id) 
             
             # Generate SQL query from model
             if model == 'gemini':
