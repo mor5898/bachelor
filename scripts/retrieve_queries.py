@@ -151,7 +151,7 @@ def generate_sql_queries(dataset_name, prompt_templates, model, limit=5):
         base_filename_gold = f'gold_{prompt_key}_{model}.txt'
         # Loop through the dataset examples
         for idx, example in enumerate(factory.dataset):
-            # if idx < 445:  
+            # if idx < 445:  # last = idx = 1033
             #     continue
             if idx > limit:
                 break
@@ -201,7 +201,7 @@ if __name__ == "__main__":
         dataset_name='spider',
         prompt_templates=prompt_schemas,
         model='gemini',
-        limit=1
+        limit=1034
     )
 
     # For SPIDER dataset and llama model

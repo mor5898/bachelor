@@ -1,0 +1,1034 @@
+SELECT COUNT(*) FROM singer;
+SELECT COUNT(*) FROM singer;
+SELECT Name, Country, Age FROM singer ORDER BY Age DESC;
+SELECT Name, Country, Age FROM singer ORDER BY Age DESC;
+SELECT AVG(Age), MIN(Age), MAX(Age) FROM singer WHERE Country = 'France';
+SELECT AVG(Age), MIN(Age), MAX(Age) FROM singer WHERE Country = 'France';
+SELECT Name, Song_release_year FROM singer ORDER BY Age LIMIT 1;
+SELECT Name, Song_release_year FROM singer ORDER BY Age LIMIT 1;
+SELECT DISTINCT Country FROM singer WHERE Age > 20;
+SELECT DISTINCT Country FROM singer WHERE Age > 20;
+SELECT Country, COUNT(*) AS Number_of_Singers FROM singer GROUP BY Country;
+SELECT Country, COUNT(*) AS Number_of_Singers FROM singer GROUP BY Country;
+SELECT Song_Name FROM singer WHERE Age > ( SELECT AVG(Age) FROM singer );
+SELECT Song_Name FROM singer WHERE Age > ( SELECT AVG(Age) FROM singer );
+SELECT Location, Name FROM stadium WHERE Capacity BETWEEN 5000 AND 10000;
+SELECT Location, Name FROM stadium WHERE Capacity BETWEEN 5000 AND 10000;
+SELECT MAX(Capacity), AVG(Capacity) FROM stadium;
+SELECT AVG(Capacity), MAX(Capacity) FROM stadium;
+SELECT Name, Capacity FROM stadium ORDER BY Average DESC LIMIT 1;
+SELECT Name, Capacity FROM stadium ORDER BY Average DESC LIMIT 1;
+SELECT COUNT(*) FROM concert WHERE Year = '2014' OR Year = '2015';
+SELECT COUNT(*) FROM concert WHERE Year = '2014' OR Year = '2015';
+SELECT s.Name, COUNT(c.concert_ID) AS Number_of_Concerts FROM stadium AS s LEFT JOIN concert AS c ON s.Stadium_ID = c.Stadium_ID GROUP BY s.Name;
+SELECT T1.Name, COUNT(T2.concert_ID) FROM stadium AS T1 INNER JOIN concert AS T2 ON T1.Stadium_ID = T2.Stadium_ID GROUP BY T1.Name;
+SELECT T1.Name, T1.Capacity FROM stadium AS T1 INNER JOIN concert AS T2 ON T1.Stadium_ID = T2.Stadium_ID WHERE STRFTIME('%Y', T2.Year) >= '2014' GROUP BY T1.Name, T1.Capacity ORDER BY COUNT(T2.concert_ID) DESC LIMIT 1;
+SELECT T1.Name, T1.Capacity FROM stadium AS T1 INNER JOIN concert AS T2 ON T1.Stadium_ID = T2.Stadium_ID WHERE T2.Year > 2013 GROUP BY T1.Stadium_ID ORDER BY COUNT(T2.concert_ID) DESC LIMIT 1;
+SELECT Year FROM concert GROUP BY Year ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT Year FROM concert GROUP BY Year ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT Name FROM stadium EXCEPT SELECT T1.Name FROM stadium AS T1 INNER JOIN concert AS T2 ON T1.Stadium_ID = T2.Stadium_ID;
+SELECT Name FROM stadium EXCEPT SELECT T1.Name FROM stadium AS T1 INNER JOIN concert AS T2 ON T1.Stadium_ID = T2.Stadium_ID;
+SELECT Country FROM singer WHERE Age > 40 INTERSECT SELECT Country FROM singer WHERE Age < 30;
+SELECT Name FROM stadium WHERE Stadium_ID NOT IN ( SELECT Stadium_ID FROM concert WHERE Year = '2014' );
+SELECT Name FROM stadium EXCEPT SELECT T1.Name FROM stadium AS T1 INNER JOIN concert AS T2 ON T1.Stadium_ID = T2.Stadium_ID WHERE T2.Year = '2014';
+SELECT c.concert_Name, c.Theme, COUNT(sic.Singer_ID) AS Number_of_Singers FROM concert AS c LEFT JOIN singer_in_concert AS sic ON c.concert_ID = sic.concert_ID GROUP BY c.concert_ID;
+SELECT c.concert_Name, c.Theme, COUNT(sic.Singer_ID) AS Number_of_Singers FROM concert AS c JOIN singer_in_concert AS sic ON c.concert_ID = sic.concert_ID GROUP BY c.concert_ID;
+SELECT singer.Name, COUNT(singer_in_concert.concert_ID) AS Number_of_Concerts FROM singer JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID GROUP BY singer.Name;
+SELECT singer.Name, COUNT(singer_in_concert.concert_ID) AS Number_of_Concerts FROM singer JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID GROUP BY singer.Name;
+SELECT T1.Name FROM singer AS T1 INNER JOIN singer_in_concert AS T2 ON T1.Singer_ID = T2.Singer_ID INNER JOIN concert AS T3 ON T2.concert_ID = T3.concert_ID WHERE T3.Year = '2014';
+SELECT T1.Name FROM singer AS T1 INNER JOIN singer_in_concert AS T2 ON T1.Singer_ID = T2.Singer_ID INNER JOIN concert AS T3 ON T2.concert_ID = T3.concert_ID WHERE T3.Year = '2014';
+SELECT Name, Country FROM singer WHERE Song_Name LIKE '%Hey%';
+SELECT Name, Country FROM singer WHERE Song_Name LIKE '%Hey%';
+SELECT T1.Name, T1.Location FROM stadium AS T1 INNER JOIN concert AS T2 ON T1.Stadium_ID = T2.Stadium_ID WHERE T2.Year = '2014' INTERSECT SELECT T1.Name, T1.Location FROM stadium AS T1 INNER JOIN concert AS T2 ON T1.Stadium_ID = T2.Stadium_ID WHERE T2.Year = '2015';
+SELECT T1.Name, T1.Location FROM stadium AS T1 INNER JOIN concert AS T2 ON T1.Stadium_ID = T2.Stadium_ID WHERE T2.Year = '2014' INTERSECT SELECT T1.Name, T1.Location FROM stadium AS T1 INNER JOIN concert AS T2 ON T1.Stadium_ID = T2.Stadium_ID WHERE T2.Year = '2015';
+SELECT COUNT(*) FROM concert WHERE Stadium_ID = ( SELECT Stadium_ID FROM stadium ORDER BY Capacity DESC LIMIT 1 );
+SELECT COUNT(*) FROM concert WHERE Stadium_ID = ( SELECT Stadium_ID FROM stadium ORDER BY Capacity DESC LIMIT 1 );
+SELECT COUNT(*) FROM Pets WHERE weight > 10;
+SELECT COUNT(*) FROM Pets WHERE weight > 10;
+SELECT weight FROM Pets WHERE PetType = 'dog' ORDER BY pet_age LIMIT 1;
+SELECT weight FROM Pets WHERE PetType = 'dog' ORDER BY pet_age LIMIT 1;
+SELECT MAX(weight), PetType FROM Pets GROUP BY PetType;
+SELECT PetType, MAX(weight) AS max_weight FROM Pets GROUP BY PetType;
+SELECT COUNT(*) FROM Has_Pet JOIN Student ON Has_Pet.StuID = Student.StuID WHERE Student.Age > 20;
+SELECT COUNT(*) FROM Has_Pet JOIN Student ON Has_Pet.StuID = Student.StuID WHERE Student.Age > 20;
+SELECT COUNT(*) FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Student.Sex = 'F' AND Pets.PetType = 'dog';
+SELECT COUNT(*) FROM Student JOIN Has_Pet ON Student.StuID = Has_Pet.StuID JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE Pets.PetType = 'dog' AND Student.Sex = 'F';
+SELECT COUNT(DISTINCT PetType) FROM Pets;
+SELECT COUNT(DISTINCT PetType) FROM Pets;
+SELECT Fname FROM Student WHERE StuID IN ( SELECT StuID FROM Has_Pet WHERE PetID IN ( SELECT PetID FROM Pets WHERE PetType = 'cat' OR PetType = 'dog' ) );
+SELECT Fname FROM Student WHERE StuID IN ( SELECT StuID FROM Has_Pet WHERE PetID IN ( SELECT PetID FROM Pets WHERE PetType = 'Cat' OR PetType = 'Dog' ) );
+SELECT Fname FROM Student WHERE StuID IN (SELECT StuID FROM Has_Pet WHERE PetID IN (SELECT PetID FROM Pets WHERE PetType = 'cat')) AND StuID IN (SELECT StuID FROM Has_Pet WHERE PetID IN (SELECT PetID FROM Pets WHERE PetType = 'dog'));
+SELECT Fname FROM Student WHERE StuID IN (SELECT StuID FROM Has_Pet WHERE PetID IN (SELECT PetID FROM Pets WHERE PetType = 'cat')) AND StuID IN (SELECT StuID FROM Has_Pet WHERE PetID IN (SELECT PetID FROM Pets WHERE PetType = 'dog'));
+SELECT Major, Age FROM Student WHERE StuID NOT IN ( SELECT StuID FROM Has_Pet WHERE PetID IN ( SELECT PetID FROM Pets WHERE PetType = 'cat' ) );
+SELECT s.Major, s.Age FROM Student AS s LEFT JOIN Has_Pet AS hp ON s.StuID = hp.StuID LEFT JOIN Pets AS p ON hp.PetID = p.PetID WHERE p.PetType <> 'cat' OR p.PetType IS NULL;
+SELECT StuID FROM Student EXCEPT SELECT StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE PetType = 'cat';
+SELECT StuID FROM Student EXCEPT SELECT StuID FROM Has_Pet JOIN Pets ON Has_Pet.PetID = Pets.PetID WHERE PetType = 'cat';
+SELECT Fname, Age FROM Student WHERE StuID IN (SELECT StuID FROM Has_Pet WHERE PetID IN (SELECT PetID FROM Pets WHERE PetType = 'dog')) AND StuID NOT IN (SELECT StuID FROM Has_Pet WHERE PetID IN (SELECT PetID FROM Pets WHERE PetType = 'cat'));
+SELECT Fname FROM Student WHERE StuID IN (SELECT StuID FROM Has_Pet WHERE PetID IN (SELECT PetID FROM Pets WHERE PetType = 'dog')) AND StuID NOT IN (SELECT StuID FROM Has_Pet WHERE PetID IN (SELECT PetID FROM Pets WHERE PetType = 'cat'));
+SELECT PetType, weight FROM Pets ORDER BY pet_age LIMIT 1;
+SELECT PetType, weight FROM Pets ORDER BY pet_age LIMIT 1;
+SELECT PetID, weight FROM Pets WHERE pet_age > 1;
+SELECT PetID, weight FROM Pets WHERE pet_age > 1;
+SELECT PetType, AVG(pet_age) AS average_age, MAX(pet_age) AS max_age FROM Pets GROUP BY PetType;
+SELECT PetType, AVG(pet_age) AS average_age, MAX(pet_age) AS max_age FROM Pets GROUP BY PetType;
+SELECT PetType, AVG(weight) AS average_weight FROM Pets GROUP BY PetType;
+SELECT PetType, AVG(weight) AS average_weight FROM Pets GROUP BY PetType;
+SELECT Fname, Age FROM Student WHERE StuID IN ( SELECT StuID FROM Has_Pet );
+SELECT DISTINCT Fname, Age FROM Student WHERE StuID IN ( SELECT StuID FROM Has_Pet );
+SELECT PetID FROM Has_Pet WHERE StuID IN ( SELECT StuID FROM Student WHERE LName = 'Smith' );
+SELECT PetID FROM Has_Pet WHERE StuID IN ( SELECT StuID FROM Student WHERE LName = 'Smith' );
+SELECT s.StuID, COUNT(hp.PetID) AS NumberOfPets FROM Student AS s JOIN Has_Pet AS hp ON s.StuID = hp.StuID GROUP BY s.StuID HAVING COUNT(hp.PetID) > 0;
+SELECT StuID, COUNT(*) AS NumberOfPets FROM Has_Pet GROUP BY StuID;
+SELECT Fname, Sex FROM Student WHERE StuID IN ( SELECT StuID FROM Has_Pet GROUP BY StuID HAVING COUNT(*) > 1 );
+SELECT Fname, Sex FROM Student WHERE StuID IN ( SELECT StuID FROM Has_Pet GROUP BY StuID HAVING COUNT(*) > 1 );
+SELECT LName FROM Student WHERE StuID IN ( SELECT StuID FROM Has_Pet WHERE PetID IN ( SELECT PetID FROM Pets WHERE PetType = 'cat' AND pet_age = 3 ) );
+SELECT LName FROM Student WHERE StuID IN ( SELECT StuID FROM Has_Pet WHERE PetID IN ( SELECT PetID FROM Pets WHERE PetType = 'cat' AND pet_age = 3 ) );
+SELECT AVG(Age) FROM Student WHERE StuID NOT IN (SELECT StuID FROM Has_Pet);
+SELECT AVG(Age) FROM Student WHERE StuID NOT IN (SELECT StuID FROM Has_Pet);
+SELECT COUNT(*) FROM continents;
+SELECT COUNT(*) FROM continents;
+SELECT c.ContId, c.Continent, COUNT(co.CountryId) AS NumberOfCountries FROM continents AS c LEFT JOIN countries AS co ON c.ContId = co.Continent GROUP BY c.ContId, c.Continent;
+SELECT c.ContId, c.Continent, COUNT(co.CountryId) AS NumberOfCountries FROM continents AS c LEFT JOIN countries AS co ON c.ContId = co.Continent GROUP BY c.ContId, c.Continent;
+SELECT COUNT(*) FROM countries;
+SELECT COUNT(*) FROM countries;
+SELECT cm.FullName, cm.Id, COUNT(ml.ModelId) AS NumberOfModels FROM car_makers AS cm JOIN model_list AS ml ON cm.Id = ml.Maker GROUP BY cm.FullName, cm.Id;
+SELECT car_makers.FullName, car_makers.Id, COUNT(model_list.Model) AS NumberOfModels FROM car_makers JOIN model_list ON car_makers.Id = model_list.Maker GROUP BY car_makers.FullName, car_makers.Id;
+SELECT Model FROM car_names WHERE MakeId = ( SELECT Id FROM cars_data ORDER BY CAST(REPLACE(Horsepower, '?', '') AS REAL) LIMIT 1 );
+SELECT Model FROM car_names WHERE MakeId = ( SELECT Id FROM cars_data ORDER BY CAST(REPLACE(Horsepower, '?', '') AS REAL) LIMIT 1 );
+SELECT Model FROM car_names WHERE MakeId IN ( SELECT Id FROM cars_data WHERE Weight < ( SELECT AVG(Weight) FROM cars_data ) );
+SELECT T1.Model FROM model_list AS T1 INNER JOIN car_names AS T2 ON T1.Model = T2.Model INNER JOIN cars_data AS T3 ON T2.MakeId = T3.Id WHERE T3.Weight < ( SELECT AVG(Weight) FROM cars_data );
+SELECT T1.Maker FROM car_makers AS T1 INNER JOIN model_list AS T2 ON T1.Id = T2.Maker INNER JOIN car_names AS T3 ON T2.Model = T3.Model INNER JOIN cars_data AS T4 ON T3.MakeId = T4.Id WHERE T4.Year = 1970 GROUP BY T1.Maker;
+SELECT T1.Maker FROM car_makers AS T1 INNER JOIN model_list AS T2 ON T1.Id = T2.Maker INNER JOIN car_names AS T3 ON T2.Model = T3.Model INNER JOIN cars_data AS T4 ON T3.MakeId = T4.Id WHERE T4.Year = 1970 GROUP BY T1.Maker;
+SELECT Make, Year FROM car_names JOIN cars_data ON car_names.MakeId = cars_data.Id ORDER BY Year LIMIT 1;
+SELECT T1.Maker, MIN(T2.Year) FROM car_makers AS T1 INNER JOIN car_names AS T3 ON T1.Id = T3.MakeId INNER JOIN cars_data AS T2 ON T3.MakeId = T2.Id GROUP BY T1.Maker ORDER BY MIN(T2.Year) LIMIT 1;
+SELECT DISTINCT T1.Model FROM model_list AS T1 INNER JOIN car_names AS T2 ON T1.Model = T2.Model INNER JOIN cars_data AS T3 ON T2.MakeId = T3.Id WHERE T3.Year > 1980;
+SELECT T1.Model FROM model_list AS T1 INNER JOIN car_names AS T2 ON T1.Model = T2.Model INNER JOIN cars_data AS T3 ON T2.MakeId = T3.Id WHERE T3.Year > 1980;
+SELECT c.Continent, COUNT(DISTINCT cm.Maker) AS NumberOfMakers FROM continents AS c JOIN countries AS co ON c.ContId = co.Continent JOIN car_makers AS cm ON co.CountryId = cm.Country GROUP BY c.Continent;
+SELECT c.Continent, COUNT(DISTINCT cm.Id) AS NumberOfCarMakers FROM continents AS c JOIN countries AS co ON c.ContId = co.Continent JOIN car_makers AS cm ON co.CountryId = cm.Country GROUP BY c.Continent;
+SELECT T1.CountryName FROM countries AS T1 INNER JOIN car_makers AS T2 ON T1.CountryId = T2.Country GROUP BY T1.CountryName ORDER BY COUNT(T2.Id) DESC LIMIT 1;
+SELECT T1.CountryName FROM countries AS T1 INNER JOIN car_makers AS T2 ON T1.CountryId = T2.Country GROUP BY T1.CountryName ORDER BY COUNT(T2.Id) DESC LIMIT 1;
+SELECT COUNT(T1.ModelId), T2.FullName FROM model_list AS T1 INNER JOIN car_makers AS T2 ON T1.Maker = T2.Id GROUP BY T2.FullName;
+SELECT cm.Id, cm.FullName, COUNT(ml.ModelId) AS NumberOfModels FROM car_makers AS cm LEFT JOIN model_list AS ml ON cm.Id = ml.Maker GROUP BY cm.Id, cm.FullName;
+SELECT Accelerate FROM cars_data WHERE Id = ( SELECT MakeId FROM car_names WHERE Make = 'amc' AND Model = 'hornet sportabout (sw)' );
+SELECT Accelerate FROM cars_data WHERE Id = ( SELECT MakeId FROM car_names WHERE Model = 'hornet sportabout (sw)' );
+SELECT COUNT(DISTINCT T1.Id) FROM car_makers AS T1 INNER JOIN countries AS T2 ON T1.Country = T2.CountryId WHERE T2.CountryName = 'France';
+SELECT COUNT(DISTINCT T1.Maker) FROM car_makers AS T1 INNER JOIN countries AS T2 ON T1.Country = T2.CountryId WHERE T2.CountryName = 'France';
+SELECT COUNT(DISTINCT T1.Model) FROM model_list AS T1 INNER JOIN car_makers AS T2 ON T1.Maker = T2.Id INNER JOIN countries AS T3 ON T2.Country = T3.CountryId INNER JOIN continents AS T4 ON T3.Continent = T4.ContId WHERE T4.Continent = 'North America';
+SELECT COUNT(DISTINCT T1.Model) FROM model_list AS T1 INNER JOIN car_makers AS T2 ON T1.Maker = T2.Id INNER JOIN countries AS T3 ON T2.Country = T3.CountryId INNER JOIN continents AS T4 ON T3.Continent = T4.ContId WHERE T4.Continent = 'North America';
+SELECT CAST(AVG(REPLACE(MPG, ',', '')) AS REAL) FROM cars_data WHERE Cylinders = 4;
+SELECT CAST(AVG(REPLACE(MPG, ',', '')) AS REAL) FROM cars_data WHERE Cylinders = 4;
+SELECT MIN(Weight) FROM cars_data WHERE Cylinders = 8 AND Year = 1974;
+SELECT MIN(Weight) FROM cars_data WHERE Cylinders = 8 AND Year = 1974;
+SELECT car_makers.Maker, model_list.Model FROM car_makers JOIN model_list ON car_makers.Id = model_list.Maker;
+SELECT car_makers.Maker, model_list.Model FROM car_makers JOIN model_list ON car_makers.Id = model_list.Maker;
+SELECT CountryName, CountryId FROM countries WHERE CountryId IN ( SELECT Country FROM car_makers );
+SELECT CountryName, CountryId FROM countries WHERE CountryId IN ( SELECT Country FROM car_makers );
+SELECT COUNT(*) FROM cars_data WHERE CAST(Horsepower AS REAL) > 150;
+SELECT COUNT(*) FROM cars_data WHERE CAST(Horsepower AS REAL) > 150;
+SELECT Year, AVG(Weight) AS average_weight FROM cars_data GROUP BY Year;
+SELECT AVG(Weight) AS average_weight, Year FROM cars_data GROUP BY Year;
+SELECT T1.CountryName FROM countries AS T1 INNER JOIN car_makers AS T2 ON T1.CountryId = T2.Country INNER JOIN continents AS T3 ON T1.Continent = T3.ContId WHERE T3.Continent = 'Europe' GROUP BY T1.CountryName HAVING COUNT(*) >= 3;
+SELECT T1.CountryName FROM countries AS T1 INNER JOIN car_makers AS T2 ON T1.CountryId = T2.Country INNER JOIN continents AS T3 ON T1.Continent = T3.ContId WHERE T3.Continent = 'Europe' GROUP BY T1.CountryName HAVING COUNT(*) >= 3;
+SELECT MAX(T1.Horsepower), T3.Make FROM cars_data AS T1 INNER JOIN car_names AS T2 ON T1.Id = T2.MakeId INNER JOIN car_makers AS T3 ON T2.Make = T3.Maker WHERE T1.Cylinders = 3;
+SELECT MAX(T1.Horsepower), T2.Make FROM cars_data AS T1 INNER JOIN car_names AS T2 ON T1.Id = T2.MakeId WHERE T1.Cylinders = 3;
+SELECT Model FROM car_names WHERE MakeId = ( SELECT Id FROM cars_data ORDER BY CAST(REPLACE(MPG, ',', '') AS REAL) DESC LIMIT 1 );
+SELECT Model FROM car_names WHERE MakeId = ( SELECT Id FROM cars_data ORDER BY CAST(REPLACE(MPG, ',', '') AS REAL) DESC LIMIT 1 );
+SELECT CAST(AVG(REPLACE(T1.Horsepower, ',', '')) AS REAL) FROM cars_data AS T1 WHERE T1.Year < 1980;
+SELECT CAST(AVG(REPLACE(T1.Horsepower, ',', '')) AS REAL) FROM cars_data AS T1 INNER JOIN car_names AS T2 ON T1.Id = T2.MakeId WHERE T1.Year < 1980;
+SELECT AVG(T1.Edispl) FROM cars_data AS T1 INNER JOIN car_names AS T2 ON T1.Id = T2.MakeId INNER JOIN model_list AS T3 ON T2.Model = T3.Model INNER JOIN car_makers AS T4 ON T3.Maker = T4.Id WHERE T4.Maker = 'volvo';
+SELECT AVG(T1.Edispl) FROM cars_data AS T1 INNER JOIN car_names AS T2 ON T1.Id = T2.MakeId INNER JOIN model_list AS T3 ON T2.Model = T3.Model INNER JOIN car_makers AS T4 ON T3.Maker = T4.Id WHERE T4.Maker = 'volvo';
+SELECT Cylinders, MAX(Accelerate) AS MaxAccelerate FROM cars_data GROUP BY Cylinders;
+SELECT Cylinders, MAX(Accelerate) FROM cars_data GROUP BY Cylinders;
+SELECT Model FROM car_names GROUP BY Model ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT Model FROM car_names GROUP BY Model ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT COUNT(*) FROM cars_data WHERE Cylinders > 4;
+SELECT COUNT(*) FROM cars_data WHERE Cylinders > 4;
+SELECT COUNT(*) FROM cars_data WHERE Year = 1980;
+SELECT COUNT(*) FROM cars_data WHERE Year = 1980;
+SELECT COUNT(T1.ModelId) FROM model_list AS T1 INNER JOIN car_makers AS T2 ON T1.Maker = T2.Id WHERE T2.FullName = 'American Motor Company';
+SELECT COUNT(T1.ModelId) FROM model_list AS T1 INNER JOIN car_makers AS T2 ON T1.Maker = T2.Id WHERE T2.FullName = 'American Motors Corporation';
+SELECT FullName, Id FROM car_makers WHERE Id IN ( SELECT Maker FROM model_list GROUP BY Maker HAVING COUNT(*) > 3 );
+SELECT cm.Id, cm.Maker FROM car_makers AS cm JOIN model_list AS ml ON cm.Id = ml.Maker GROUP BY cm.Id, cm.Maker HAVING COUNT(*) > 3;
+SELECT DISTINCT T1.Model FROM model_list AS T1 INNER JOIN car_makers AS T2 ON T1.Maker = T2.Id INNER JOIN car_names AS T3 ON T1.Model = T3.Model INNER JOIN cars_data AS T4 ON T3.MakeId = T4.Id WHERE T2.FullName = 'General Motors' OR T4.Weight > 3500;
+SELECT T1.Model FROM model_list AS T1 INNER JOIN car_makers AS T2 ON T1.Maker = T2.Id WHERE T2.FullName = 'General Motors' UNION SELECT T1.Model FROM model_list AS T1 INNER JOIN car_names AS T2 ON T1.Model = T2.Model INNER JOIN cars_data AS T3 ON T2.MakeId = T3.Id WHERE T3.Weight > 3500;
+SELECT Year FROM cars_data WHERE Weight BETWEEN 3000 AND 4000;
+SELECT DISTINCT Year FROM cars_data WHERE Weight < 4000 INTERSECT SELECT DISTINCT Year FROM cars_data WHERE Weight > 3000;
+SELECT Horsepower FROM cars_data ORDER BY Accelerate DESC LIMIT 1;
+SELECT Horsepower FROM cars_data ORDER BY Accelerate DESC LIMIT 1;
+SELECT T1.Cylinders FROM cars_data AS T1 INNER JOIN car_names AS T2 ON T1.Id = T2.MakeId INNER JOIN model_list AS T3 ON T2.Model = T3.Model INNER JOIN car_makers AS T4 ON T3.Maker = T4.Id WHERE T4.Maker = 'volvo' ORDER BY T1.Accelerate LIMIT 1;
+SELECT T1.Cylinders FROM cars_data AS T1 INNER JOIN car_names AS T2 ON T1.Id = T2.MakeId INNER JOIN model_list AS T3 ON T2.Model = T3.Model INNER JOIN car_makers AS T4 ON T3.Maker = T4.Id WHERE T4.Maker = 'volvo' ORDER BY T1.Accelerate LIMIT 1;
+SELECT COUNT(*) FROM cars_data WHERE Accelerate > ( SELECT MAX(Accelerate) FROM cars_data WHERE Horsepower = ( SELECT MAX(Horsepower) FROM cars_data ) );
+SELECT COUNT(*) FROM cars_data WHERE Accelerate > ( SELECT MAX(Accelerate) FROM cars_data WHERE Horsepower = ( SELECT MAX(Horsepower) FROM cars_data ) );
+SELECT COUNT(DISTINCT T1.Country) FROM countries AS T1 INNER JOIN car_makers AS T2 ON T1.CountryId = T2.Country GROUP BY T1.Country HAVING COUNT(*) > 2;
+SELECT COUNT(DISTINCT T1.Country) FROM countries AS T1 INNER JOIN car_makers AS T2 ON T1.CountryId = T2.Country GROUP BY T1.Country HAVING COUNT(*) > 2;
+SELECT COUNT(*) FROM cars_data WHERE Cylinders > 6;
+SELECT COUNT(*) FROM cars_data WHERE Cylinders > 6;
+SELECT T1.Model FROM car_names AS T1 INNER JOIN cars_data AS T2 ON T1.MakeId = T2.Id WHERE T2.Cylinders = 4 ORDER BY CAST(REPLACE(T2.Horsepower, '?', '') AS REAL) DESC LIMIT 1;
+SELECT T1.Model FROM car_names AS T1 INNER JOIN cars_data AS T2 ON T1.MakeId = T2.Id WHERE T2.Cylinders = 4 ORDER BY CAST(REPLACE(T2.Horsepower, '?', '') AS REAL) DESC LIMIT 1;
+SELECT T1.MakeId, T1.Make FROM car_names AS T1 INNER JOIN cars_data AS T2 ON T1.MakeId = T2.Id WHERE T2.Horsepower > ( SELECT MIN(Horsepower) FROM cars_data ) AND T2.Cylinders <= 3;
+SELECT T1.MakeId, T1.Make FROM car_names AS T1 INNER JOIN cars_data AS T2 ON T1.MakeId = T2.Id WHERE T2.Cylinders < 4 AND T2.Horsepower <> ( SELECT MIN(Horsepower) FROM cars_data );
+SELECT MAX(CAST(T1.MPG AS REAL)) FROM cars_data AS T1 INNER JOIN car_names AS T2 ON T1.Id = T2.MakeId WHERE T1.Cylinders = 8 OR T1.Year < 1980;
+SELECT MAX(CAST(T1.MPG AS REAL)) FROM cars_data AS T1 INNER JOIN car_names AS T2 ON T1.Id = T2.MakeId WHERE T1.Cylinders = 8 OR T1.Year < 1980;
+SELECT Model FROM car_names JOIN cars_data ON car_names.MakeId = cars_data.Id JOIN car_makers ON car_names.MakeId = car_makers.Id WHERE cars_data.Weight < 3500 AND car_makers.FullName <> 'Ford Motor Company';
+SELECT T1.Model FROM model_list AS T1 INNER JOIN car_names AS T2 ON T1.Model = T2.Model INNER JOIN cars_data AS T3 ON T2.MakeId = T3.Id INNER JOIN car_makers AS T4 ON T1.Maker = T4.Id WHERE T3.Weight < 3500 AND T4.FullName <> 'Ford Motor Company';
+SELECT CountryName FROM countries EXCEPT SELECT T1.CountryName FROM countries AS T1 INNER JOIN car_makers AS T2 ON T1.CountryId = T2.Country;
+SELECT CountryName FROM countries EXCEPT SELECT T1.CountryName FROM countries AS T1 INNER JOIN car_makers AS T2 ON T1.CountryId = T2.Country;
+SELECT Id, Maker FROM car_makers WHERE Id IN ( SELECT Maker FROM model_list GROUP BY Maker HAVING COUNT(*) >= 2 ) GROUP BY Id, Maker HAVING COUNT(*) > 3;
+SELECT cm.Id, cm.Maker FROM car_makers AS cm JOIN model_list AS ml ON cm.Id = ml.Maker JOIN car_names AS cn ON ml.Model = cn.Model GROUP BY cm.Id, cm.Maker HAVING COUNT(DISTINCT ml.Model) >= 2 AND COUNT(cn.MakeId) > 3;
+SELECT T1.CountryId, T1.CountryName FROM countries AS T1 INNER JOIN car_makers AS T2 ON T1.CountryId = T2.Country GROUP BY T1.CountryId, T1.CountryName HAVING COUNT(*) > 3 UNION SELECT T1.CountryId, T1.CountryName FROM countries AS T1 INNER JOIN car_makers AS T2 ON T1.CountryId = T2.Country INNER JOIN model_list AS T3 ON T2.Id = T3.Maker WHERE T3.Model = 'fiat';
+SELECT T1.CountryId, T1.CountryName FROM countries AS T1 INNER JOIN car_makers AS T2 ON T1.CountryId = T2.Country GROUP BY T1.CountryId, T1.CountryName HAVING COUNT(*) > 3 UNION SELECT T1.CountryId, T1.CountryName FROM countries AS T1 INNER JOIN car_makers AS T2 ON T1.CountryId = T2.Country INNER JOIN model_list AS T3 ON T2.Id = T3.Maker WHERE T3.Model = 'fiat';
+SELECT Country FROM airlines WHERE Airline = 'JetBlue Airways';
+SELECT Country FROM airlines WHERE Airline = 'Jetblue Airways';
+SELECT Abbreviation FROM airlines WHERE Airline = 'JetBlue Airways';
+SELECT Abbreviation FROM airlines WHERE Airline = 'Jetblue Airways';
+SELECT Airline, Abbreviation FROM airlines WHERE Country = 'USA';
+SELECT Airline, Abbreviation FROM airlines WHERE Country = 'USA';
+SELECT AirportCode, AirportName FROM airports WHERE City = 'Anthony';
+SELECT AirportCode, AirportName FROM airports WHERE City = 'Anthony';
+SELECT COUNT(*) FROM airlines;
+SELECT COUNT(*) FROM airlines;
+SELECT COUNT(*) FROM airports;
+SELECT COUNT(*) FROM airports;
+SELECT COUNT(*) FROM flights;
+SELECT COUNT(*) FROM flights;
+SELECT Airline FROM airlines WHERE Abbreviation = 'UAL';
+SELECT Airline FROM airlines WHERE Abbreviation = 'UAL';
+SELECT COUNT(*) FROM airlines WHERE Country = 'USA';
+SELECT COUNT(uid) FROM airlines WHERE Country = 'USA';
+SELECT City, Country FROM airports WHERE AirportName = 'Alton Airport';
+SELECT City, Country FROM airports WHERE AirportName = 'Alton Airport';
+SELECT AirportName FROM airports WHERE AirportCode = 'AKO';
+SELECT AirportName FROM airports WHERE AirportCode = 'AKO';
+SELECT AirportName FROM airports WHERE City = 'Aberdeen';
+SELECT AirportName FROM airports WHERE City = 'Aberdeen';
+SELECT COUNT(*) FROM flights WHERE SourceAirport = 'APG';
+SELECT COUNT(*) FROM flights WHERE SourceAirport = 'APG';
+SELECT COUNT(*) FROM flights WHERE DestAirport = 'ATO';
+SELECT COUNT(*) FROM flights WHERE DestAirport = 'ATO';
+SELECT COUNT(*) FROM flights JOIN airports ON flights.SourceAirport = airports.AirportCode WHERE airports.City = 'Aberdeen';
+SELECT COUNT(*) FROM flights WHERE SourceAirport = ( SELECT AirportCode FROM airports WHERE City = 'Aberdeen' );
+SELECT COUNT(*) FROM flights JOIN airports ON flights.DestAirport = airports.AirportCode WHERE airports.City = 'Aberdeen';
+SELECT COUNT(*) FROM flights WHERE DestAirport = ( SELECT AirportCode FROM airports WHERE City = 'Aberdeen' );
+SELECT COUNT(*) FROM flights JOIN airports AS source_airport ON flights.SourceAirport = source_airport.AirportCode JOIN airports AS dest_airport ON flights.DestAirport = dest_airport.AirportCode WHERE source_airport.City = 'Aberdeen' AND dest_airport.City = 'Ashley';
+SELECT COUNT(*) FROM flights WHERE SourceAirport = ( SELECT AirportCode FROM airports WHERE City = 'Aberdeen' ) AND DestAirport = ( SELECT AirportCode FROM airports WHERE City = 'Ashley' );
+SELECT COUNT(*) FROM flights WHERE Airline = ( SELECT uid FROM airlines WHERE Airline = 'JetBlue Airways' );
+SELECT COUNT(*) FROM flights WHERE Airline = ( SELECT uid FROM airlines WHERE Airline = 'Jetblue Airways' );
+SELECT COUNT(*) FROM flights JOIN airlines ON flights.Airline = airlines.uid JOIN airports ON flights.DestAirport = airports.AirportCode WHERE airlines.Airline = 'United Airlines' AND airports.AirportCode = 'ASY';
+SELECT COUNT(*) FROM flights WHERE DestAirport = 'ASY' AND Airline = ( SELECT uid FROM airlines WHERE Airline = 'United Airlines' );
+SELECT COUNT(*) FROM flights JOIN airlines ON flights.Airline = airlines.uid JOIN airports ON flights.SourceAirport = airports.AirportCode WHERE airlines.Airline = 'United Airlines' AND airports.AirportCode = 'AHD';
+SELECT COUNT(*) FROM flights WHERE Airline = ( SELECT uid FROM airlines WHERE Airline = 'United Airlines' ) AND SourceAirport = 'AHD';
+SELECT COUNT(*) FROM flights JOIN airlines ON flights.Airline = airlines.uid JOIN airports ON flights.DestAirport = airports.AirportCode WHERE airlines.Airline = 'United Airlines' AND airports.City = 'Aberdeen';
+SELECT COUNT(*) FROM flights JOIN airlines ON flights.Airline = airlines.uid JOIN airports ON flights.DestAirport = airports.AirportCode WHERE airlines.Airline = 'United Airlines' AND airports.City = 'Aberdeen';
+SELECT City FROM airports WHERE AirportCode IN ( SELECT DestAirport FROM flights ) GROUP BY City ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT City FROM airports WHERE AirportCode = ( SELECT DestAirport FROM flights GROUP BY DestAirport ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT City FROM airports WHERE AirportCode IN ( SELECT SourceAirport FROM flights ) GROUP BY City ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT City FROM airports WHERE AirportCode = ( SELECT SourceAirport FROM flights GROUP BY SourceAirport ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT SourceAirport FROM flights GROUP BY SourceAirport ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT SourceAirport FROM flights GROUP BY SourceAirport ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT AirportCode FROM airports WHERE AirportCode IN ( SELECT SourceAirport FROM flights ) OR AirportCode IN ( SELECT DestAirport FROM flights ) GROUP BY AirportCode ORDER BY COUNT(*) LIMIT 1;
+SELECT SourceAirport FROM flights GROUP BY SourceAirport ORDER BY COUNT(*) LIMIT 1;
+SELECT a.Airline FROM airlines AS a JOIN flights AS f ON a.uid = f.Airline GROUP BY a.Airline ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT a.Airline FROM airlines AS a JOIN flights AS f ON a.uid = f.Airline GROUP BY a.Airline ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT Abbreviation, Country FROM airlines WHERE uid = ( SELECT Airline FROM flights GROUP BY Airline ORDER BY COUNT(*) LIMIT 1 );
+SELECT MIN(T1.Abbreviation), T1.Country FROM airlines AS T1 INNER JOIN flights AS T2 ON T1.uid = T2.Airline GROUP BY T1.uid ORDER BY COUNT(T2.FlightNo) LIMIT 1;
+SELECT T1.Airline FROM airlines AS T1 INNER JOIN flights AS T2 ON T1.uid = T2.Airline WHERE T2.SourceAirport = 'AHD';
+SELECT T1.Airline FROM airlines AS T1 INNER JOIN flights AS T2 ON T1.uid = T2.Airline WHERE T2.SourceAirport = 'AHD';
+SELECT T1.Airline FROM airlines AS T1 INNER JOIN flights AS T2 ON T1.uid = T2.Airline WHERE T2.DestAirport = 'AHD';
+SELECT T1.Airline FROM airlines AS T1 INNER JOIN flights AS T2 ON T1.uid = T2.Airline WHERE T2.DestAirport = 'AHD';
+SELECT T1.Airline FROM airlines AS T1 INNER JOIN flights AS T2 ON T1.uid = T2.Airline WHERE T2.SourceAirport = 'APG' INTERSECT SELECT T1.Airline FROM airlines AS T1 INNER JOIN flights AS T2 ON T1.uid = T2.Airline WHERE T2.SourceAirport = 'CVO';
+SELECT T1.Airline FROM airlines AS T1 INNER JOIN flights AS T2 ON T1.uid = T2.Airline WHERE T2.SourceAirport = 'APG' INTERSECT SELECT T1.Airline FROM airlines AS T1 INNER JOIN flights AS T2 ON T1.uid = T2.Airline WHERE T2.SourceAirport = 'CVO';
+SELECT T1.Airline FROM airlines AS T1 INNER JOIN flights AS T2 ON T1.uid = T2.Airline WHERE T2.SourceAirport = 'CVO' EXCEPT SELECT T1.Airline FROM airlines AS T1 INNER JOIN flights AS T2 ON T1.uid = T2.Airline WHERE T2.SourceAirport = 'APG';
+SELECT T1.Airline FROM airlines AS T1 INNER JOIN flights AS T2 ON T1.uid = T2.Airline WHERE T2.SourceAirport = 'CVO' EXCEPT SELECT T1.Airline FROM airlines AS T1 INNER JOIN flights AS T2 ON T1.uid = T2.Airline WHERE T2.SourceAirport = 'APG';
+SELECT A.Airline FROM airlines AS A JOIN flights AS F ON A.uid = F.Airline GROUP BY A.Airline HAVING COUNT(*) >= 10;
+SELECT A.Airline FROM airlines AS A JOIN flights AS F ON A.uid = F.Airline GROUP BY A.Airline HAVING COUNT(*) >= 10;
+SELECT A.Airline FROM airlines AS A JOIN flights AS F ON A.uid = F.Airline GROUP BY A.Airline HAVING COUNT(*) < 200;
+SELECT A.Airline FROM airlines AS A JOIN flights AS F ON A.uid = F.Airline GROUP BY A.Airline HAVING COUNT(*) < 200;
+SELECT FlightNo FROM flights WHERE Airline = ( SELECT uid FROM airlines WHERE Airline = 'United Airlines' );
+SELECT FlightNo FROM flights WHERE Airline = ( SELECT uid FROM airlines WHERE Airline = 'United Airlines' );
+SELECT FlightNo FROM flights WHERE SourceAirport = 'APG';
+SELECT FlightNo FROM flights WHERE SourceAirport = 'APG';
+SELECT FlightNo FROM flights WHERE DestAirport = 'APG';
+SELECT FlightNo FROM flights WHERE DestAirport = 'APG';
+SELECT FlightNo FROM flights WHERE SourceAirport IN ( SELECT AirportCode FROM airports WHERE City = 'Aberdeen' );
+SELECT FlightNo FROM flights WHERE SourceAirport = ( SELECT AirportCode FROM airports WHERE City = 'Aberdeen' );
+SELECT FlightNo FROM flights WHERE DestAirport IN ( SELECT AirportCode FROM airports WHERE City = 'Aberdeen' );
+SELECT FlightNo FROM flights WHERE DestAirport = ( SELECT AirportCode FROM airports WHERE City = 'Aberdeen' );
+SELECT COUNT(*) FROM flights WHERE DestAirport IN ( SELECT AirportCode FROM airports WHERE City = 'Aberdeen' OR City = 'Abilene' );
+SELECT COUNT(*) FROM flights WHERE DestAirport IN ( SELECT AirportCode FROM airports WHERE City = 'Aberdeen' OR City = 'Abilene' );
+SELECT AirportName FROM airports EXCEPT SELECT a.AirportName FROM airports AS a JOIN flights AS f ON a.AirportCode = f.SourceAirport OR a.AirportCode = f.DestAirport;
+SELECT AirportCode FROM airports EXCEPT SELECT SourceAirport FROM flights UNION SELECT DestAirport FROM flights;
+SELECT COUNT(*) FROM employee;
+SELECT COUNT(*) FROM employee;
+SELECT Name FROM employee ORDER BY Age ASC;
+SELECT Name FROM employee ORDER BY Age ASC;
+SELECT City, COUNT(*) AS num_employees FROM employee GROUP BY City;
+SELECT City, COUNT(*) AS num_employees FROM employee GROUP BY City;
+SELECT City FROM employee WHERE Age < 30 GROUP BY City HAVING COUNT(*) > 1;
+SELECT City FROM employee WHERE Age < 30 GROUP BY City HAVING COUNT(*) > 1;
+SELECT Location, COUNT(*) AS Number_of_shops FROM shop GROUP BY Location;
+SELECT Location, COUNT(*) AS Number_of_shops FROM shop GROUP BY Location;
+SELECT Manager_name, District FROM shop ORDER BY Number_products DESC LIMIT 1;
+SELECT Manager_name, District FROM shop ORDER BY Number_products DESC LIMIT 1;
+SELECT MIN(Number_products), MAX(Number_products) FROM shop;
+SELECT MIN(Number_products), MAX(Number_products) FROM shop;
+SELECT Name, Location, District FROM shop ORDER BY Number_products DESC;
+SELECT Name, Location, District FROM shop ORDER BY Number_products DESC;
+SELECT Name FROM shop WHERE Number_products > ( SELECT AVG(Number_products) FROM shop );
+SELECT Name FROM shop WHERE Number_products > ( SELECT AVG(Number_products) FROM shop );
+SELECT Name FROM employee WHERE Employee_ID = ( SELECT Employee_ID FROM evaluation GROUP BY Employee_ID ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT Name FROM employee WHERE Employee_ID = ( SELECT Employee_ID FROM evaluation GROUP BY Employee_ID ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT Name FROM employee WHERE Employee_ID = ( SELECT Employee_ID FROM evaluation ORDER BY Bonus DESC LIMIT 1 );
+SELECT Name FROM employee WHERE Employee_ID = ( SELECT Employee_ID FROM evaluation ORDER BY Bonus DESC LIMIT 1 );
+SELECT Name FROM employee EXCEPT SELECT e.Name FROM employee AS e JOIN evaluation AS ev ON e.Employee_ID = ev.Employee_ID;
+SELECT Name FROM employee EXCEPT SELECT e.Name FROM employee AS e JOIN evaluation AS ev ON e.Employee_ID = ev.Employee_ID;
+SELECT Name FROM shop WHERE Shop_ID = ( SELECT Shop_ID FROM hiring GROUP BY Shop_ID ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT Name FROM shop WHERE Shop_ID = ( SELECT Shop_ID FROM hiring GROUP BY Shop_ID ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT Name FROM shop EXCEPT SELECT s.Name FROM shop AS s JOIN hiring AS h ON s.Shop_ID = h.Shop_ID;
+SELECT Name FROM shop EXCEPT SELECT T1.Name FROM shop AS T1 INNER JOIN hiring AS T2 ON T1.Shop_ID = T2.Shop_ID;
+SELECT s.Name, COUNT(h.Employee_ID) AS Number_of_employees FROM shop AS s JOIN hiring AS h ON s.Shop_ID = h.Shop_ID GROUP BY s.Name;
+SELECT s.Name, COUNT(h.Employee_ID) AS Number_of_employees FROM shop AS s LEFT JOIN hiring AS h ON s.Shop_ID = h.Shop_ID GROUP BY s.Name;
+SELECT SUM(Bonus) FROM evaluation;
+SELECT SUM(Bonus) FROM evaluation;
+SELECT * FROM hiring;
+SELECT * FROM hiring;
+SELECT District FROM shop WHERE Number_products < 3000 INTERSECT SELECT District FROM shop WHERE Number_products > 10000;
+SELECT District FROM shop WHERE Number_products < 3000 INTERSECT SELECT District FROM shop WHERE Number_products > 10000;
+SELECT COUNT(DISTINCT Location) FROM shop;
+SELECT COUNT(DISTINCT Location) FROM shop;
+SELECT COUNT(*) FROM Documents;
+SELECT COUNT(*) FROM Documents;
+SELECT Document_ID, Document_Name, Document_Description FROM Documents;
+SELECT Document_ID, Document_Name, Document_Description FROM Documents;
+SELECT Document_Name, Template_ID FROM Documents WHERE Document_Description LIKE '%w%';
+SELECT Document_Name, Template_ID FROM Documents WHERE Document_Description LIKE '%w%';
+SELECT Document_ID, Template_ID, Document_Description FROM Documents WHERE Document_Name = 'Robbin CV';
+SELECT Document_ID, Template_ID, Document_Description FROM Documents WHERE Document_Name = 'Robbin CV';
+SELECT COUNT(DISTINCT Template_ID) FROM Documents;
+SELECT COUNT(DISTINCT Template_ID) FROM Documents;
+SELECT COUNT(DISTINCT T1.Document_ID) FROM Documents AS T1 INNER JOIN Templates AS T2 ON T1.Template_ID = T2.Template_ID INNER JOIN Ref_Template_Types AS T3 ON T2.Template_Type_Code = T3.Template_Type_Code WHERE T3.Template_Type_Code = 'PPT';
+SELECT COUNT(DISTINCT T1.Document_ID) FROM Documents AS T1 INNER JOIN Templates AS T2 ON T1.Template_ID = T2.Template_ID INNER JOIN Ref_Template_Types AS T3 ON T2.Template_Type_Code = T3.Template_Type_Code WHERE T3.Template_Type_Description = 'PPT';
+SELECT Template_ID, COUNT(Document_ID) AS Number_of_Documents FROM Documents GROUP BY Template_ID;
+SELECT Template_ID, COUNT(*) AS UsageCount FROM Documents GROUP BY Template_ID;
+SELECT T.Template_ID, T.Template_Type_Code FROM Templates AS T JOIN Documents AS D ON T.Template_ID = D.Template_ID GROUP BY T.Template_ID, T.Template_Type_Code ORDER BY COUNT(D.Document_ID) DESC LIMIT 1;
+SELECT Template_ID, Template_Type_Code FROM Templates WHERE Template_ID = ( SELECT Template_ID FROM Documents GROUP BY Template_ID ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT Template_ID FROM Documents GROUP BY Template_ID HAVING COUNT(*) > 1;
+SELECT Template_ID FROM Documents GROUP BY Template_ID HAVING COUNT(*) > 1;
+SELECT Template_ID FROM Templates EXCEPT SELECT Template_ID FROM Documents;
+SELECT Template_ID FROM Templates EXCEPT SELECT Template_ID FROM Documents;
+SELECT COUNT(*) FROM Templates;
+SELECT COUNT(*) FROM Templates;
+SELECT Template_ID, Version_Number, Template_Type_Code FROM Templates;
+SELECT Template_ID, Version_Number, Template_Type_Code FROM Templates;
+SELECT DISTINCT Template_Type_Code FROM Templates;
+SELECT DISTINCT Template_Type_Code FROM Ref_Template_Types;
+SELECT Template_ID FROM Templates WHERE Template_Type_Code = 'PP' OR Template_Type_Code = 'PPT';
+SELECT Template_ID FROM Templates WHERE Template_Type_Code = 'PP' OR Template_Type_Code = 'PPT';
+SELECT COUNT(*) FROM Templates WHERE Template_Type_Code = 'CV';
+SELECT COUNT(*) FROM Templates WHERE Template_Type_Code = ( SELECT Template_Type_Code FROM Ref_Template_Types WHERE Template_Type_Description = 'CV' );
+SELECT Version_Number, Template_Type_Code FROM Templates WHERE Version_Number > 5;
+SELECT Version_Number, Template_Type_Code FROM Templates WHERE Version_Number > 5;
+SELECT Ref_Template_Types.Template_Type_Code, COUNT(Templates.Template_ID) AS Number_of_Templates FROM Ref_Template_Types LEFT JOIN Templates ON Ref_Template_Types.Template_Type_Code = Templates.Template_Type_Code GROUP BY Ref_Template_Types.Template_Type_Code;
+SELECT Ref_Template_Types.Template_Type_Code, COUNT(Templates.Template_ID) AS Number_of_Templates FROM Ref_Template_Types LEFT JOIN Templates ON Ref_Template_Types.Template_Type_Code = Templates.Template_Type_Code GROUP BY Ref_Template_Types.Template_Type_Code;
+SELECT Template_Type_Code FROM Templates GROUP BY Template_Type_Code ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT Template_Type_Code FROM Templates GROUP BY Template_Type_Code ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT Template_Type_Code FROM Templates GROUP BY Template_Type_Code HAVING COUNT(*) < 3;
+SELECT Template_Type_Code FROM Templates GROUP BY Template_Type_Code HAVING COUNT(*) < 3;
+SELECT MIN(Version_Number), Template_Type_Code FROM Templates;
+SELECT MIN(Version_Number), Template_Type_Code FROM Templates;
+SELECT T.Template_Type_Code FROM Documents AS D JOIN Templates AS T ON D.Template_ID = T.Template_ID WHERE D.Document_Name = 'Data base';
+SELECT T.Template_Type_Code FROM Templates AS T JOIN Documents AS D ON T.Template_ID = D.Template_ID WHERE D.Document_Name = 'Data base';
+SELECT Document_Name FROM Documents WHERE Template_ID IN ( SELECT Template_ID FROM Templates WHERE Template_Type_Code = 'BK' );
+SELECT Document_Name FROM Documents WHERE Template_ID IN ( SELECT Template_ID FROM Templates WHERE Template_Type_Code = 'BK' );
+SELECT Ref_Template_Types.Template_Type_Code, COUNT(Documents.Document_ID) AS Number_of_Documents FROM Ref_Template_Types LEFT JOIN Templates ON Ref_Template_Types.Template_Type_Code = Templates.Template_Type_Code LEFT JOIN Documents ON Templates.Template_ID = Documents.Template_ID GROUP BY Ref_Template_Types.Template_Type_Code;
+SELECT Ref_Template_Types.Template_Type_Code, COUNT(Documents.Document_ID) AS Number_of_Documents FROM Ref_Template_Types LEFT JOIN Templates ON Ref_Template_Types.Template_Type_Code = Templates.Template_Type_Code LEFT JOIN Documents ON Templates.Template_ID = Documents.Template_ID GROUP BY Ref_Template_Types.Template_Type_Code;
+SELECT Template_Type_Code FROM Templates WHERE Template_ID IN ( SELECT Template_ID FROM Documents ) GROUP BY Template_Type_Code ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT Template_Type_Code FROM Templates WHERE Template_ID IN ( SELECT Template_ID FROM Documents GROUP BY Template_ID ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT Template_Type_Code FROM Ref_Template_Types EXCEPT SELECT T.Template_Type_Code FROM Templates AS T JOIN Documents AS D ON T.Template_ID = D.Template_ID;
+SELECT Template_Type_Code FROM Ref_Template_Types EXCEPT SELECT T.Template_Type_Code FROM Templates AS T JOIN Documents AS D ON T.Template_ID = D.Template_ID;
+SELECT Template_Type_Code, Template_Type_Description FROM Ref_Template_Types;
+SELECT Template_Type_Code, Template_Type_Description FROM Ref_Template_Types;
+SELECT Template_Type_Description FROM Ref_Template_Types WHERE Template_Type_Code = 'AD';
+SELECT Template_Type_Description FROM Ref_Template_Types WHERE Template_Type_Code = 'AD';
+SELECT Template_Type_Code FROM Ref_Template_Types WHERE Template_Type_Description = 'Book';
+SELECT Template_Type_Code FROM Ref_Template_Types WHERE Template_Type_Description = 'Book';
+SELECT DISTINCT Ref_Template_Types.Template_Type_Description FROM Ref_Template_Types JOIN Templates ON Ref_Template_Types.Template_Type_Code = Templates.Template_Type_Code JOIN Documents ON Templates.Template_ID = Documents.Template_ID;
+SELECT DISTINCT T.Template_Type_Description FROM Ref_Template_Types AS T JOIN Templates AS Temp ON T.Template_Type_Code = Temp.Template_Type_Code JOIN Documents AS D ON Temp.Template_ID = D.Template_ID;
+SELECT Template_ID FROM Templates WHERE Template_Type_Code IN ( SELECT Template_Type_Code FROM Ref_Template_Types WHERE Template_Type_Description = 'Presentation' );
+SELECT Template_ID FROM Templates WHERE Template_Type_Code = ( SELECT Template_Type_Code FROM Ref_Template_Types WHERE Template_Type_Description = 'Presentation' );
+SELECT COUNT(*) FROM Paragraphs;
+SELECT COUNT(*) FROM Paragraphs;
+SELECT COUNT(*) FROM Paragraphs WHERE Document_ID IN ( SELECT Document_ID FROM Documents WHERE Document_Name = 'Summer Show' );
+SELECT COUNT(*) FROM Paragraphs WHERE Document_ID IN ( SELECT Document_ID FROM Documents WHERE Document_Name = 'Summer Show' );
+SELECT * FROM Paragraphs WHERE Paragraph_Text = 'Korea ';
+SELECT * FROM Paragraphs WHERE Paragraph_Text LIKE '%Korea%';
+SELECT Paragraph_ID, Paragraph_Text FROM Paragraphs WHERE Document_ID IN ( SELECT Document_ID FROM Documents WHERE Document_Name = 'Welcome to NY' );
+SELECT Paragraph_ID, Paragraph_Text FROM Paragraphs WHERE Document_ID IN ( SELECT Document_ID FROM Documents WHERE Document_Name = 'Welcome to NY' );
+SELECT Paragraph_Text FROM Paragraphs WHERE Document_ID IN ( SELECT Document_ID FROM Documents WHERE Document_Name = 'Customer reviews' );
+SELECT Paragraph_Text FROM Paragraphs WHERE Document_ID IN ( SELECT Document_ID FROM Documents WHERE Document_Name = 'Customer reviews' );
+SELECT Document_ID, COUNT(Paragraph_ID) AS Number_of_Paragraphs FROM Paragraphs GROUP BY Document_ID ORDER BY Document_ID;
+SELECT Document_ID, COUNT(Paragraph_ID) AS Number_of_Paragraphs FROM Paragraphs GROUP BY Document_ID ORDER BY Document_ID;
+SELECT Documents.Document_ID, Documents.Document_Name, COUNT(Paragraphs.Paragraph_ID) AS Number_of_Paragraphs FROM Documents LEFT JOIN Paragraphs ON Documents.Document_ID = Paragraphs.Document_ID GROUP BY Documents.Document_ID, Documents.Document_Name;
+SELECT Documents.Document_ID, Documents.Document_Name, COUNT(Paragraphs.Paragraph_ID) AS Number_of_Paragraphs FROM Documents LEFT JOIN Paragraphs ON Documents.Document_ID = Paragraphs.Document_ID GROUP BY Documents.Document_ID, Documents.Document_Name;
+SELECT Document_ID FROM Paragraphs GROUP BY Document_ID HAVING COUNT(*) >= 2;
+SELECT Document_ID FROM Paragraphs GROUP BY Document_ID HAVING COUNT(*) >= 2;
+SELECT Document_ID, Document_Name FROM Documents WHERE Document_ID = ( SELECT Document_ID FROM Paragraphs GROUP BY Document_ID ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT Document_ID, Document_Name FROM Documents WHERE Document_ID = ( SELECT Document_ID FROM Paragraphs GROUP BY Document_ID ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT Document_ID FROM Paragraphs GROUP BY Document_ID ORDER BY COUNT(*) LIMIT 1;
+SELECT Document_ID FROM Paragraphs GROUP BY Document_ID ORDER BY COUNT(*) LIMIT 1;
+SELECT Document_ID FROM Documents WHERE Document_ID IN ( SELECT Document_ID FROM Paragraphs GROUP BY Document_ID HAVING COUNT(*) BETWEEN 1 AND 2 );
+SELECT Document_ID FROM Documents WHERE Document_ID IN ( SELECT Document_ID FROM Paragraphs GROUP BY Document_ID HAVING COUNT(*) BETWEEN 1 AND 2 );
+SELECT Document_ID FROM Paragraphs WHERE Paragraph_Text = 'Brazil' INTERSECT SELECT Document_ID FROM Paragraphs WHERE Paragraph_Text = 'Ireland';
+SELECT Document_ID FROM Paragraphs WHERE Paragraph_Text = 'Brazil' INTERSECT SELECT Document_ID FROM Paragraphs WHERE Paragraph_Text = 'Ireland';
+SELECT COUNT(*) FROM teacher;
+SELECT COUNT(*) FROM teacher;
+SELECT Name FROM teacher ORDER BY CAST(REPLACE(Age, ' ', '') AS INTEGER);
+SELECT Name FROM teacher ORDER BY CAST(REPLACE(Age, ',', '') AS REAL);
+SELECT Age, Hometown FROM teacher;
+SELECT Age, Hometown FROM teacher;
+SELECT Name FROM teacher WHERE Hometown <> 'Little Lever Urban District';
+SELECT Name FROM teacher WHERE Hometown <> 'Little Lever Urban District';
+SELECT Name FROM teacher WHERE Age = '32' OR Age = '33';
+SELECT Name FROM teacher WHERE Age = '32' OR Age = '33';
+SELECT Hometown FROM teacher ORDER BY CAST(REPLACE(Age, ' years old', '') AS INTEGER) LIMIT 1;
+SELECT Hometown FROM teacher ORDER BY CAST(REPLACE(Age, ' years old', '') AS INTEGER) LIMIT 1;
+SELECT Hometown, COUNT(*) AS Number_of_Teachers FROM teacher GROUP BY Hometown;
+SELECT Hometown, COUNT(*) AS Number_of_Teachers FROM teacher GROUP BY Hometown;
+SELECT Hometown FROM teacher GROUP BY Hometown ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT Hometown FROM teacher GROUP BY Hometown ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT Hometown FROM teacher GROUP BY Hometown HAVING COUNT(*) >= 2;
+SELECT Hometown FROM teacher GROUP BY Hometown HAVING COUNT(*) >= 2;
+SELECT T1.Name, T2.Course FROM teacher AS T1 INNER JOIN course_arrange AS T3 ON T1.Teacher_ID = T3.Teacher_ID INNER JOIN course AS T2 ON T3.Course_ID = T2.Course_ID;
+SELECT T1.Name, T2.Course FROM teacher AS T1 INNER JOIN course_arrange AS T3 ON T1.Teacher_ID = T3.Teacher_ID INNER JOIN course AS T2 ON T3.Course_ID = T2.Course_ID;
+SELECT T1.Name, T2.Course FROM teacher AS T1 INNER JOIN course_arrange AS T3 ON T1.Teacher_ID = T3.Teacher_ID INNER JOIN course AS T2 ON T3.Course_ID = T2.Course_ID ORDER BY T1.Name;
+SELECT T1.Name, T2.Course FROM teacher AS T1 INNER JOIN course_arrange AS T3 ON T1.Teacher_ID = T3.Teacher_ID INNER JOIN course AS T2 ON T3.Course_ID = T2.Course_ID ORDER BY T1.Name;
+SELECT T1.Name FROM teacher AS T1 INNER JOIN course_arrange AS T2 ON T1.Teacher_ID = T2.Teacher_ID INNER JOIN course AS T3 ON T2.Course_ID = T3.Course_ID WHERE T3.Course = 'math';
+SELECT T1.Name FROM teacher AS T1 INNER JOIN course_arrange AS T2 ON T1.Teacher_ID = T2.Teacher_ID INNER JOIN course AS T3 ON T2.Course_ID = T3.Course_ID WHERE T3.Course = 'math';
+SELECT T1.Name, COUNT(T2.Course_ID) FROM teacher AS T1 INNER JOIN course_arrange AS T2 ON T1.Teacher_ID = T2.Teacher_ID GROUP BY T1.Name;
+SELECT T1.Name, COUNT(T2.Course_ID) AS Number_of_Courses FROM teacher AS T1 INNER JOIN course_arrange AS T2 ON T1.Teacher_ID = T2.Teacher_ID GROUP BY T1.Name;
+SELECT Name FROM teacher WHERE Teacher_ID IN ( SELECT Teacher_ID FROM course_arrange GROUP BY Teacher_ID HAVING COUNT(*) >= 2 );
+SELECT T1.Name FROM teacher AS T1 INNER JOIN course_arrange AS T2 ON T1.Teacher_ID = T2.Teacher_ID GROUP BY T1.Teacher_ID HAVING COUNT(T2.Course_ID) >= 2;
+SELECT Name FROM teacher EXCEPT SELECT T1.Name FROM teacher AS T1 INNER JOIN course_arrange AS T2 ON T1.Teacher_ID = T2.Teacher_ID;
+SELECT Name FROM teacher EXCEPT SELECT T1.Name FROM teacher AS T1 INNER JOIN course_arrange AS T2 ON T1.Teacher_ID = T2.Teacher_ID;
+SELECT COUNT(*) FROM visitor WHERE Age < 30;
+SELECT Name FROM visitor WHERE Level_of_membership > 4 ORDER BY Level_of_membership DESC;
+SELECT AVG(Age) FROM visitor WHERE Level_of_membership <= 4;
+SELECT Name, Level_of_membership FROM visitor WHERE Level_of_membership > 4 ORDER BY Age DESC;
+SELECT Museum_ID, Name FROM museum ORDER BY Num_of_Staff DESC LIMIT 1;
+SELECT AVG(Num_of_Staff) FROM museum WHERE CAST(SUBSTR(Open_Year, 1, 4) AS INTEGER) < 2009;
+SELECT Open_Year, Num_of_Staff FROM museum WHERE Name = 'Plaza Museum';
+SELECT Name FROM museum WHERE Num_of_Staff > ( SELECT MIN(Num_of_Staff) FROM museum WHERE STRFTIME('%Y', Open_Year) > '2010' );
+SELECT ID, Name, Age FROM visitor WHERE ID IN ( SELECT visitor_ID FROM visit GROUP BY visitor_ID HAVING COUNT(*) > 1 );
+SELECT ID, Name, Level_of_membership FROM visitor WHERE ID = ( SELECT visitor_ID FROM visit ORDER BY Total_spent DESC LIMIT 1 );
+SELECT Museum_ID, Name FROM museum WHERE Museum_ID = ( SELECT Museum_ID FROM visit GROUP BY Museum_ID ORDER BY SUM(Num_of_Ticket) DESC LIMIT 1 );
+SELECT Name FROM museum EXCEPT SELECT T1.Name FROM museum AS T1 INNER JOIN visit AS T2 ON T1.Museum_ID = T2.Museum_ID;
+SELECT Name, Age FROM visitor WHERE ID = ( SELECT visitor_ID FROM visit ORDER BY Num_of_Ticket DESC LIMIT 1 );
+SELECT AVG(Num_of_Ticket) AS average_tickets, MAX(Num_of_Ticket) AS max_tickets FROM visit;
+SELECT SUM(T1.Total_spent) FROM visit AS T1 INNER JOIN visitor AS T2 ON T1.visitor_ID = T2.ID WHERE T2.Level_of_membership = 1;
+SELECT T1.Name FROM visitor AS T1 INNER JOIN visit AS T2 ON T1.ID = T2.visitor_ID INNER JOIN museum AS T3 ON T2.Museum_ID = T3.Museum_ID WHERE STRFTIME('%Y', T3.Open_Year) < '2009' INTERSECT SELECT T1.Name FROM visitor AS T1 INNER JOIN visit AS T2 ON T1.ID = T2.visitor_ID INNER JOIN museum AS T3 ON T2.Museum_ID = T3.Museum_ID WHERE STRFTIME('%Y', T3.Open_Year) > '2011';
+SELECT COUNT(ID) FROM visitor WHERE ID NOT IN ( SELECT visitor_ID FROM visit WHERE Museum_ID IN ( SELECT Museum_ID FROM museum WHERE CAST(SUBSTR(Open_Year, 1, 4) AS INTEGER) > 2010 ) );
+SELECT COUNT(*) FROM museum WHERE STRFTIME('%Y', Open_Year) > '2013' OR STRFTIME('%Y', Open_Year) < '2008';
+SELECT COUNT(player_id) FROM players;
+SELECT COUNT(player_id) FROM players;
+SELECT COUNT(*) FROM matches UNION ALL SELECT COUNT(*) FROM qualifying_matches;
+SELECT COUNT(*) FROM matches;
+SELECT first_name, birth_date FROM players WHERE country_code = 'USA';
+SELECT first_name, birth_date FROM players WHERE country_code = 'USA';
+SELECT AVG(loser_age) AS average_loser_age, AVG(winner_age) AS average_winner_age FROM matches;
+SELECT AVG(loser_age) AS average_loser_age, AVG(winner_age) AS average_winner_age FROM matches;
+SELECT AVG(winner_rank) FROM matches;
+SELECT AVG(winner_rank) FROM matches;
+SELECT MAX(loser_rank) FROM matches;
+SELECT MIN(loser_rank) FROM matches;
+SELECT COUNT(DISTINCT country_code) FROM players;
+SELECT COUNT(DISTINCT country_code) FROM players;
+SELECT COUNT(DISTINCT loser_name) FROM matches;
+SELECT COUNT(DISTINCT loser_name) FROM matches;
+SELECT tourney_name FROM matches GROUP BY tourney_name HAVING COUNT(*) > 10;
+SELECT tourney_name FROM matches GROUP BY tourney_name HAVING COUNT(*) > 10;
+SELECT winner_name FROM matches WHERE year = 2013 INTERSECT SELECT winner_name FROM matches WHERE year = 2016;
+SELECT p.first_name, p.last_name FROM players AS p JOIN matches AS m ON p.player_id = m.winner_id WHERE m.year = 2013 INTERSECT SELECT p.first_name, p.last_name FROM players AS p JOIN matches AS m ON p.player_id = m.winner_id WHERE m.year = 2016;
+SELECT COUNT(*) FROM matches WHERE year = 2013 OR year = 2016;
+SELECT COUNT(*) FROM matches WHERE year = 2013 OR year = 2016;
+SELECT p.country_code, p.first_name FROM players AS p JOIN matches AS m ON p.player_id = m.winner_id WHERE m.tourney_name = 'Australian Open' INTERSECT SELECT p.country_code, p.first_name FROM players AS p JOIN matches AS m ON p.player_id = m.winner_id WHERE m.tourney_name = 'WTA Championships';
+SELECT p.first_name, p.country_code FROM players AS p JOIN matches AS m ON p.player_id = m.winner_id WHERE m.tourney_name = 'WTA Championships' INTERSECT SELECT p.first_name, p.country_code FROM players AS p JOIN matches AS m ON p.player_id = m.winner_id WHERE m.tourney_name = 'Australian Open';
+SELECT first_name, country_code FROM players ORDER BY birth_date LIMIT 1;
+SELECT first_name, country_code FROM players ORDER BY birth_date LIMIT 1;
+SELECT first_name, last_name FROM players ORDER BY birth_date;
+SELECT first_name, last_name FROM players ORDER BY birth_date;
+SELECT first_name, last_name FROM players WHERE hand = 'L' ORDER BY birth_date;
+SELECT first_name, last_name FROM players WHERE hand = 'L' ORDER BY birth_date;
+SELECT first_name, country_code FROM players WHERE player_id = ( SELECT player_id FROM rankings GROUP BY player_id ORDER BY SUM(tours) DESC LIMIT 1 );
+SELECT first_name, country_code FROM players WHERE player_id = ( SELECT player_id FROM rankings ORDER BY tours DESC LIMIT 1 );
+SELECT year FROM matches GROUP BY year ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT year FROM matches GROUP BY year ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT winner_name, winner_rank_points FROM matches GROUP BY winner_id ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT winner_name, MAX(winner_rank_points) FROM matches GROUP BY winner_name ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT winner_name FROM matches WHERE tourney_name = 'Australian Open' ORDER BY winner_rank_points DESC LIMIT 1;
+SELECT winner_name FROM matches WHERE tourney_name = 'Australian Open' ORDER BY winner_rank_points DESC LIMIT 1;
+SELECT loser_name, winner_name FROM matches ORDER BY minutes DESC LIMIT 1;
+SELECT winner_name, loser_name FROM matches ORDER BY minutes DESC LIMIT 1;
+SELECT AVG(rankings.ranking), players.first_name FROM rankings JOIN players ON rankings.player_id = players.player_id GROUP BY players.first_name;
+SELECT first_name, AVG(ranking) AS average_ranking FROM players JOIN rankings ON players.player_id = rankings.player_id GROUP BY first_name;
+SELECT p.first_name, SUM(r.ranking_points) AS total_ranking_points FROM players AS p JOIN rankings AS r ON p.player_id = r.player_id GROUP BY p.first_name;
+SELECT first_name, SUM(ranking_points) AS total_ranking_points FROM players JOIN rankings ON players.player_id = rankings.player_id GROUP BY first_name;
+SELECT country_code, COUNT(*) AS num_players FROM players GROUP BY country_code;
+SELECT country_code, COUNT(*) AS num_players FROM players GROUP BY country_code;
+SELECT country_code FROM players GROUP BY country_code ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT country_code FROM players GROUP BY country_code ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT country_code FROM players GROUP BY country_code HAVING COUNT(*) > 50;
+SELECT country_code FROM players GROUP BY country_code HAVING COUNT(*) > 50;
+SELECT ranking_date, SUM(tours) AS total_tours FROM rankings GROUP BY ranking_date;
+SELECT ranking_date, SUM(tours) AS total_tours FROM rankings GROUP BY ranking_date;
+SELECT year, COUNT(*) AS match_count FROM matches GROUP BY year;
+SELECT year, COUNT(*) AS match_count FROM matches GROUP BY year;
+SELECT winner_name, winner_rank FROM matches ORDER BY winner_age LIMIT 3;
+SELECT winner_name, winner_rank FROM matches ORDER BY winner_age LIMIT 3;
+SELECT COUNT(DISTINCT T1.winner_id) FROM matches AS T1 INNER JOIN players AS T2 ON T1.winner_id = T2.player_id WHERE T1.tourney_name LIKE '%WTA Championships%' AND T2.hand = 'L';
+SELECT COUNT(DISTINCT winner_id) FROM matches WHERE tourney_name = 'WTA Championships' AND winner_hand = 'L';
+SELECT first_name, country_code, birth_date FROM players WHERE player_id = ( SELECT winner_id FROM matches ORDER BY winner_rank_points DESC LIMIT 1 );
+SELECT first_name, country_code, birth_date FROM players WHERE player_id = ( SELECT winner_id FROM matches ORDER BY winner_rank_points DESC LIMIT 1 );
+SELECT hand, COUNT(*) AS num_players FROM players GROUP BY hand;
+SELECT hand, COUNT(*) AS num_players FROM players GROUP BY hand;
+SELECT COUNT(*) FROM ship WHERE disposition_of_ship = 'Captured';
+SELECT name, tonnage FROM ship ORDER BY name DESC;
+SELECT name, date, result FROM battle;
+SELECT MAX(killed + injured) AS max_death_toll, MIN(killed + injured) AS min_death_toll FROM death;
+SELECT CAST(SUM(injured) AS REAL) / COUNT(*) FROM death;
+SELECT note, killed, injured FROM death WHERE caused_by_ship_id IN ( SELECT id FROM ship WHERE tonnage = 't' );
+SELECT name, result FROM battle WHERE bulgarian_commander <> 'Boril';
+SELECT DISTINCT T1.id, T1.name FROM battle AS T1 INNER JOIN ship AS T2 ON T1.id = T2.lost_in_battle WHERE T2.ship_type = 'Brig';
+SELECT T1.id, T1.name FROM battle AS T1 INNER JOIN ship AS T2 ON T1.id = T2.lost_in_battle INNER JOIN death AS T3 ON T2.id = T3.caused_by_ship_id GROUP BY T1.id, T1.name HAVING SUM(T3.killed) > 10;
+SELECT caused_by_ship_id, ( SELECT name FROM ship WHERE id = T1.caused_by_ship_id ) FROM death AS T1 GROUP BY caused_by_ship_id ORDER BY SUM(injured) DESC LIMIT 1;
+SELECT DISTINCT name FROM battle WHERE bulgarian_commander = 'Kaloyan' AND latin_commander = 'Baldwin I';
+SELECT COUNT(DISTINCT result) FROM battle;
+SELECT COUNT(T1.id) FROM battle AS T1 LEFT JOIN ship AS T2 ON T1.id = T2.lost_in_battle WHERE T2.tonnage <> '225' OR T2.tonnage IS NULL;
+SELECT T1.name, T1.date FROM battle AS T1 INNER JOIN ship AS T2 ON T1.id = T2.lost_in_battle WHERE T2.name = 'Lettice' INTERSECT SELECT T1.name, T1.date FROM battle AS T1 INNER JOIN ship AS T2 ON T1.id = T2.lost_in_battle WHERE T2.name = 'HMS Atalanta';
+SELECT T1.name, T1.result, T1.bulgarian_commander FROM battle AS T1 LEFT JOIN ship AS T2 ON T1.id = T2.lost_in_battle WHERE T2.location <> 'English Channel' GROUP BY T1.id HAVING COUNT(T2.id) = 0;
+SELECT note FROM death WHERE note LIKE '%East%';
+SELECT line_1, line_2 FROM Addresses;
+SELECT line_1, line_2 FROM Addresses;
+SELECT COUNT(*) FROM Courses;
+SELECT COUNT(*) FROM Courses;
+SELECT course_description FROM Courses WHERE course_name = 'Math';
+SELECT course_description FROM Courses WHERE course_name LIKE '%math%';
+SELECT zip_postcode FROM Addresses WHERE city = 'Port Chelsea';
+SELECT zip_postcode FROM Addresses WHERE city = 'Port Chelsea';
+SELECT department_id, department_name FROM Departments WHERE department_id = ( SELECT department_id FROM Degree_Programs GROUP BY department_id ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT department_name, department_id FROM Departments WHERE department_id = ( SELECT department_id FROM Degree_Programs GROUP BY department_id ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT COUNT(DISTINCT department_id) FROM Degree_Programs;
+SELECT COUNT(DISTINCT department_id) FROM Degree_Programs;
+SELECT COUNT(DISTINCT degree_summary_name) FROM Degree_Programs;
+SELECT COUNT(DISTINCT degree_program_id) FROM Degree_Programs;
+SELECT COUNT(*) FROM Degree_Programs WHERE department_id = ( SELECT department_id FROM Departments WHERE department_name = 'Engineering' );
+SELECT COUNT(*) FROM Degree_Programs WHERE department_id = ( SELECT department_id FROM Departments WHERE department_name = 'Engineering' );
+SELECT section_name, section_description FROM Sections;
+SELECT section_name, section_description FROM Sections;
+SELECT course_name, course_id FROM Courses WHERE course_id IN ( SELECT course_id FROM Sections GROUP BY course_id HAVING COUNT(*) <= 2 );
+SELECT course_name, course_id FROM Courses WHERE course_id IN ( SELECT course_id FROM Sections GROUP BY course_id HAVING COUNT(*) < 2 );
+SELECT section_name FROM Sections ORDER BY section_name DESC;
+SELECT section_name FROM Sections ORDER BY section_name DESC;
+SELECT semester_id, semester_name FROM Semesters WHERE semester_id = ( SELECT semester_id FROM Student_Enrolment GROUP BY semester_id ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT Semesters.semester_name, Semesters.semester_id FROM Semesters JOIN Student_Enrolment ON Semesters.semester_id = Student_Enrolment.semester_id GROUP BY Semesters.semester_id ORDER BY COUNT(Student_Enrolment.student_id) DESC LIMIT 1;
+SELECT department_description FROM Departments WHERE department_name LIKE '%the computer%';
+SELECT department_description FROM Departments WHERE department_name LIKE '%computer%';
+SELECT Students.first_name, Students.middle_name, Students.last_name, Students.student_id FROM Students JOIN Student_Enrolment ON Students.student_id = Student_Enrolment.student_id GROUP BY Students.student_id, Student_Enrolment.semester_id HAVING COUNT(DISTINCT Student_Enrolment.degree_program_id) = 2;
+SELECT Students.student_id, Students.first_name, Students.middle_name, Students.last_name FROM Students JOIN Student_Enrolment ON Students.student_id = Student_Enrolment.student_id GROUP BY Students.student_id, Student_Enrolment.semester_id HAVING COUNT(DISTINCT Student_Enrolment.degree_program_id) = 2;
+SELECT Students.first_name, Students.middle_name, Students.last_name FROM Students JOIN Student_Enrolment ON Students.student_id = Student_Enrolment.student_id JOIN Degree_Programs ON Student_Enrolment.degree_program_id = Degree_Programs.degree_program_id WHERE Degree_Programs.degree_summary_name LIKE '%Bachelor%';
+SELECT Students.first_name, Students.middle_name, Students.last_name FROM Students JOIN Student_Enrolment ON Students.student_id = Student_Enrolment.student_id JOIN Degree_Programs ON Student_Enrolment.degree_program_id = Degree_Programs.degree_program_id WHERE Degree_Programs.degree_summary_name LIKE '%Bachelors%';
+SELECT T1.degree_summary_name FROM Degree_Programs AS T1 INNER JOIN Student_Enrolment AS T2 ON T1.degree_program_id = T2.degree_program_id GROUP BY T1.degree_summary_name ORDER BY COUNT(T2.student_id) DESC LIMIT 1;
+SELECT T1.degree_summary_name FROM Degree_Programs AS T1 INNER JOIN Student_Enrolment AS T2 ON T1.degree_program_id = T2.degree_program_id GROUP BY T1.degree_summary_name ORDER BY COUNT(T2.student_id) DESC LIMIT 1;
+SELECT degree_program_id, degree_summary_name FROM Degree_Programs WHERE degree_program_id = ( SELECT degree_program_id FROM Student_Enrolment GROUP BY degree_program_id ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT degree_program_id, degree_summary_name FROM Degree_Programs WHERE degree_program_id = ( SELECT degree_program_id FROM Student_Enrolment GROUP BY degree_program_id ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT Students.student_id, Students.first_name, Students.middle_name, Students.last_name, COUNT(*) AS num_enrollments FROM Students JOIN Student_Enrolment ON Students.student_id = Student_Enrolment.student_id GROUP BY Students.student_id, Students.first_name, Students.middle_name, Students.last_name ORDER BY num_enrollments DESC LIMIT 1;
+SELECT Students.first_name, Students.middle_name, Students.last_name, Students.student_id, COUNT(Student_Enrolment.student_id) AS num_enrollments FROM Students JOIN Student_Enrolment ON Students.student_id = Student_Enrolment.student_id GROUP BY Students.student_id ORDER BY num_enrollments DESC LIMIT 1;
+SELECT semester_name FROM Semesters EXCEPT SELECT Semesters.semester_name FROM Semesters JOIN Student_Enrolment ON Semesters.semester_id = Student_Enrolment.semester_id;
+SELECT semester_name FROM Semesters WHERE semester_id NOT IN ( SELECT semester_id FROM Student_Enrolment );
+SELECT T1.course_name FROM Courses AS T1 INNER JOIN Student_Enrolment_Courses AS T2 ON T1.course_id = T2.course_id;
+SELECT T1.course_name FROM Courses AS T1 INNER JOIN Student_Enrolment_Courses AS T2 ON T1.course_id = T2.course_id;
+SELECT T1.course_name FROM Courses AS T1 INNER JOIN Student_Enrolment_Courses AS T2 ON T1.course_id = T2.course_id GROUP BY T1.course_name ORDER BY COUNT(T2.student_course_id) DESC LIMIT 1;
+SELECT T1.course_name FROM Courses AS T1 INNER JOIN Student_Enrolment_Courses AS T2 ON T1.course_id = T2.course_id GROUP BY T1.course_name ORDER BY COUNT(T2.student_course_id) DESC LIMIT 1;
+SELECT last_name FROM Students WHERE current_address_id IN ( SELECT address_id FROM Addresses WHERE state_province_county = 'North Carolina' ) EXCEPT SELECT Students.last_name FROM Students JOIN Student_Enrolment ON Students.student_id = Student_Enrolment.student_id;
+SELECT last_name FROM Students WHERE student_id NOT IN ( SELECT student_id FROM Student_Enrolment ) AND current_address_id IN ( SELECT address_id FROM Addresses WHERE state_province_county = 'North Carolina' );
+SELECT T1.transcript_date, T1.transcript_id FROM Transcripts AS T1 INNER JOIN Transcript_Contents AS T2 ON T1.transcript_id = T2.transcript_id GROUP BY T1.transcript_id HAVING COUNT(*) >= 2;
+SELECT T1.transcript_id, T1.transcript_date FROM Transcripts AS T1 INNER JOIN Transcript_Contents AS T2 ON T1.transcript_id = T2.transcript_id GROUP BY T1.transcript_id HAVING COUNT(*) >= 2;
+SELECT cell_mobile_number FROM Students WHERE first_name = 'Timmothy' AND last_name = 'Ward';
+SELECT cell_mobile_number FROM Students WHERE first_name = 'Timmothy' AND last_name = 'Ward';
+SELECT first_name, middle_name, last_name FROM Students ORDER BY date_first_registered LIMIT 1;
+SELECT first_name, middle_name, last_name FROM Students ORDER BY date_first_registered LIMIT 1;
+SELECT first_name, middle_name, last_name FROM Students ORDER BY date_left LIMIT 1;
+SELECT first_name, middle_name, last_name FROM Students ORDER BY date_left LIMIT 1;
+SELECT first_name FROM Students WHERE current_address_id <> permanent_address_id;
+SELECT first_name FROM Students WHERE current_address_id <> permanent_address_id LIMIT 1;
+SELECT T1.address_id, T1.line_1, T1.line_2, T1.line_3 FROM Addresses AS T1 INNER JOIN Students AS T2 ON T1.address_id = T2.current_address_id GROUP BY T1.address_id ORDER BY COUNT(T2.student_id) DESC LIMIT 1;
+SELECT T1.address_id, T1.line_1, T1.line_2 FROM Addresses AS T1 INNER JOIN Students AS T2 ON T1.address_id = T2.current_address_id GROUP BY T1.address_id ORDER BY COUNT(T2.student_id) DESC LIMIT 1;
+SELECT AVG(strftime('%J', transcript_date)) FROM Transcripts;
+SELECT AVG(strftime('%J', transcript_date)) FROM Transcripts;
+SELECT transcript_date, other_details FROM Transcripts ORDER BY transcript_date LIMIT 1;
+SELECT MIN(T1.transcript_date), T1.other_details FROM Transcripts AS T1 INNER JOIN Transcript_Contents AS T2 ON T1.transcript_id = T2.transcript_id;
+SELECT COUNT(*) FROM Transcripts;
+SELECT COUNT(*) FROM Transcripts;
+SELECT MAX(transcript_date) FROM Transcripts;
+SELECT MAX(transcript_date) FROM Transcripts;
+SELECT COUNT(T1.transcript_id), T1.student_course_id FROM Transcript_Contents AS T1 GROUP BY T1.student_course_id ORDER BY COUNT(T1.transcript_id) DESC LIMIT 1;
+SELECT COUNT(T1.transcript_id), T2.course_id FROM Transcript_Contents AS T1 INNER JOIN Student_Enrolment_Courses AS T2 ON T1.student_course_id = T2.student_course_id GROUP BY T2.course_id ORDER BY COUNT(T1.transcript_id) DESC LIMIT 1;
+SELECT transcript_id, MIN(transcript_date) FROM Transcripts GROUP BY transcript_id ORDER BY COUNT(*) LIMIT 1;
+SELECT transcript_date, transcript_id FROM Transcripts WHERE transcript_id = ( SELECT transcript_id FROM Transcript_Contents GROUP BY transcript_id ORDER BY COUNT(*) LIMIT 1 );
+SELECT T1.semester_name FROM Semesters AS T1 INNER JOIN Student_Enrolment AS T2 ON T1.semester_id = T2.semester_id INNER JOIN Degree_Programs AS T3 ON T2.degree_program_id = T3.degree_program_id WHERE T3.degree_summary_name LIKE '%Master%' INTERSECT SELECT T1.semester_name FROM Semesters AS T1 INNER JOIN Student_Enrolment AS T2 ON T1.semester_id = T2.semester_id INNER JOIN Degree_Programs AS T3 ON T2.degree_program_id = T3.degree_program_id WHERE T3.degree_summary_name LIKE '%Bachelor%';
+SELECT T1.semester_id FROM Student_Enrolment AS T1 INNER JOIN Degree_Programs AS T2 ON T1.degree_program_id = T2.degree_program_id WHERE T2.degree_summary_name LIKE '%Masters%' INTERSECT SELECT T1.semester_id FROM Student_Enrolment AS T1 INNER JOIN Degree_Programs AS T2 ON T1.degree_program_id = T2.degree_program_id WHERE T2.degree_summary_name LIKE '%Bachelors%';
+SELECT COUNT(DISTINCT current_address_id) FROM Students;
+SELECT DISTINCT line_1, line_2, line_3, city, zip_postcode, state_province_county, country, other_address_details FROM Addresses WHERE address_id IN ( SELECT current_address_id FROM Students UNION SELECT permanent_address_id FROM Students );
+SELECT * FROM Students ORDER BY last_name DESC, first_name DESC, middle_name DESC;
+SELECT other_student_details FROM Students ORDER BY other_student_details DESC;
+The `Sections` table describes individual sections of courses. Each row represents a specific section offering of a course. The table includes: * **section_id:** A unique identifier for each section. * **course_id:** A foreign key referencing the `Courses` table, indicating which course this section belongs to. * **section_name:** A name for the section (e.g., "CS101-A", "Math201-Fall"). * **section_description:** A description of the section (optional). * **other_details:** A field for any other relevant details about the section. In short, it provides the necessary information to distinguish between different offerings of the same course (e.g., different times, instructors, or semesters).
+SELECT section_description FROM Sections WHERE section_name = 'h';
+SELECT first_name FROM Students WHERE permanent_address_id IN ( SELECT address_id FROM Addresses WHERE country = 'Haiti' ) OR cell_mobile_number = '09700166582';
+SELECT first_name FROM Students WHERE permanent_address_id IN ( SELECT address_id FROM Addresses WHERE country = 'Haiti' ) OR cell_mobile_number = '09700166582';
+SELECT Title FROM Cartoon ORDER BY Title;
+SELECT Title FROM Cartoon ORDER BY Title;
+SELECT * FROM Cartoon WHERE Directed_by = 'Ben Jones';
+SELECT Title FROM Cartoon WHERE Directed_by = 'Ben Jones';
+SELECT COUNT(*) FROM Cartoon WHERE Written_by = 'Joseph Kuhr';
+SELECT COUNT(*) FROM Cartoon WHERE Written_by = 'Joseph Kuhr';
+SELECT Title, Directed_by FROM Cartoon ORDER BY Original_air_date;
+SELECT Title, Directed_by FROM Cartoon ORDER BY Original_air_date;
+SELECT Title FROM Cartoon WHERE Directed_by = 'Ben Jones' OR Directed_by = 'Brandon Vietti';
+SELECT Title FROM Cartoon WHERE Directed_by = 'Ben Jones' OR Directed_by = 'Brandon Vietti';
+SELECT Country, COUNT(*) AS Number_of_TV_Channels FROM TV_Channel GROUP BY Country ORDER BY Number_of_TV_Channels DESC LIMIT 1;
+SELECT Country, COUNT(*) AS num_channels FROM TV_Channel GROUP BY Country ORDER BY num_channels DESC LIMIT 1;
+SELECT COUNT(DISTINCT series_name), COUNT(DISTINCT Content) FROM TV_Channel;
+SELECT COUNT(DISTINCT series_name), COUNT(DISTINCT Content) FROM TV_Channel;
+SELECT Content FROM TV_Channel WHERE series_name = 'Sky Radio';
+SELECT Content FROM TV_Channel WHERE series_name = 'Sky Radio';
+SELECT Package_Option FROM TV_Channel WHERE series_name = 'Sky Radio';
+SELECT Package_Option FROM TV_Channel WHERE series_name = 'Sky Radio';
+SELECT COUNT(*) FROM TV_Channel WHERE Language = 'English';
+SELECT COUNT(id) FROM TV_Channel WHERE Language = 'English';
+SELECT Language, COUNT(*) AS Number_of_Channels FROM TV_Channel GROUP BY Language ORDER BY Number_of_Channels LIMIT 1;
+SELECT Language, COUNT(*) AS num_channels FROM TV_Channel GROUP BY Language ORDER BY num_channels LIMIT 1;
+SELECT Language, COUNT(*) AS Number_of_Channels FROM TV_Channel GROUP BY Language;
+SELECT Language, COUNT(*) AS Number_of_Channels FROM TV_Channel GROUP BY Language;
+SELECT T1.series_name FROM TV_Channel AS T1 INNER JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T2.Title = 'The Rise of the Blue Beetle!';
+SELECT T1.series_name FROM TV_Channel AS T1 INNER JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T2.Title = 'The Rise of the Blue Beetle';
+SELECT Title FROM Cartoon WHERE Channel = ( SELECT id FROM TV_Channel WHERE series_name = 'Sky Radio' );
+SELECT Title FROM Cartoon WHERE Channel = ( SELECT id FROM TV_Channel WHERE series_name = 'Sky Radio' );
+SELECT Episode FROM TV_series ORDER BY Rating;
+SELECT Episode FROM TV_series ORDER BY Rating;
+SELECT Episode, Rating FROM TV_series ORDER BY CAST(REPLACE(Rating, ',', '') AS REAL) DESC LIMIT 3;
+SELECT Episode, Rating FROM TV_series ORDER BY CAST(REPLACE(Rating, '%', '') AS REAL) DESC LIMIT 3;
+SELECT MIN(Share), MAX(Share) FROM TV_series;
+SELECT MAX(Share), MIN(Share) FROM TV_series;
+SELECT Air_Date FROM TV_series WHERE Episode = 'A Love of a Lifetime';
+SELECT Air_Date FROM TV_series WHERE Episode = 'A Love of a Lifetime';
+SELECT Weekly_Rank FROM TV_series WHERE Episode = 'A Love of a Lifetime';
+SELECT Weekly_Rank FROM TV_series WHERE Episode = 'A Love of a Lifetime';
+SELECT T1.series_name FROM TV_Channel AS T1 INNER JOIN TV_series AS T2 ON T1.id = T2.Channel WHERE T2.Episode = 'A Love of a Lifetime';
+SELECT T1.series_name FROM TV_Channel AS T1 INNER JOIN TV_series AS T2 ON T1.id = T2.Channel WHERE T2.Episode = 'A Love of a Lifetime';
+SELECT Episode FROM TV_series WHERE Channel = ( SELECT id FROM TV_Channel WHERE series_name = 'Sky Radio' );
+SELECT Episode FROM TV_series WHERE Channel = ( SELECT id FROM TV_Channel WHERE series_name = 'Sky Radio' );
+SELECT Directed_by, COUNT(*) AS num_cartoons FROM Cartoon GROUP BY Directed_by;
+SELECT Directed_by, COUNT(*) AS Number_of_Cartoons FROM Cartoon GROUP BY Directed_by;
+SELECT Production_code, Channel FROM Cartoon ORDER BY Original_air_date DESC LIMIT 1;
+SELECT Production_code, Channel FROM Cartoon ORDER BY Original_air_date DESC LIMIT 1;
+SELECT Package_Option, series_name FROM TV_Channel WHERE Hight_definition_TV = 'yes';
+SELECT Package_Option, series_name FROM TV_Channel WHERE Hight_definition_TV = 'Yes';
+SELECT DISTINCT T1.Country FROM TV_Channel AS T1 INNER JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T2.Written_by = 'Todd Casey';
+SELECT DISTINCT T1.Country FROM TV_Channel AS T1 INNER JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T2.Written_by = 'Todd Casey';
+SELECT DISTINCT Country FROM TV_Channel EXCEPT SELECT DISTINCT T1.Country FROM TV_Channel AS T1 INNER JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T2.Written_by = 'Todd Casey';
+SELECT DISTINCT Country FROM TV_Channel EXCEPT SELECT DISTINCT T1.Country FROM TV_Channel AS T1 INNER JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T2.Written_by = 'Todd Casey';
+SELECT T1.series_name, T1.Country FROM TV_Channel AS T1 INNER JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T2.Directed_by = 'Ben Jones' INTERSECT SELECT T1.series_name, T1.Country FROM TV_Channel AS T1 INNER JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T2.Directed_by = 'Michael Chang';
+SELECT T1.series_name, T1.Country FROM TV_Channel AS T1 INNER JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T2.Directed_by = 'Ben Jones' INTERSECT SELECT T1.series_name, T1.Country FROM TV_Channel AS T1 INNER JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T2.Directed_by = 'Michael Chang';
+SELECT Pixel_aspect_ratio_PAR, Country FROM TV_Channel WHERE Language <> 'English';
+SELECT Pixel_aspect_ratio_PAR, Country FROM TV_Channel WHERE Language <> 'English';
+SELECT id FROM TV_Channel WHERE Country IN ( SELECT Country FROM TV_Channel GROUP BY Country HAVING COUNT(*) > 2 );
+SELECT id FROM TV_Channel GROUP BY id HAVING COUNT(*) > 2;
+SELECT id FROM TV_Channel EXCEPT SELECT T1.Channel FROM TV_Channel AS T1 INNER JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T2.Directed_by = 'Ben Jones';
+SELECT id FROM TV_Channel EXCEPT SELECT T1.Channel FROM TV_Channel AS T1 INNER JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T2.Directed_by = 'Ben Jones';
+SELECT Package_Option FROM TV_Channel EXCEPT SELECT T1.Package_Option FROM TV_Channel AS T1 INNER JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T2.Directed_by = 'Ben Jones';
+SELECT Package_Option FROM TV_Channel WHERE id NOT IN ( SELECT Channel FROM Cartoon WHERE Directed_by = 'Ben Jones' );
+SELECT COUNT(*) FROM poker_player;
+SELECT COUNT(*) FROM poker_player;
+SELECT Earnings FROM poker_player ORDER BY Earnings DESC;
+SELECT Earnings FROM poker_player ORDER BY Earnings DESC;
+SELECT Final_Table_Made, Best_Finish FROM poker_player;
+SELECT Final_Table_Made, Best_Finish FROM poker_player;
+SELECT AVG(Earnings) FROM poker_player;
+SELECT AVG(Earnings) FROM poker_player;
+SELECT Money_Rank FROM poker_player ORDER BY Earnings DESC LIMIT 1;
+SELECT Money_Rank FROM poker_player ORDER BY Earnings DESC LIMIT 1;
+SELECT MAX(Final_Table_Made) FROM poker_player WHERE Earnings < 200000;
+SELECT MAX(Final_Table_Made) FROM poker_player WHERE Earnings < 200000;
+SELECT Name FROM people WHERE People_ID IN ( SELECT People_ID FROM poker_player );
+SELECT Name FROM people WHERE People_ID IN ( SELECT People_ID FROM poker_player );
+SELECT p.Name FROM people AS p JOIN poker_player AS pp ON p.People_ID = pp.People_ID WHERE pp.Earnings > 300000;
+SELECT p.Name FROM people AS p JOIN poker_player AS pp ON p.People_ID = pp.People_ID WHERE pp.Earnings > 300000;
+SELECT p.Name FROM people AS p JOIN poker_player AS pp ON p.People_ID = pp.People_ID ORDER BY pp.Final_Table_Made ASC;
+SELECT p.Name FROM people AS p JOIN poker_player AS pp ON p.People_ID = pp.People_ID ORDER BY pp.Final_Table_Made;
+SELECT Birth_Date FROM people WHERE People_ID = ( SELECT People_ID FROM poker_player ORDER BY Earnings LIMIT 1 );
+SELECT Birth_Date FROM people WHERE People_ID = ( SELECT People_ID FROM poker_player ORDER BY Earnings LIMIT 1 );
+SELECT T1.Money_Rank FROM poker_player AS T1 INNER JOIN people AS T2 ON T1.People_ID = T2.People_ID ORDER BY T2.Height DESC LIMIT 1;
+SELECT T1.Money_Rank FROM poker_player AS T1 INNER JOIN people AS T2 ON T1.People_ID = T2.People_ID ORDER BY T2.Height DESC LIMIT 1;
+SELECT AVG(T1.Earnings) FROM poker_player AS T1 INNER JOIN people AS T2 ON T1.People_ID = T2.People_ID WHERE T2.Height > 200;
+SELECT AVG(T1.Earnings) FROM poker_player AS T1 INNER JOIN people AS T2 ON T1.People_ID = T2.People_ID WHERE T2.Height > 200;
+SELECT p.Name FROM people AS p JOIN poker_player AS pp ON p.People_ID = pp.People_ID ORDER BY pp.Earnings DESC;
+SELECT p.Name FROM people AS p JOIN poker_player AS pp ON p.People_ID = pp.People_ID ORDER BY pp.Earnings DESC;
+SELECT Nationality, COUNT(*) AS Number_of_People FROM people GROUP BY Nationality;
+SELECT Nationality, COUNT(*) AS num_people FROM people GROUP BY Nationality;
+SELECT Nationality FROM people GROUP BY Nationality ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT Nationality FROM people GROUP BY Nationality ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT Nationality FROM people GROUP BY Nationality HAVING COUNT(*) >= 2;
+SELECT Nationality FROM people GROUP BY Nationality HAVING COUNT(*) >= 2;
+SELECT Name, Birth_Date FROM people ORDER BY Name ASC;
+SELECT Name, Birth_Date FROM people ORDER BY Name;
+SELECT Name FROM people WHERE Nationality <> 'Russia';
+SELECT Name FROM people WHERE Nationality <> 'Russia';
+SELECT Name FROM people EXCEPT SELECT p.Name FROM people AS p JOIN poker_player AS pp ON p.People_ID = pp.People_ID;
+SELECT Name FROM people EXCEPT SELECT p.Name FROM people AS p JOIN poker_player AS pp ON p.People_ID = pp.People_ID;
+SELECT COUNT(DISTINCT Nationality) FROM people;
+SELECT COUNT(DISTINCT Nationality) FROM people;
+To answer the question "How many states are there?", we need the database schema. The provided context states there is *no* schema. Therefore, it's impossible to answer the question. We need a table (e.g., `states`) with at least a state name or ID to count the number of states.
+SELECT contestant_number, contestant_name FROM Contestants ORDER BY contestant_name DESC;
+The provided context lacks a database schema. To answer the question, "List the vote ids, phone numbers, and states of all votes," I need the schema (table names and column names). For example, a possible schema might be: CREATE TABLE Votes ( vote_id INT PRIMARY KEY, phone_number VARCHAR(20), state VARCHAR(2) ); With this schema, the SQL query would be: SELECT vote_id, phone_number, state FROM Votes; Please provide the database schema so I can give you the correct SQL query.
+To determine the maximum and minimum values of area codes, we need the database schema. The schema would define a table (likely named something like `phone_numbers` or `addresses`) containing a column representing the area code. Without the schema, I cannot provide a definitive answer. However, I can give you the SQL queries you would use *if* you had a table named `phone_numbers` with an `area_code` column: **SQL (assuming a table named `phone_numbers` with an `area_code` column):** To find the maximum area code: SELECT MAX(area_code) AS max_area_code FROM phone_numbers; To find the minimum area code: SELECT MIN(area_code) AS min_area_code FROM phone_numbers; These queries assume `area_code` is a numeric data type. If it's stored as text, you might need to cast it to a numeric type before using `MAX()` and `MIN()`, depending on your specific database system (e.g., `CAST(area_code AS INT)` in some systems). The exact syntax for casting might vary slightly. Remember to replace `phone_numbers` and `area_code` with the actual names of your table and column if they are different.
+The question cannot be answered without the database schema. The schema defines the tables and columns, including the table containing vote information (likely a table named something like `votes` or `ballots`), the column specifying the state ('CA'), and the column indicating the creation date of the vote. Once the schema is provided, a SQL query can be constructed to find the answer. For example, if the table was named `votes` with columns `state` and `created_date`, the query would be: SELECT MAX(created_date) FROM votes WHERE state = 'CA';
+This question cannot be answered without the database schema. The schema defines the tables and columns, which is necessary to formulate a SQL query to retrieve the requested contestant names. A sample query would look something like this (assuming a table named `contestants` with a column named `name`): SELECT name FROM contestants WHERE name != 'Jessie Alloway'; But without knowing the table and column names, a precise query cannot be constructed.
+The question cannot be answered without the database schema. The schema defines the tables, columns, and data types. To determine the distinct states and create times of all votes, we need to know: 1. **Table Name:** The name of the table containing vote information. Let's assume it's called `votes`. 2. **Column Names:** The names of the columns representing the state and create time of a vote. Let's assume these are `state` and `create_time`. With this information, the SQL query would be: SELECT DISTINCT state, create_time FROM votes; This query selects the distinct combinations of `state` and `create_time` from the `votes` table. Without the schema, this is the best possible answer. Provide the schema for a more precise query.
+To answer this question, we need a database schema. The schema should include at least two tables: one for contestants (with contestant number and name) and one for votes (linking contestant numbers to votes). Let's assume the following schema: **Table: Contestants** | Column Name | Data Type | |---|---| | contestant_number | INT (Primary Key) | | contestant_name | VARCHAR(255) | **Table: Votes** | Column Name | Data Type | |---|---| | vote_id | INT (Primary Key) | | contestant_number | INT (Foreign Key referencing Contestants.contestant_number) | Then, the SQL query to find the contestant numbers and names of contestants with at least two votes would be: SELECT c.contestant_number, c.contestant_name FROM Contestants c JOIN Votes v ON c.contestant_number = v.contestant_number GROUP BY c.contestant_number, c.contestant_name HAVING COUNT(*) >= 2; This query does the following: 1. **`SELECT c.contestant_number, c.contestant_name`**: Selects the contestant number and name. 2. **`FROM Contestants c JOIN Votes v ON c.contestant_number = v.contestant_number`**: Joins the `Contestants` and `Votes` tables based on the `contestant_number`. 3. **`GROUP BY c.contestant_number, c.contestant_name`**: Groups the results by contestant number and name so we can count votes per contestant. 4. **`HAVING COUNT(*) >= 2`**: Filters the grouped results to include only contestants with at least two votes (COUNT(*) counts the number of votes for each contestant). Without a specific database schema, this is the most general and accurate solution. If your schema is different (e.g., different column names or additional tables), you'll need to adjust the query accordingly.
+To answer this question, we need a database schema. Since none is provided, I'll assume a simple schema. Let's say we have a table called `votes` with the following columns: * `contestant_number` (INT): The unique identifier for each contestant. * `contestant_name` (VARCHAR): The name of the contestant. * `votes_received` (INT): The number of votes the contestant received. Then, the SQL query to find the contestant with the least number of votes would be: SELECT contestant_number, contestant_name FROM votes ORDER BY votes_received ASC LIMIT 1; This query first orders the results in ascending order based on the `votes_received` column. Then, `LIMIT 1` restricts the output to only the first row, which represents the contestant with the fewest votes. **Important Note:** This query assumes that at least one contestant received votes. If no contestants received any votes, the query will return an empty result set. To handle this case, you might want to use a more robust query, depending on your specific needs and database system. For example, in some systems you could use a `FETCH FIRST 1 ROWS ONLY` clause instead of `LIMIT 1`. Also, you might want to add a check to see if any rows were returned.
+The question cannot be answered without the database schema. The schema would need to define at least a table with columns containing information about votes and the state where those votes originated. For example, a table named `votes` might have columns like `vote_id`, `state`, and `candidate`. Then a SQL query could be written to count the votes.
+To answer this question, we need the database schema. The schema would define the tables and columns involved (e.g., a `Contestants` table with a `contestant_id` and a `votes` column, or perhaps a `Votes` table with a `contestant_id` and a `voter_id`). Without the schema, it's impossible to provide a SQL query or a numerical answer. Please provide the database schema.
+To answer this question, we need the database schema. The schema would define tables (e.g., `voters`, `polling_stations`) and their columns (e.g., `voter_id`, `area_code`, `votes_cast`). Without the schema, I cannot provide a SQL query to find the area code with the most votes. **Example Schema and Query:** Let's assume a simplified schema: CREATE TABLE Voters ( voter_id INT PRIMARY KEY, area_code VARCHAR(10) ); This table only tracks the area code for each voter. A more realistic schema would include a table to track votes cast, potentially linking to a polling station table. If we had a table like this: CREATE TABLE Votes ( voter_id INT, area_code VARCHAR(10), votes_cast INT, FOREIGN KEY (voter_id) REFERENCES Voters(voter_id) ); Then we could use the following SQL query to find the area code with the most votes: SELECT area_code FROM Votes GROUP BY area_code ORDER BY SUM(votes_cast) DESC LIMIT 1; This query groups the votes by `area_code`, sums the `votes_cast` for each area, orders the results in descending order based on the sum, and then returns only the top area code. **In short:** Provide the database schema to get a precise SQL query. The above is an example based on a plausible schema; your actual query will depend on your specific table and column names.
+The provided context lacks the database schema. To answer the question, I need the table structure (names of tables and columns, data types) and sample data. Specifically, I need a table (likely named something like `votes` or `ballots`) with at least these columns: * `create_date` (date or timestamp) * `state` (string) * `phone_number` (string) * `contestant_name` (string) Once you provide the schema and sample data, I can write a SQL query to retrieve the requested information. For example, if the table was named `votes`, the query would look something like this: SELECT create_date, state, phone_number FROM votes WHERE contestant_name = 'Tabatha Gehling';
+To answer this question, we need a database schema. The schema should include at least the following tables: * **Voters:** With columns like `voter_id` (primary key), `area_code` (representing the voter's area code). * **Votes:** With columns like `vote_id` (primary key), `voter_id` (foreign key referencing Voters), `contestant_name` (the name of the contestant voted for). Assuming such a schema exists, the SQL query to find the area codes where voters voted for both 'Tabatha Gehling' and 'Kelly Clauss' would be: SELECT DISTINCT v.area_code FROM Voters v JOIN Votes vt ON v.voter_id = vt.voter_id WHERE vt.contestant_name = 'Tabatha Gehling' INTERSECT SELECT DISTINCT v.area_code FROM Voters v JOIN Votes vt ON v.voter_id = vt.voter_id WHERE vt.contestant_name = 'Kelly Clauss'; This query works by: 1. **Finding area codes for Tabatha Gehling:** The first `SELECT` statement finds all distinct area codes from the `Voters` table where the corresponding `Votes` table entry shows a vote for 'Tabatha Gehling'. 2. **Finding area codes for Kelly Clauss:** The second `SELECT` statement does the same for 'Kelly Clauss'. 3. **Using INTERSECT:** The `INTERSECT` operator returns only the area codes that are present in *both* result sets. This ensures we only get area codes where voters voted for both contestants. **Alternative using JOIN and GROUP BY (potentially more efficient):** SELECT v.area_code FROM Voters v JOIN Votes vt ON v.voter_id = vt.voter_id WHERE vt.contestant_name IN ('Tabatha Gehling', 'Kelly Clauss') GROUP BY v.area_code HAVING COUNT(DISTINCT vt.contestant_name) = 2; This alternative is potentially more efficient because it avoids two separate scans of the tables. It joins the tables, filters for votes for either contestant, groups by area code, and then uses the `HAVING` clause to only include area codes where exactly two distinct contestants (Tabatha and Kelly) received votes. Without the actual database schema, this is the best solution we can provide. You'll need to adapt the table and column names to match your specific schema.
+SELECT name FROM Contestants WHERE name LIKE '%Al%';
+This question cannot be answered without the database schema. The schema would need to include a table (e.g., `countries`) with at least two columns: one for the country name (e.g., `country_name`) and one for the independence date (e.g., `independence_date`). Once the schema is provided, a SQL query like this could be used: SELECT country_name FROM countries WHERE independence_date > '1950-12-31'; This query assumes the `independence_date` column is of a date or datetime data type. The specific query might need slight adjustments depending on the exact column names and data types in your schema.
+Please provide the database schema (table names and column names, including data types) so I can answer your question. I need the schema to write a SQL query that identifies nations founded after 1950.
+The provided context lacks the database schema necessary to answer the question. To answer how many countries have a republic as their form of government, we need a table (e.g., `countries`) with at least two columns: * `country_name` (or similar): The name of the country. * `government_form` (or similar): The type of government (e.g., 'Republic', 'Monarchy', 'Democracy'). With such a table, the SQL query would be: SELECT COUNT(*) FROM countries WHERE government_form = 'Republic'; Without the schema and sample data, it's impossible to provide a numerical answer.
+The provided context lacks the database schema necessary to answer the question. To answer how many countries have governments that are republics, a table with at least two columns is needed: one for country names and another specifying the type of government. For example, a table named `countries` with columns `country_name` (TEXT) and `government_type` (TEXT) would suffice. Then, a SQL query like this could be used: SELECT COUNT(*) FROM countries WHERE government_type = 'Republic'; Without the schema, it's impossible to provide a numerical answer.
+I need the database schema (table names, column names, and data types) to answer your question. The question asks for a calculation based on geographical data (surface area) and a region (Caribbean). To perform this calculation, I need a table with at least these columns: * **country_name:** (TEXT or VARCHAR) The name of the country. * **region:** (TEXT or VARCHAR) The region the country belongs to. * **surface_area:** (NUMERIC, FLOAT, or DOUBLE) The surface area of the country (likely in square kilometers). Once you provide the schema and sample data, I can write a SQL query to calculate the total surface area of Caribbean countries.
+I need the database schema (table names, column names, and data types) to answer your question. Specifically, I need a table that contains information about countries and their surface areas. The table should have at least two columns: one identifying the country (e.g., `country_name`) and another containing the surface area (e.g., `surface_area` in square kilometers). Additionally, I need a way to identify which countries are in the Caribbean (perhaps a column indicating region or continent). Once you provide the schema, I can write a SQL query to calculate the total surface area.
+Anguilla is in **North America**.
+To answer this question, we need a database schema (table structure) with at least two tables: one containing country information (including the country name and continent) and possibly another linking countries to regions or continents. Without the schema, it's impossible to provide a SQL query or definitive answer. The answer requires looking up "Anguilla" in a table and finding its associated continent.
+To answer this question, I need the database schema. The schema would define tables (like a "cities" table and a "regions" table) and the relationships between them (e.g., a foreign key linking cities to their regions). Without the schema, I cannot determine the region of Kabul.
+To answer this question, I need the database schema. The schema would define tables (like a "cities" table or a "regions" table) and their columns (like "city_name", "region_name", etc.) that would contain the information needed to determine the region of Kabul. Without the schema, I cannot provide an answer.
+I need the database schema to answer this question. The schema would define the tables and columns containing information about languages spoken in Aruba. For example, I'd need a table with columns like `language` and `population_speaking` (or similar). Without the schema, I cannot provide an answer.
+I need the database schema to answer your question. The schema would define the tables and columns containing information about Aruba, including potentially a table with language data. Without the schema, I cannot access the necessary information.
+I need the database schema to answer your question. The schema defines the tables and columns (like "country", "population", "life_expectancy") that hold the data. Without knowing the schema, I cannot query the database to find the population and life expectancy for Brazil.
+I need the database schema (table names, column names, and data types) to answer your question. I cannot access external databases or specific files. Please provide the schema so I can write a query to retrieve Brazil's population and life expectancy.
+I need the database schema to answer your question. The schema defines the tables and their columns (including things like table names, column names, data types, and relationships between tables). Without it, I cannot access the information about Angola's region and population.
+I need the database schema to answer this question. The schema would define tables (like a "countries" table) and their columns (like "country_name", "region", "population"). Without the schema, I cannot access the information needed to determine Angola's region and population.
+I need the database schema (table names, column names, and data types) to answer your question. The question asks for an average life expectancy, implying there's a table with at least columns for "country," "region," and "life_expectancy". Please provide the schema so I can write the appropriate SQL query.
+I need the database schema (table names, column names, and data types) to answer your question. The schema should include tables with information about people and their lifespans, and ideally a table linking people to geographic regions (like Central Africa). Without the schema, I cannot formulate a SQL query to calculate the average life expectancy.
+I need the database schema (table names, column names, and data types) to answer your question. The schema is essential for writing a SQL query to find the country with the shortest life expectancy in Asia. Please provide the schema.
+This question cannot be answered without the database schema. The schema would define the tables (e.g., Countries, Demographics) and their columns (e.g., CountryName, Continent, LifeExpectancy) needed to query the data. Provide the schema to allow for a SQL query to be constructed.
+The question cannot be answered without the database schema. The schema would need to define tables with columns containing information about countries, their populations, their geographic location (to identify those in Asia), and their Gross National Product (GNP). Only then could a SQL query be constructed to calculate the total population and maximum GNP for Asian countries.
+The provided context lacks the necessary database schema (table names, column names, data types) to answer the question. To answer how many people live in Asia and what the largest GNP among them is, we need a database schema with at least the following information: * **A table (e.g., `people`)** containing information about individuals. * **A column (e.g., `continent`)** specifying the continent where each person lives. * **A column (e.g., `gnp`)** representing the Gross National Product associated with each person (this could be per capita GNP or some other measure). **Example Schema and SQL Query:** Let's assume a simplified schema: CREATE TABLE people ( id INT PRIMARY KEY, name VARCHAR(255), continent VARCHAR(255), gnp DECIMAL(15, 2) ); Then, the SQL query to answer the question would be: SELECT COUNT(*) AS num_people_in_asia, MAX(gnp) AS largest_gnp_in_asia FROM people WHERE continent = 'Asia'; This query would: 1. `SELECT COUNT(*)`: Count the number of rows (people) matching the criteria. 2. `SELECT MAX(gnp)`: Find the maximum GNP among those rows. 3. `FROM people`: Specify the table to query. 4. `WHERE continent = 'Asia'`: Filter the results to include only people living in Asia. Without the actual database schema and data, this is the best possible answer. Provide the schema, and I can give you a more precise SQL query.
+I need the database schema (table names, column names, and data types) to answer your question. The question requires querying a database, and without knowing the structure of the database, I cannot formulate the SQL query needed to calculate the average life expectancy. Please provide the schema.
+The question cannot be answered without the database schema. To calculate the average life expectancy for African republics, the database needs tables with at least the following information: * **A table containing country information:** This table would need columns for at least `country_name`, `continent`, `government_type`, and `life_expectancy`. Once the schema is provided, a SQL query can be constructed to answer the question. For example, if the table is named `countries`, a query might look like this: SELECT AVG(life_expectancy) FROM countries WHERE continent = 'Africa' AND government_type = 'Republic'; This query assumes that 'Republic' is the exact string used to represent a republic in the `government_type` column. The specific query will need to be adjusted based on the actual column names and data types in your database.
+The provided context lacks the necessary database schema or data to answer the question. To calculate the total surface area of Asia and Europe, we'd need a table with at least the following information: * **Continent:** A column specifying the name of the continent (e.g., 'Asia', 'Europe'). * **SurfaceArea:** A column containing the surface area of each continent (likely in square kilometers or square miles). With such a table (let's call it `continents`), the SQL query would be: SELECT SUM(SurfaceArea) FROM continents WHERE Continent IN ('Asia', 'Europe'); This query would sum the `SurfaceArea` values for rows where the `Continent` is either 'Asia' or 'Europe'. Without the actual data, however, a numerical answer is impossible.
+To answer this question, we need a database schema with tables containing information about countries, their continents, and their surface areas. Let's assume a simplified schema: **Table: countries** | Column Name | Data Type | |---|---| | country_id | INT (Primary Key) | | country_name | VARCHAR(255) | | continent | VARCHAR(255) | | surface_area | DECIMAL(10,2) | **SQL Query:** SELECT SUM(surface_area) AS total_surface_area FROM countries WHERE continent = 'Asia' OR continent = 'Europe'; This query selects the sum of the `surface_area` column from the `countries` table, filtering for rows where the `continent` column is either 'Asia' or 'Europe'. The result, `total_surface_area`, will represent the total surface area covered by countries in Asia or Europe. The units of `surface_area` would depend on how the data is stored in the database (e.g., square kilometers, square miles).
+The question cannot be answered without the database schema. The schema would need to include at least a table with information about people and their district of residence. The query would then select the count of people where the district is 'Gelderland'.
+The question cannot be answered without the database schema. The schema would need to include at least a table with information about districts and their populations. For example, a table named `districts` might have columns like `district_name` and `population`.
+The provided context lacks a database schema. To answer the question, we need a schema describing tables (e.g., `nations`) and their columns (e.g., `government`, `gnp`, `population`). Assuming a table named `nations` with columns `government`, `gnp` (numeric), and `population` (numeric), the SQL query would be: SELECT AVG(gnp) AS average_gnp, SUM(population) AS total_population FROM nations WHERE government = 'US territory'; This query calculates the average GNP (`AVG(gnp)`) and the total population (`SUM(population)`) for all rows in the `nations` table where the `government` column is equal to 'US territory'. The results are aliased as `average_gnp` and `total_population` respectively for clarity. Remember to replace `'US territory'` with the exact string used in your database if it's different.
+The provided context lacks the database schema necessary to answer the question. To calculate the mean GNP and total population of US territories, we need a table (let's call it `nations`) with at least the following columns: * `nation_name`: (TEXT or VARCHAR) Name of the nation. * `us_territory`: (BOOLEAN or INTEGER) Indicates whether the nation is a US territory (e.g., 1 for yes, 0 for no). * `gnp`: (NUMERIC) Gross National Product. * `population`: (NUMERIC) Population. Assuming such a table exists, the SQL query would be: SELECT AVG(gnp) AS mean_gnp, SUM(population) AS total_population FROM nations WHERE us_territory = 1; -- Or TRUE if using BOOLEAN This query calculates the average GNP (`AVG(gnp)`) and the sum of the populations (`SUM(population)`) for all rows where the `us_territory` column is 1 (or TRUE), indicating US territories. The results are aliased as `mean_gnp` and `total_population` for clarity.
+I need the database schema to answer this question. The schema would define the tables and columns containing information about languages spoken in the world. Without that information, I cannot determine the number of unique languages.
+The provided context lacks any database schema or data to answer the question. To determine the number of distinct languages used around the world, a database table (e.g., `languages`) with at least a column specifying the language name would be needed. Then, a SQL query like `SELECT COUNT(DISTINCT language_name) FROM languages;` could be used.
+I need the database schema to answer this question. The schema would define the tables and columns containing information about African countries and their governments. Without that information, I cannot determine the number of government types in Africa.
+I need the database schema to answer this question. The schema would define the tables and columns containing information about African countries and their governments. Without that information, I cannot determine the number of different forms of government in Africa.
+The provided context lacks any database schema or data about languages used in Aruba. Therefore, it's impossible to answer the question. To answer, we would need a table (e.g., `languages_aruba`) with at least a column listing the languages spoken in Aruba.
+This question cannot be answered without the database schema. The schema would need to contain a table (e.g., `languages_spoken`) with at least columns for country and language. Only then could a query be constructed to count the number of distinct languages spoken in Aruba.
+I need the database schema to answer this question. The schema would need to contain a table with information about countries and their official languages. Without that information, I cannot determine how many official languages Afghanistan has.
+I need the database schema to answer this question. The schema would need to contain a table with information about countries and their official languages. Without that information, I cannot determine how many official languages are spoken in Afghanistan.
+I need the database schema (table names, columns, and their data types) to answer your question. The schema is essential to formulate a SQL query that identifies the country with the most spoken languages. Please provide the schema.
+The provided context lacks the database schema necessary to answer the question. To answer this, I need a table (e.g., `Nations`) with at least two columns: * `nation_name` (text): The name of the nation. * `num_languages` (integer): The number of languages used in that nation. With such a table, the SQL query would be: SELECT nation_name FROM Nations ORDER BY num_languages DESC LIMIT 1; This query orders the nations by the number of languages in descending order and then returns only the top row, which represents the nation using the greatest number of languages.
+Without a database schema, it's impossible to answer which continent has the most diverse languages. To answer this question, a database table would be needed with at least two columns: * **language:** The name of the language. * **continent:** The continent where the language is primarily spoken. The query would then involve grouping by continent and counting the distinct languages in each group, then selecting the continent with the maximum count. For example, in SQL, the query might look something like this (assuming a table named `languages`): SELECT continent FROM languages GROUP BY continent ORDER BY COUNT(DISTINCT language) DESC LIMIT 1; This query would return the continent with the highest number of distinct languages. Without the database schema and data, however, this is impossible to determine.
+To answer this question, we need a database schema with tables containing information about continents and the languages spoken in each. A suitable schema might look like this: **Table: Continents** | Column Name | Data Type | |---|---| | continent_id | INT (Primary Key) | | continent_name | VARCHAR(255) | **Table: Countries** | Column Name | Data Type | |---|---| | country_id | INT (Primary Key) | | country_name | VARCHAR(255) | | continent_id | INT (Foreign Key referencing Continents) | **Table: Languages** | Column Name | Data Type | |---|---| | language_id | INT (Primary Key) | | language_name | VARCHAR(255) | **Table: CountryLanguages** | Column Name | Data Type | |---|---| | country_id | INT (Foreign Key referencing Countries) | | language_id | INT (Foreign Key referencing Languages) | With this schema, we can write a SQL query to find the continent with the most languages: SELECT c.continent_name FROM Continents c JOIN Countries co ON c.continent_id = co.continent_id JOIN CountryLanguages cl ON co.country_id = cl.country_id GROUP BY c.continent_name ORDER BY COUNT(DISTINCT cl.language_id) DESC LIMIT 1; This query performs the following steps: 1. **Joins the tables:** It joins the `Continents`, `Countries`, and `CountryLanguages` tables to link continents to countries and countries to the languages they speak. 2. **Groups by continent:** It groups the results by `continent_name` to count languages per continent. 3. **Counts distinct languages:** `COUNT(DISTINCT cl.language_id)` counts the number of unique languages spoken in each continent. This is crucial to avoid overcounting languages spoken in multiple countries within the same continent. 4. **Orders by language count:** It orders the results in descending order based on the number of distinct languages. 5. **Limits to one result:** `LIMIT 1` returns only the continent with the highest language count. Without sample data in the tables, we cannot determine which continent actually has the most languages. This query provides the mechanism to find the answer given the appropriate data.
+To answer this question, we need a database schema with tables containing information about countries and the languages they speak. A suitable schema might look like this: **Table: Countries** | Column Name | Data Type | |---|---| | country_id | INT (Primary Key) | | country_name | VARCHAR(255) | **Table: Languages** | Column Name | Data Type | |---|---| | language_id | INT (Primary Key) | | language_name | VARCHAR(255) | **Table: CountryLanguages** | Column Name | Data Type | |---|---| | country_id | INT (Foreign Key referencing Countries) | | language_id | INT (Foreign Key referencing Languages) | To find the number of countries that speak both English and Dutch, we would use a SQL query like this: SELECT COUNT(DISTINCT c.country_id) FROM Countries c JOIN CountryLanguages cl ON c.country_id = cl.country_id JOIN Languages l ON cl.language_id = l.language_id WHERE l.language_name = 'English' INTERSECT SELECT COUNT(DISTINCT c.country_id) FROM Countries c JOIN CountryLanguages cl ON c.country_id = cl.country_id JOIN Languages l ON cl.language_id = l.language_id WHERE l.language_name = 'Dutch'; This query first finds all countries speaking English, then finds all countries speaking Dutch, and finally uses `INTERSECT` to find the countries that are in both sets. The `COUNT(DISTINCT c.country_id)` then counts the number of unique countries in the resulting set. **Without the database schema and data, it's impossible to give a numerical answer.** The query above provides the method to obtain the answer given the appropriate database.
+The question cannot be answered without the database schema. The schema would need to define tables (e.g., Nations, Languages) and their relationships (e.g., a many-to-many relationship between Nations and Languages indicating which languages are spoken in each nation). Only then could a SQL query be constructed to count the nations using both English and Dutch.
+This question cannot be answered without the database schema. The schema would define the tables (e.g., Nations, LanguagesSpoken) and their columns (e.g., NationName, Language) needed to determine which nations speak both English and French. A query would then be constructed based on that schema.
+To answer this question, we need a database schema with tables containing information about nations and the languages they speak. Let's assume a schema like this: **Table: Nations** | NationID | NationName | |---|---| | 1 | Canada | | 2 | United Kingdom | | 3 | France | | 4 | United States | | 5 | Belgium | **Table: Languages** | LanguageID | NationID | Language | |---|---|---| | 1 | 1 | English | | 2 | 1 | French | | 3 | 2 | English | | 4 | 3 | French | | 5 | 4 | English | | 6 | 5 | French | | 7 | 5 | Dutch | | 8 | 5 | German | Then, the SQL query to find the nations that speak both English and French would be: SELECT n.NationName FROM Nations n JOIN Languages l ON n.NationID = l.NationID WHERE l.Language = 'English' INTERSECT SELECT n.NationName FROM Nations n JOIN Languages l ON n.NationID = l.NationID WHERE l.Language = 'French'; This query uses an `INTERSECT` operation to find the common nations between those speaking English and those speaking French. The result, based on the sample data, would be: **Canada** If the database schema were different (e.g., a single table with nation and language columns), the query would need to be adjusted accordingly. For example, if we had a table called `NationLanguages`: **Table: NationLanguages** | NationID | Language | |---|---| | 1 | English | | 1 | French | | 2 | English | | 3 | French | | 4 | English | | 5 | French | | 5 | Dutch | | 5 | German | The query would be: SELECT NationName FROM Nations WHERE NationID IN (SELECT NationID FROM NationLanguages WHERE Language = 'English') AND NationID IN (SELECT NationID FROM NationLanguages WHERE Language = 'French'); This version uses `IN` clauses to check for the existence of both languages for each nation. Both queries achieve the same result given appropriate data. The key is adapting the query to the specific schema provided.
+The provided context lacks a database schema. To answer the question, "What are the names of nations where both English and French are official languages?", I need a database schema (table structure) with at least a table containing information about nations and their official languages. The table would likely have columns such as `nation_name` and `official_language`. For example, a suitable schema might look like this: CREATE TABLE Nations ( nation_id INT PRIMARY KEY, nation_name VARCHAR(255), official_language VARCHAR(255) ); Then, a SQL query like this could be used to find the answer: SELECT nation_name FROM Nations WHERE official_language = 'English' INTERSECT SELECT nation_name FROM Nations WHERE official_language = 'French'; This query finds nations where 'English' is an official language and then finds the intersection (common elements) with nations where 'French' is an official language. The result would be a list of nation names fulfilling both conditions. Without the actual database data, I cannot provide the specific names.
+SELECT name FROM country WHERE language = 'English' INTERSECT SELECT name FROM country WHERE language = 'French'; This SQL query uses the `INTERSECT` operator to find the countries that appear in both the result sets of the two `SELECT` statements. The first `SELECT` statement finds countries with English as an official language, and the second finds countries with French. The `INTERSECT` ensures that only countries having *both* languages are returned. This assumes that the `country` table has columns `name` (country name) and `language` (official language). The exact column names might vary depending on your specific database schema.
+The provided context lacks the necessary database schema to answer the question. To determine the number of distinct continents where Chinese is spoken, we'd need a table (e.g., `Languages`) with at least these columns: * `LanguageName` (text): The name of the language. * `Continent` (text): The continent where the language is spoken. Then, a SQL query like this could be used: SELECT COUNT(DISTINCT Continent) FROM Languages WHERE LanguageName = 'Chinese'; Without the schema and sample data, it's impossible to provide a numerical answer.
+There's no database schema provided, so it's impossible to answer how many continents speak Chinese based on database information. To answer this question, you'd need geographic and linguistic data, not just a database schema. The answer would depend on how you define "speak Chinese" (e.g., official language, significant portion of the population, etc.). Even with that definition, the answer is likely to be **one** (Asia), although some might argue for more depending on the diaspora and the definition of "speak".
+This question cannot be answered without the database schema. The schema would define tables (like `Regions`, `Languages`, `RegionLanguages`) and their columns (like `region_name`, `language_name`, `region_id`, `language_id`) that would be necessary to formulate a SQL query to find the regions using English or Dutch.
+To answer this question, we need a database schema with tables containing information about regions and the languages spoken in those regions. Let's assume a simplified schema: **Table: Regions** | Column Name | Data Type | |---|---| | region_id | INT (Primary Key) | | region_name | VARCHAR(255) | **Table: Languages** | Column Name | Data Type | |---|---| | language_id | INT (Primary Key) | | language_name | VARCHAR(255) | **Table: RegionLanguages** (A junction table to link regions and languages) | Column Name | Data Type | |---|---| | region_id | INT (Foreign Key referencing Regions) | | language_id | INT (Foreign Key referencing Languages) | **SQL Query:** SELECT DISTINCT r.region_name FROM Regions r JOIN RegionLanguages rl ON r.region_id = rl.region_id JOIN Languages l ON rl.language_id = l.language_id WHERE l.language_name = 'Dutch' OR l.language_name = 'English'; This query joins the three tables to find regions that have either Dutch or English listed in the `RegionLanguages` table. The `DISTINCT` keyword ensures that each region is listed only once, even if it speaks both languages. Without a specific database schema provided, this is the most general and adaptable solution. If you provide a schema, I can tailor the query to your specific table and column names.
+To answer this question, we need a database schema with at least a table containing information about countries and their official languages. Let's assume a table named `countries` with the following columns: * `country_id` (INT, primary key) * `country_name` (VARCHAR) * `official_language` (VARCHAR) Then, the SQL query to find the countries where either English or Dutch is the official language would be: SELECT country_name FROM countries WHERE official_language = 'English' OR official_language = 'Dutch'; This query selects the `country_name` from the `countries` table where the `official_language` column is either 'English' or 'Dutch'. The `OR` operator ensures that countries with either language are included in the result.
+To answer this question, we need a database schema with at least two tables: one for countries and one for languages. The tables would need to be linked, likely with a many-to-many relationship since a country can have multiple official languages and a language can be official in multiple countries. Here's how we'd approach the SQL query assuming the following schema: **Table: countries** * `country_id` (INT, primary key) * `country_name` (VARCHAR) **Table: languages** * `language_id` (INT, primary key) * `language_name` (VARCHAR) **Table: country_languages** (linking table) * `country_id` (INT, foreign key referencing countries.country_id) * `language_id` (INT, foreign key referencing languages.language_id) The SQL query would be: SELECT c.country_name FROM countries c JOIN country_languages cl ON c.country_id = cl.country_id JOIN languages l ON cl.language_id = l.language_id WHERE l.language_name = 'English' OR l.language_name = 'Dutch'; This query joins the three tables to find countries that have either English or Dutch listed in the `country_languages` table. The `WHERE` clause filters the results to only include countries with those specific languages. Without a defined schema, this is the best possible answer. The specific table and column names might vary depending on your database design.
+I need the database schema to answer this question. The schema should include at least a table with columns for programming language and geographic location (allowing for identification of Asian countries). Without the schema and sample data, I cannot determine the most popular programming language in Asia.
+I need the database schema to answer this question. The schema would define tables (e.g., `Countries`, `Languages`) and their columns (e.g., `country_name`, `continent`, `language`, `official_language`). Without the schema and sample data, I cannot determine which language is used by the largest number of Asian nations.
+The provided context lacks the necessary database schema to answer the question. To answer this, we need a database schema with at least two tables: one containing information about countries (including their government type and spoken languages), and possibly another linking countries to languages. The tables would need columns such as: * **Countries Table:** * `country_name` (TEXT) * `government_type` (TEXT) * `language_id` (INTEGER, Foreign Key referencing Languages table) * **Languages Table:** * `language_id` (INTEGER, Primary Key) * `language_name` (TEXT) With such a schema, a SQL query could be constructed to find the answer. For example (assuming the above schema): SELECT l.language_name FROM Languages l JOIN Countries c ON l.language_id = c.language_id WHERE c.government_type = 'republic' GROUP BY l.language_name HAVING COUNT(DISTINCT c.country_name) = 1; This query joins the `Languages` and `Countries` tables, filters for republic governments, groups by language, and then filters again to only include languages spoken by exactly one country. Without the schema, however, it's impossible to provide a definitive answer.
+The provided context lacks the necessary database schema to answer the question. To answer this, we need a database schema with at least these tables and columns: * **Countries:** `country_name` (TEXT), `government_type` (TEXT), `primary_language` (TEXT) (and potentially other language columns if a country has multiple official languages) With this schema, a SQL query like this could be used: SELECT primary_language FROM Countries WHERE government_type = 'Republic' GROUP BY primary_language HAVING COUNT(*) = 1; This query would: 1. **`SELECT primary_language`**: Select the primary language column. 2. **`FROM Countries`**: Specify the table to query. 3. **`WHERE government_type = 'Republic'`**: Filter for countries with a republic government. 4. **`GROUP BY primary_language`**: Group the results by primary language. 5. **`HAVING COUNT(*) = 1`**: Filter the grouped results to only include languages that appear exactly once (meaning only one republic uses that language). Without the database schema and data, it's impossible to provide a definitive answer.
+SELECT city FROM city WHERE language = 'English' ORDER BY population DESC LIMIT 1; This SQL query assumes you have a table named `city` with at least columns named `city`, `language`, and `population`. It filters the table to only include cities where the `language` is 'English', then orders the results by `population` in descending order (largest first), and finally limits the results to only the top row (the city with the largest population).
+This question cannot be answered without the database schema. The schema would need to define tables with columns containing information about cities, their populations, and the languages spoken by their residents. For example, we might need tables like: * **Cities:** `city_id` (INT, primary key), `city_name` (VARCHAR), `population` (INT) * **CityLanguages:** `city_id` (INT, foreign key referencing Cities), `language` (VARCHAR) With such a schema, a SQL query could be constructed to find the answer. Without the schema, any answer is pure speculation.
+SELECT name, population, life_expectancy FROM countries WHERE continent = 'Asia' ORDER BY area DESC LIMIT 1; This SQL query assumes you have a table named `countries` with columns `name` (text), `population` (numeric), `life_expectancy` (numeric), `continent` (text), and `area` (numeric). It filters for Asian countries, orders them by area in descending order, and then returns only the top row (the country with the largest area).
+I need the database schema (table names, column names, and data types) to answer your question. The schema would define the tables containing information about countries, their populations, land areas, and life expectancies. Once you provide the schema, I can write a SQL query to find the answer.
+The question cannot be answered without the database schema. The schema would need to include at least two tables: one with country information (including official language(s) and life expectancy) and possibly a separate table linking countries to languages if multiple languages are possible per country. The SQL query would then join these tables and filter for countries where English is *not* listed as an official language, finally calculating the average life expectancy.
+The question cannot be answered without the database schema. The schema would need to include at least two tables: one with country information (including official language and potentially life expectancy) and possibly another linking countries to languages. The SQL query would then need to be constructed based on the specific table and column names within that schema. For example, if the schema included tables named `countries` and `languages`, with relevant columns like `country_name`, `official_language`, and `life_expectancy`, a possible SQL query would look like this: SELECT AVG(c.life_expectancy) AS mean_life_expectancy FROM countries c LEFT JOIN languages l ON c.country_id = l.country_id -- Assuming a country_id links the tables WHERE l.language != 'English'; This query assumes that a country can have multiple official languages and that the `languages` table has a row for each official language of a country. The exact query would need to be adapted to the specific schema provided.
+I need the database schema (table names, columns, and their data types) to answer your question. The question asks for a count of people based on nationality and language usage, but without knowing the table structure and column names (e.g., a table with columns like `nation`, `population`, `official_languages`), I cannot formulate the SQL query to provide the answer.
+The question cannot be answered without the database schema. The schema would need to include at least two tables: one with information about people (including their country of residence) and another with information about countries (including the languages spoken). Only then could a query be constructed to count the number of people living in countries where English is not an official language.
+This question cannot be answered without the database schema. The schema would need to contain tables with information about countries, their heads of state, and their official languages. The query would then need to join these tables to find the answer.
+This question cannot be answered without the database schema. The schema would need to contain tables with information about countries, their heads of state, and their official languages. The query would then need to join these tables to find the answer.
+The question cannot be answered without the database schema. The schema would need to include tables with information about countries (including founding date and official languages). The query would then need to join these tables and use aggregate functions (like `COUNT(DISTINCT language)`) to get the desired result.
+The provided context lacks the database schema necessary to answer the question. To answer this, I need a table (e.g., `countries`) with at least these columns: * `country_name` (TEXT): The name of the country. * `founding_year` (INTEGER): The year the country was founded. * `official_language` (TEXT): The official language of the country (this could be multiple languages per country, requiring a different schema design for optimal normalization). **Example Schema and Query (assuming one official language per country):** Let's assume a table named `countries` with the columns mentioned above. Then the SQL query would be: SELECT COUNT(DISTINCT official_language) FROM countries WHERE founding_year < 1930; **Example Schema and Query (assuming multiple official languages per country, using a junction table):** If a country can have multiple official languages, a better schema would involve a junction table: * `countries`: `country_id` (INTEGER, primary key), `country_name` (TEXT), `founding_year` (INTEGER) * `languages`: `language_id` (INTEGER, primary key), `language_name` (TEXT) * `country_languages`: `country_id` (INTEGER, foreign key referencing countries), `language_id` (INTEGER, foreign key referencing languages) The query would then be: SELECT COUNT(DISTINCT l.language_name) FROM countries c JOIN country_languages cl ON c.country_id = cl.country_id JOIN languages l ON cl.language_id = l.language_id WHERE c.founding_year < 1930; Without the actual schema, I cannot provide a definitive SQL query. Please provide the schema to get a precise answer.
+To answer this question, we need a database table with at least two columns: `country_name` (text) and `surface_area` (numeric). We also need to know which countries are considered to be in Europe. This information is typically stored in a separate table or as a column within the main table. Let's assume we have a table named `countries` with the following structure: | Column Name | Data Type | |-----------------|------------| | country_name | VARCHAR(255)| | continent | VARCHAR(255)| | surface_area | DECIMAL | The SQL query to find the countries with a surface area greater than any country in Europe would be: SELECT country_name FROM countries WHERE surface_area > (SELECT MAX(surface_area) FROM countries WHERE continent = 'Europe'); **Explanation:** * **`SELECT country_name FROM countries`**: This selects the names of countries from the `countries` table. * **`WHERE surface_area > (...)`**: This filters the results to include only countries where the `surface_area` is greater than the value in the subquery. * **`(SELECT MAX(surface_area) FROM countries WHERE continent = 'Europe')`**: This is a subquery that finds the maximum `surface_area` among all countries in Europe. The result of this subquery is a single value. This query efficiently finds all countries with a surface area larger than the largest European country's surface area. Remember to replace `'Europe'` with the appropriate continent name if your database uses a different naming convention. Also, ensure that your database contains accurate and up-to-date data on country surface areas and continent assignments.
+To answer this question, we need a database table with at least two columns: `country_name` (text) and `area` (numeric). The table should contain data for all countries worldwide. Let's assume the table is named `countries`. The SQL query would then be: SELECT country_name FROM countries WHERE area > (SELECT MAX(area) FROM countries WHERE continent = 'Europe'); This query works as follows: 1. **`SELECT MAX(area) FROM countries WHERE continent = 'Europe'`**: This subquery finds the maximum area among all countries in Europe. 2. **`WHERE area > ...`**: The main query then selects all countries whose area is greater than the maximum area found in the subquery. **Important Considerations:** * **Data Accuracy:** The accuracy of the results depends entirely on the accuracy and completeness of the `countries` table. Different datasets may have varying definitions of country boundaries and areas. * **Continent Definition:** The query assumes a column named `continent` exists and that 'Europe' is consistently used to identify European countries. The definition of "Europe" can be subjective, and some countries might be considered part of both Europe and Asia (e.g., Turkey, Russia). The query's results will depend on how the `continent` column is populated. * **Null Values:** The query might need adjustments if the `area` or `continent` columns can contain `NULL` values. You might need to add `WHERE area IS NOT NULL` and `WHERE continent IS NOT NULL` clauses to handle such cases. To get a truly accurate answer, you would need to specify the database schema and provide the data. This query provides a general solution assuming a standard structure.
+This question cannot be answered without the database schema. The schema would need to include tables with at least the following information: * **A table of countries:** This table would need a column specifying the country name and a column specifying the continent (Africa or Asia). * **A table of populations:** This table would need a column linking to the country table (e.g., a country ID) and a column specifying the population. Once this schema is provided, a SQL query can be constructed to find the answer. The query would involve finding the minimum population of any Asian country and then selecting all African countries with a population less than that minimum.
+This question cannot be answered without the database schema. The schema would need to contain tables with at least the following information: * **A table of countries:** This table would need a column specifying the country's name and a column specifying the continent (Africa or Asia). * **A table of populations:** This table would need a column linking to the country table (e.g., a country ID) and a column specifying the population of that country. Once this schema is provided, a SQL query can be constructed to answer the question. The query would involve finding the minimum population of any Asian country and then selecting all African countries with a population less than that minimum.
+This question cannot be answered without the database schema. The schema would need to contain at least two tables: one with country information (including continent, name, and population) and possibly a separate table linking countries to continents if the continent information isn't directly in the country table. The query would then need to compare the maximum population of African countries to the populations of Asian countries.
+This question cannot be answered without the database schema. The schema would need to include at least two tables: one with country information (including continent, name, and population) and possibly another with geographical regions to define "Asia" and "Africa". The SQL query would then join these tables and filter based on population size.
+This question cannot be answered without the database schema. The schema would need to define at least two tables: one with country information (including a country code column) and another that links countries to the languages they speak. Without knowing the table and column names, it's impossible to write a SQL query to find the requested country codes.
+SELECT country_code FROM countries WHERE country_code NOT IN (SELECT country_code FROM languages WHERE language = 'English'); This SQL query assumes you have a table named `countries` with at least a `country_code` column, and a table named `languages` with at least `country_code` and `language` columns. The query works by finding all country codes that are *not* present in the subset of the `languages` table where the language is English. This effectively identifies countries that don't have English listed as a language.
+This question cannot be answered without the database schema. The schema would need to define tables containing information about countries and the languages spoken in those countries. For example, we might need tables like: * **Countries:** With columns like `country_code` (e.g., 'US', 'UK', 'CA'), `country_name`. * **Languages:** With columns like `language_code` (e.g., 'en', 'es', 'fr'), `language_name`. * **CountryLanguages:** A linking table with columns like `country_code`, `language_code`. Only with such a schema can a SQL query be constructed to find the `country_code` where languages other than English (`language_code` != 'en') are spoken. The query would look something like this (assuming the schema above): SELECT DISTINCT c.country_code FROM Countries c JOIN CountryLanguages cl ON c.country_code = cl.country_code JOIN Languages l ON cl.language_code = l.language_code WHERE l.language_code != 'en';
+The provided context lacks a database schema. To answer the question, I need the schema (table names, column names, and data types) of the database, specifically tables containing information about countries and the languages spoken in those countries. For example, a suitable schema might include a table like this: **Table: Countries** | Column Name | Data Type | |---|---| | country_code | VARCHAR(2) | | country_name | VARCHAR(255) | **Table: Languages** | Column Name | Data Type | |---|---| | language_id | INT | | language_name | VARCHAR(255) | **Table: CountryLanguages** | Column Name | Data Type | |---|---| | country_code | VARCHAR(2) | | language_id | INT | With this schema (or a similar one), I could provide a SQL query to retrieve the country codes. The query would involve joining the tables and filtering for languages that are not 'English'. For instance: SELECT DISTINCT c.country_code FROM Countries c JOIN CountryLanguages cl ON c.country_code = cl.country_code JOIN Languages l ON cl.language_id = l.language_id WHERE l.language_name != 'English'; Please provide the database schema so I can give you the correct SQL query.
+The provided context lacks a database schema. To answer the question, I need the schema (table names, column names, and data types) of the database. Specifically, I need tables with information about countries, their languages, and their government forms. For example, a possible schema might include: * **countries:** `country_code (VARCHAR(2)), country_name (VARCHAR(255))` * **languages:** `country_code (VARCHAR(2)), language (VARCHAR(255))` * **government:** `country_code (VARCHAR(2)), government_form (VARCHAR(255))` Once you provide the schema, I can write a SQL query to find the codes of countries that meet the specified criteria.
+SELECT code FROM country WHERE NOT language = 'English' AND NOT government_form = 'Republic'; This SQL query assumes you have a table named `country` with at least the columns `code`, `language`, and `government_form`. It selects the `code` column only for those rows where the `language` is not 'English' AND the `government_form` is not 'Republic'. This directly answers the prompt's request. Note that this assumes that the language and government form are stored as exact string matches. If there are variations (e.g., "english", "republic of..."), you might need to use `LIKE` or other string comparison operators for a more robust solution.
+To answer this question, we need a database schema with tables containing information about cities, countries, and languages. A suitable schema might look like this: **Table: Countries** | Column Name | Data Type | |---|---| | country_id | INT (Primary Key) | | country_name | VARCHAR(255) | | continent | VARCHAR(255) | | official_language | VARCHAR(255) | **Table: Cities** | Column Name | Data Type | |---|---| | city_id | INT (Primary Key) | | city_name | VARCHAR(255) | | country_id | INT (Foreign Key referencing Countries.country_id) | The SQL query to find the cities in European countries where English is not the official language would be: SELECT c.city_name FROM Cities c JOIN Countries co ON c.country_id = co.country_id WHERE co.continent = 'Europe' AND co.official_language <> 'English'; This query joins the `Cities` and `Countries` tables based on `country_id`. It then filters the results to include only cities located in European countries where the `official_language` is not 'English'. The result will be a list of city names. **Important Note:** This query relies on the accuracy and completeness of the data in the `Countries` table. The definition of "official language" can also be ambiguous in some cases, and the database might need additional fields to handle multiple official languages or regional variations.
+This question cannot be answered without the database schema. The schema would need to include at least two tables: one with information about cities (including their names and countries) and another with information about countries (including their official languages). The query would then join these tables and filter based on the continent and official language.
+To answer this question, we need a database schema with tables containing information about countries, cities, languages, and their relationships. A likely schema would include tables like: * **Countries:** `country_id` (INT, primary key), `country_name` (VARCHAR), `continent` (VARCHAR), `official_language` (VARCHAR) * **Cities:** `city_id` (INT, primary key), `city_name` (VARCHAR), `country_id` (INT, foreign key referencing Countries) A SQL query to find the unique cities in Asian countries where Chinese is the official language would look like this: SELECT DISTINCT c.city_name FROM Cities c JOIN Countries co ON c.country_id = co.country_id WHERE co.continent = 'Asia' AND co.official_language = 'Chinese'; This query first joins the `Cities` and `Countries` tables based on the `country_id`. Then, it filters the results to include only cities located in countries where the continent is 'Asia' and the official language is 'Chinese'. Finally, `DISTINCT` ensures that only unique city names are returned. Note that "Chinese" might need to be adjusted depending on how variations of Chinese are represented in the database (e.g., Mandarin, Cantonese). The accuracy of the results depends entirely on the data present in the `Countries` table.
+SELECT DISTINCT CityName FROM Cities WHERE Continent = 'Asia' AND OfficialLanguage = 'Chinese'; This SQL query assumes you have a table named `Cities` with at least the columns `CityName`, `Continent`, and `OfficialLanguage`. It selects the distinct city names where the continent is 'Asia' and the official language is 'Chinese'. If your table names or column names are different, adjust the query accordingly.
+To answer this question, we need a database schema. The question is impossible to answer without knowing the table and column names involved. We need a table (let's assume it's called `countries`) with at least the following columns: * `name` (VARCHAR, text representing the country name) * `independence_year` (INT or DATE, representing the year of independence) * `surface_area` (FLOAT or DECIMAL, representing the surface area) * `population` (INT, representing the population) Assuming such a table exists, the SQL query to find the name, independence year, and surface area of the country with the smallest population would be: SELECT name, independence_year, surface_area FROM countries ORDER BY population ASC LIMIT 1; This query first orders the `countries` table by the `population` column in ascending order (smallest population first). Then, `LIMIT 1` restricts the result set to only the first row, which represents the country with the smallest population. The query then selects the `name`, `independence_year`, and `surface_area` for that country. If there are multiple countries with the same smallest population, this query will return only one of them (arbitrarily). If you need all countries with the smallest population, you would need a slightly more complex query involving a subquery to find the minimum population first.
+This question cannot be answered without the database schema. The schema would define the tables and columns (like country name, year of independence, surface area, and population) needed to query the database. Please provide the schema.
+To answer this question, we need a database schema. The provided context lacks the necessary table structure (table names, column names, and data types) to formulate a SQL query. For example, a suitable schema might include a table named `countries` with columns like: * `country_name` (VARCHAR): Name of the country * `population` (INT): Population of the country * `area` (FLOAT): Area of the country in square kilometers * `leader` (VARCHAR): Name of the country's leader Assuming such a table exists, the SQL query would be: SELECT population, country_name, leader FROM countries ORDER BY area DESC LIMIT 1; This query orders the `countries` table by the `area` column in descending order and then selects only the first row (using `LIMIT 1`), which represents the country with the largest area. The query then returns the population, name, and leader of that country. Without the schema, this is the best possible answer.
+SELECT name, population, head_of_state FROM countries ORDER BY area DESC LIMIT 1;
+SELECT country_name, COUNT(*) AS num_languages FROM countries -- Assuming a table named 'countries' with columns 'country_name' and 'language' JOIN languages ON countries.country_id = languages.country_id -- Assuming a table named 'languages' with columns 'country_id' and 'language' GROUP BY country_name HAVING COUNT(*) >= 3; **Assumptions Made:** * There are two tables: `countries` and `languages`. * `countries` table has at least a `country_id` (primary key) and `country_name` column. * `languages` table has at least a `country_id` (foreign key referencing `countries`) and a `language` column. Each row in `languages` represents a language spoken in a country. This query joins the two tables, groups the results by country name, counts the number of languages for each country, and then filters to only include countries with 3 or more languages. You'll need to adapt the table and column names to match your specific database schema.
+To answer this question, we need a database schema with at least two tables: one for countries and one for languages spoken in those countries. Let's assume the following schema: **Table: Countries** * `country_id` (INT, PRIMARY KEY) * `country_name` (VARCHAR(255)) **Table: CountryLanguages** * `country_language_id` (INT, PRIMARY KEY) * `country_id` (INT, FOREIGN KEY referencing Countries.country_id) * `language_name` (VARCHAR(255)) Then, the SQL query to find the names of countries that speak more than 2 languages and the number of languages they speak would be: SELECT c.country_name, COUNT(cl.language_name) AS num_languages FROM Countries c JOIN CountryLanguages cl ON c.country_id = cl.country_id GROUP BY c.country_name HAVING COUNT(cl.language_name) > 2; This query does the following: 1. **`JOIN`s** the `Countries` and `CountryLanguages` tables to link countries with the languages they speak. 2. **`GROUP BY c.country_name`** groups the results by country name, so we get one row per country. 3. **`COUNT(cl.language_name)`** counts the number of languages for each country. 4. **`HAVING COUNT(cl.language_name) > 2`** filters the results to include only countries with more than 2 languages. 5. **`SELECT c.country_name, COUNT(cl.language_name) AS num_languages`** selects the country name and the count of languages, aliasing the count as `num_languages`. Without a specific database schema provided, this is the most general and adaptable solution. If you provide a specific schema, I can tailor the query to match.
+To answer this question, we need a database schema. Let's assume a schema like this: CREATE TABLE Cities ( city_id INT PRIMARY KEY, city_name VARCHAR(255), district VARCHAR(255), population INT ); Then, the SQL query to find the number of cities in each district whose population is greater than the average population of all cities would be: WITH AveragePopulation AS ( SELECT AVG(population) AS avg_pop FROM Cities ), CitiesAboveAverage AS ( SELECT district, COUNT(*) AS num_cities_above_average FROM Cities WHERE population > (SELECT avg_pop FROM AveragePopulation) GROUP BY district ) SELECT COALESCE(district, 'Overall Average') AS District, COALESCE(num_cities_above_average, 0) AS NumberOfCitiesAboveAverage FROM CitiesAboveAverage UNION ALL SELECT 'Overall Average', COUNT(*) FROM Cities WHERE population > (SELECT avg_pop FROM AveragePopulation); **Explanation:** 1. **AveragePopulation CTE:** This selects the average population of all cities. 2. **CitiesAboveAverage CTE:** This selects the district and counts the number of cities in each district whose population is greater than the average population (obtained from the `AveragePopulation` CTE). It groups the results by district. 3. **Final SELECT Statement:** This combines the results from `CitiesAboveAverage` CTE with an overall count of cities above average across all districts using `UNION ALL`. `COALESCE` handles cases where a district might not have any cities above the average population. This query provides a count of cities above the average for each district and a total count of cities above the average across all districts. If your schema is different (e.g., different column names, additional tables), you'll need to adjust the query accordingly. Remember to replace `Cities` with your actual table name if it's different.
+To answer this question, we need a database schema. Let's assume a simplified schema like this: CREATE TABLE Cities ( city_id INT PRIMARY KEY, city_name VARCHAR(255), district VARCHAR(255), population INT ); Then, the SQL query to find the number of cities in each district with a population above the average population of all cities would be: WITH AveragePopulation AS ( SELECT AVG(population) AS avg_pop FROM Cities ), CitiesAboveAverage AS ( SELECT district, COUNT(*) AS num_cities_above_average FROM Cities WHERE population > (SELECT avg_pop FROM AveragePopulation) GROUP BY district ) SELECT district, COALESCE(num_cities_above_average, 0) AS num_cities_above_average FROM (SELECT DISTINCT district FROM Cities) AS AllDistricts LEFT JOIN CitiesAboveAverage ON AllDistricts.district = CitiesAboveAverage.district; **Explanation:** 1. **`AveragePopulation` CTE:** This calculates the average population across all cities. 2. **`CitiesAboveAverage` CTE:** This selects the district and counts the number of cities in each district where the population is greater than the average population (obtained from the `AveragePopulation` CTE). It groups the results by district. 3. **Final SELECT Statement:** This uses a `LEFT JOIN` between a list of all distinct districts and `CitiesAboveAverage`. This ensures that even districts with no cities above the average population are included in the result, showing a count of 0 for them. `COALESCE` handles the cases where there's no match in `CitiesAboveAverage`, replacing `NULL` with 0. This query provides a result set with two columns: `district` and `num_cities_above_average`, showing the number of cities above the average population for each district. If a district has no cities above the average, it will still be listed with a count of 0.
+SELECT GovernmentForm, SUM(Population) AS TotalPopulation FROM Countries -- Assuming your table is named 'Countries' and has columns 'GovernmentForm', 'Population', and 'LifeExpectancy' WHERE GovernmentForm IN ( SELECT GovernmentForm FROM Countries GROUP BY GovernmentForm HAVING AVG(LifeExpectancy) > 72 ) GROUP BY GovernmentForm; This SQL query first identifies the government forms with an average life expectancy greater than 72 using a subquery. Then, it uses this result to filter the main query, summing the populations for only those government forms. The final `GROUP BY` clause ensures that the total population is calculated for each qualifying government form. Remember to replace `Countries` with the actual name of your table if it's different. Also, ensure that your table has columns named `GovernmentForm`, `Population`, and `LifeExpectancy`.
+The provided context lacks the necessary database schema (table names, column names, data types) to answer the question. To answer this, I need the schema. For example, a schema might look like this: CREATE TABLE Countries ( country_name VARCHAR(255) PRIMARY KEY, government_form VARCHAR(255), population INT, avg_life_expectancy DECIMAL(5,2) ); With a schema like this, the SQL query to answer your question would be: SELECT government_form, SUM(population) AS total_population FROM Countries WHERE avg_life_expectancy > 72 GROUP BY government_form; This query would: 1. **`SELECT government_form, SUM(population) AS total_population`**: Select the government form and the sum of populations, aliased as `total_population`. 2. **`FROM Countries`**: Specify the table to query. 3. **`WHERE avg_life_expectancy > 72`**: Filter for countries with an average life expectancy greater than 72. 4. **`GROUP BY government_form`**: Group the results by government form to get the total population for each. Provide the database schema, and I can give you the correct SQL query.
+SELECT continent, AVG(life_expectancy) AS average_life_expectancy, SUM(population) AS total_population FROM countries -- Assuming your table is named 'countries' and has columns 'continent', 'life_expectancy', and 'population' GROUP BY continent HAVING AVG(life_expectancy) < 72; This SQL query assumes you have a table named `countries` with at least the columns `continent`, `life_expectancy`, and `population`. Adjust the table and column names if they are different in your database. The query first groups the data by continent, then calculates the average life expectancy and total population for each continent. Finally, the `HAVING` clause filters the results to include only continents where the average life expectancy is less than 72.
+SELECT continent, SUM(population) AS total_population, AVG(life_expectancy) AS average_life_expectancy FROM countries -- Assuming your table is named 'countries' and has columns 'continent', 'population', and 'life_expectancy' WHERE continent IN ( SELECT continent FROM countries GROUP BY continent HAVING AVG(life_expectancy) < 72 ) GROUP BY continent; **Explanation:** 1. **Inner Query:** The inner `SELECT` statement identifies the continents with an average life expectancy less than 72. It groups the data by continent, calculates the average life expectancy for each, and filters to include only those with an average below 72. 2. **Outer Query:** The outer `SELECT` statement then uses the results of the inner query to calculate the total population and average life expectancy for those specific continents. It joins (implicitly) based on the `continent` column. It groups the results by continent to provide the aggregated data for each. **Assumptions:** * You have a table named `countries`. * This table has columns named `continent`, `population`, and `life_expectancy`. Adjust these names if your table has different column names. This query efficiently avoids redundant calculations by first identifying the qualifying continents and then performing the aggregations only on those. If your database system supports window functions, a slightly more concise but potentially less efficient approach might be possible, depending on the database's optimizer.
+SELECT name, area FROM countries ORDER BY area DESC LIMIT 5;
+SELECT name, surfacearea FROM country ORDER BY surfacearea DESC LIMIT 5;
+The question cannot be answered without the database schema. The schema would need to include at least a table with columns for country name and population. Once that information is provided, a SQL query could be constructed to find the top 3 most populous countries.
+SELECT name FROM countries ORDER BY population DESC LIMIT 3;
+To answer this question, we need a database schema with a table containing information about nations and their populations. Let's assume a table named `nations` with columns `nation_name` (text) and `population` (integer). The SQL query to find the names of the nations with the 3 lowest populations would be: SELECT nation_name FROM nations ORDER BY population ASC LIMIT 3; This query first orders the nations by population in ascending order (from lowest to highest) and then uses `LIMIT 3` to restrict the output to only the top 3 rows, thus giving the names of the 3 nations with the smallest populations.
+SELECT name FROM countries ORDER BY population LIMIT 3;
+I need the database schema (table names, column names, and data types) to answer your question. The schema would need to include at least a table with country names and a column specifying the continent. Without that information, I cannot determine how many countries are in Asia.
+To answer this question, we need a database schema with a table containing information about countries and their continents. Let's assume a table named `countries` with the following columns: * `country_id` (INT, primary key) * `country_name` (VARCHAR) * `continent` (VARCHAR) Then, the SQL query to count the number of countries in Asia would be: SELECT COUNT(*) FROM countries WHERE continent = 'Asia'; This query selects the count of all rows in the `countries` table where the `continent` column is equal to 'Asia'. The result will be a single number representing the number of Asian countries in the database.
+This question cannot be answered without the database schema. The schema defines the tables and columns (like "country_name", "continent", "population") needed to query the database. The provided context lacks this crucial information.
+This question cannot be answered without the database schema. The schema would define the tables (e.g., `Countries`) and their columns (e.g., `country_name`, `continent`, `population`). With the schema, a SQL query could be written to retrieve the requested information. For example, if the table was named `Countries`, a possible query would be: SELECT country_name FROM Countries WHERE continent = 'Europe' AND population = 80000;
+SELECT SUM(population) AS total_population, AVG(area) AS average_area FROM countries WHERE continent = 'North America' AND area > 3000;
+SELECT SUM(population), AVG(surfacearea) FROM country WHERE continent = 'North America' AND surfacearea > 3000;
+To answer this question, we need a database schema with a table containing city information, including population. Let's assume a table named `cities` with at least the following columns: * `city_name` (VARCHAR): The name of the city. * `population` (INT): The population of the city. Then, the SQL query to find cities with a population between 160000 and 900000 would be: SELECT city_name FROM cities WHERE population BETWEEN 160000 AND 900000; This query selects the `city_name` column from the `cities` table where the `population` column's value is greater than or equal to 160000 and less than or equal to 900000.
+SELECT city_name FROM cities WHERE population BETWEEN 160000 AND 900000; This SQL query assumes you have a table named `cities` with at least two columns: `city_name` (containing the name of the city) and `population` (containing the population of the city). The `BETWEEN` operator is used to select rows where the population falls within the specified range (inclusive).
+The provided context lacks a database schema. To answer the question "Which language is spoken by the largest number of countries?", I need a database schema with at least two tables: one for countries and one for languages spoken in those countries. The tables would need to have a way to link countries to the languages they speak (e.g., a foreign key relationship). For example, a suitable schema might look like this: **Table: Countries** * country_id (INT, primary key) * country_name (VARCHAR) **Table: CountryLanguages** * country_id (INT, foreign key referencing Countries.country_id) * language_id (INT, foreign key referencing Languages.language_id) **Table: Languages** * language_id (INT, primary key) * language_name (VARCHAR) With this schema, a SQL query could be used to find the answer: SELECT l.language_name FROM Languages l JOIN CountryLanguages cl ON l.language_id = cl.language_id GROUP BY l.language_name ORDER BY COUNT(DISTINCT cl.country_id) DESC LIMIT 1; This query joins the tables, groups the results by language, counts the distinct number of countries for each language, orders the results in descending order, and returns only the top result – the language spoken by the most countries. Without the actual database data, I cannot provide a definitive answer.
+Without a database schema, it's impossible to answer the question. To determine the language spoken in the most countries, I need a table (e.g., `countries`) with at least two columns: * `country_name` (or similar): The name of the country. * `official_language` (or similar): The official language(s) spoken in that country. Then, a SQL query could be used to count the occurrences of each language and find the maximum. For example: SELECT official_language, COUNT(*) AS country_count FROM countries GROUP BY official_language ORDER BY country_count DESC LIMIT 1; This query would return the language with the highest `country_count`. If multiple languages share the highest count, it would return one of them.
+To answer this question, we need a database schema with at least two tables: one for countries and one for the population's language distribution. Let's assume the following schema: **Table: countries** | Column Name | Data Type | |---|---| | country_id | INT (Primary Key) | | country_name | VARCHAR(255) | **Table: language_distribution** | Column Name | Data Type | |---|---| | distribution_id | INT (Primary Key) | | country_id | INT (Foreign Key referencing countries.country_id) | | language | VARCHAR(255) | | percentage | DECIMAL(5,2) | This schema assumes that each country can have multiple language entries, each with its percentage of the population speaking that language. The SQL query to find the language spoken by the largest percentage of people in each country would be: SELECT c.country_name, ld.language FROM countries c JOIN language_distribution ld ON c.country_id = ld.country_id JOIN (SELECT country_id, MAX(percentage) as max_percentage FROM language_distribution GROUP BY country_id) as max_percentages ON ld.country_id = max_percentages.country_id AND ld.percentage = max_percentages.max_percentage; **Explanation:** 1. **Outer Query:** This selects the `country_name` from the `countries` table and the `language` from the `language_distribution` table. 2. **First JOIN:** This joins `countries` and `language_distribution` tables based on `country_id` to link countries with their language data. 3. **Subquery:** This subquery finds the maximum percentage for each country using `MAX(percentage)` and `GROUP BY country_id`. It creates a temporary table `max_percentages` with `country_id` and the corresponding maximum percentage. 4. **Second JOIN:** This joins the result of the subquery with the `language_distribution` table. It ensures that we only select the language that corresponds to the maximum percentage for each country. The condition `ld.percentage = max_percentages.max_percentage` is crucial for this. This query will return a table with two columns: `country_name` and `language`, showing the dominant language in each country. If multiple languages share the highest percentage in a country, this query will return all of them. If you need only one language in case of ties, you might need to add a secondary sorting criteria (e.g., alphabetical order) within the subquery.
+The provided context lacks a database schema. To answer the question, I need the schema (table names, column names, and data types) of the database. Specifically, I need tables with information about countries (including country codes) and the languages spoken in those countries, along with the percentage of the population speaking each language. For example, a possible schema might include: * **countries:** `country_code` (VARCHAR), `country_name` (VARCHAR) * **languages:** `country_code` (VARCHAR), `language` (VARCHAR), `percentage` (DECIMAL) Once you provide the schema, I can write a SQL query to retrieve the requested information. The query would likely involve joining the `countries` and `languages` tables and using a subquery or window function to find the language with the maximum percentage for each country.
+The provided context lacks the necessary database schema to answer the question. To determine the total number of countries where Spanish is spoken by the largest percentage of people, we need a table (e.g., `countries`) with at least the following columns: * `country_name` (TEXT): The name of the country. * `language` (TEXT): The language spoken in the country. * `percentage_speakers` (NUMERIC): The percentage of the population speaking that language. With such a table, a SQL query like this could be used: SELECT COUNT(*) FROM countries WHERE language = 'Spanish' AND percentage_speakers = (SELECT MAX(percentage_speakers) FROM countries WHERE country_name = countries.country_name); This query first finds the maximum percentage of speakers for each country and then counts the number of countries where that maximum percentage corresponds to Spanish. Without the schema and data, it's impossible to provide a numerical answer.
+To answer this question, we need a database schema with at least two tables: one for countries and one for languages spoken in those countries. The schema should include information about which language is predominant in each country. Without the schema, I can only provide a *general* SQL query that assumes such a schema exists. Let's assume the following schema: * **countries:** * country_id (INT, primary key) * country_name (VARCHAR) * **languages:** * language_id (INT, primary key) * language_name (VARCHAR) * **country_languages:** * country_id (INT, foreign key referencing countries) * language_id (INT, foreign key referencing languages) * is_predominant (BOOLEAN) Then the SQL query would be: SELECT COUNT(DISTINCT c.country_id) FROM countries c JOIN country_languages cl ON c.country_id = cl.country_id JOIN languages l ON cl.language_id = l.language_id WHERE l.language_name = 'Spanish' AND cl.is_predominant = TRUE; This query joins the three tables to find countries where Spanish (`l.language_name = 'Spanish'`) is the predominant language (`cl.is_predominant = TRUE`). `COUNT(DISTINCT c.country_id)` ensures that each country is counted only once, even if it has multiple entries in the `country_languages` table (which might be the case if a country has multiple languages, but only one is predominant). **To get a precise answer, please provide the database schema.** I can then write a more accurate and specific SQL query.
+The provided context lacks the necessary database schema to answer the question. To answer this, I need a database schema (table names and column definitions) that includes at least the following information: * **A table with country information:** This table should have at least columns for `country_code` (e.g., 'ES' for Spain) and possibly a `country_name` column. * **A table with language information:** This table should link countries to languages spoken, ideally with a percentage column indicating the proportion of the population speaking that language. This table might have columns like `country_code`, `language`, and `percentage_speaking`. Once you provide the schema, I can write a SQL query to find the answer. For example, if the tables were named `countries` and `languages`, a query might look like this (but this is just an example and will need adjustment based on your actual schema): SELECT country_code FROM languages WHERE language = 'Spanish' ORDER BY percentage_speaking DESC LIMIT 1; -- Or LIMIT N to get the top N countries This query assumes that the `languages` table has a row for each language spoken in each country, including the percentage of the population that speaks it. The `LIMIT 1` clause returns only the country with the highest percentage. You might need to adjust the `LIMIT` clause or use a different approach (e.g., using a subquery to find the maximum percentage) depending on the specifics of your data and whether you want the top 1, top 3, etc.
+SELECT code FROM country WHERE language = 'Spanish'; This SQL query assumes you have a table named `country` with at least two columns: `code` (representing the country code) and `language` (representing the predominantly spoken language). If the language column doesn't directly store "Spanish" but instead uses a language code (e.g., 'es'), you'll need to adjust the `WHERE` clause accordingly. For example: SELECT code FROM country WHERE language_code = 'es'; If the database schema includes a more complex relationship (e.g., a separate `languages` table), a JOIN would be necessary. For instance, if you have a `country` table with a `country_id` and a `languages` table with `language_id`, `country_id`, and `language` columns, and a `percentage` column indicating the percentage of speakers, the query would be more involved: SELECT c.code FROM country c JOIN languages l ON c.country_id = l.country_id WHERE l.language = 'Spanish' AND l.percentage = (SELECT MAX(percentage) FROM languages WHERE country_id = c.country_id); This last query finds the maximum percentage for each country and only selects the countries where Spanish has that maximum percentage. Remember to replace table and column names with your actual database schema.
+SELECT COUNT(*) FROM conductor;
+SELECT COUNT(*) FROM conductor;
+SELECT Name FROM conductor ORDER BY Age ASC;
+SELECT Name FROM conductor ORDER BY Age;
+SELECT Name FROM conductor WHERE Nationality <> 'USA';
+SELECT Name FROM conductor WHERE Nationality <> 'USA';
+SELECT Record_Company FROM orchestra ORDER BY Year_of_Founded DESC;
+SELECT Record_Company FROM orchestra ORDER BY Year_of_Founded DESC;
+SELECT AVG(Attendance) FROM show;
+SELECT AVG(Attendance) FROM show;
+SELECT MAX(T1.Share), MIN(T1.Share) FROM performance AS T1 WHERE T1.Type <> 'Live final';
+SELECT MAX(Share), MIN(Share) FROM performance WHERE Type <> 'Live final';
+SELECT COUNT(DISTINCT Nationality) FROM conductor;
+SELECT COUNT(DISTINCT Nationality) FROM conductor;
+SELECT Name FROM conductor ORDER BY Year_of_Work DESC;
+SELECT Name FROM conductor ORDER BY Year_of_Work DESC;
+SELECT Name FROM conductor ORDER BY Year_of_Work DESC LIMIT 1;
+SELECT Name FROM conductor ORDER BY Year_of_Work DESC LIMIT 1;
+SELECT c.Name, o.Orchestra FROM conductor AS c JOIN orchestra AS o ON c.Conductor_ID = o.Conductor_ID;
+SELECT c.Name, o.Orchestra FROM conductor AS c JOIN orchestra AS o ON c.Conductor_ID = o.Conductor_ID;
+SELECT Name FROM conductor WHERE Conductor_ID IN ( SELECT Conductor_ID FROM orchestra GROUP BY Conductor_ID HAVING COUNT(*) > 1 );
+SELECT T1.Name FROM conductor AS T1 INNER JOIN orchestra AS T2 ON T1.Conductor_ID = T2.Conductor_ID GROUP BY T1.Name HAVING COUNT(DISTINCT T2.Orchestra_ID) > 1;
+SELECT Name FROM conductor WHERE Conductor_ID = ( SELECT Conductor_ID FROM orchestra GROUP BY Conductor_ID ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT Name FROM conductor WHERE Conductor_ID = ( SELECT Conductor_ID FROM orchestra GROUP BY Conductor_ID ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT T1.Name FROM conductor AS T1 INNER JOIN orchestra AS T2 ON T1.Conductor_ID = T2.Conductor_ID WHERE T2.Year_of_Founded > 2008;
+SELECT T1.Name FROM conductor AS T1 INNER JOIN orchestra AS T2 ON T1.Conductor_ID = T2.Conductor_ID WHERE T2.Year_of_Founded > 2008;
+SELECT Record_Company, COUNT(*) AS Number_of_Orchestras FROM orchestra GROUP BY Record_Company;
+SELECT Record_Company, COUNT(*) AS Number_of_Orchestras FROM orchestra GROUP BY Record_Company;
+SELECT Major_Record_Format FROM orchestra GROUP BY Major_Record_Format ORDER BY COUNT(*) ASC;
+SELECT Major_Record_Format, COUNT(*) AS Frequency FROM orchestra GROUP BY Major_Record_Format ORDER BY Frequency DESC;
+SELECT Record_Company FROM orchestra GROUP BY Record_Company ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT Record_Company FROM orchestra GROUP BY Record_Company ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT Orchestra FROM orchestra EXCEPT SELECT O.Orchestra FROM orchestra AS O JOIN performance AS P ON O.Orchestra_ID = P.Orchestra_ID;
+SELECT Orchestra FROM orchestra EXCEPT SELECT O.Orchestra FROM orchestra AS O JOIN performance AS P ON O.Orchestra_ID = P.Orchestra_ID;
+SELECT Record_Company FROM orchestra WHERE Year_of_Founded < 2003 INTERSECT SELECT Record_Company FROM orchestra WHERE Year_of_Founded > 2003;
+SELECT Record_Company FROM orchestra WHERE Year_of_Founded < 2003 INTERSECT SELECT Record_Company FROM orchestra WHERE Year_of_Founded > 2003;
+SELECT COUNT(DISTINCT Orchestra_ID) FROM orchestra WHERE Major_Record_Format = 'CD' OR Major_Record_Format = 'DVD';
+SELECT COUNT(DISTINCT Orchestra_ID) FROM orchestra WHERE Major_Record_Format = 'CD' OR Major_Record_Format = 'DVD';
+SELECT T1.Year_of_Founded FROM orchestra AS T1 INNER JOIN performance AS T2 ON T1.Orchestra_ID = T2.Orchestra_ID GROUP BY T1.Orchestra_ID HAVING COUNT(T2.Performance_ID) > 1;
+SELECT T1.Year_of_Founded FROM orchestra AS T1 INNER JOIN performance AS T2 ON T1.Orchestra_ID = T2.Orchestra_ID GROUP BY T1.Orchestra_ID HAVING COUNT(T2.Performance_ID) > 1;
+SELECT COUNT(*) FROM Highschooler;
+SELECT COUNT(*) FROM Highschooler;
+SELECT name, grade FROM Highschooler;
+SELECT name, grade FROM Highschooler;
+SELECT DISTINCT grade FROM Highschooler;
+SELECT ID, grade FROM Highschooler;
+SELECT grade FROM Highschooler WHERE name = 'Kyle';
+SELECT grade FROM Highschooler WHERE name = 'Kyle';
+SELECT name FROM Highschooler WHERE grade = 10;
+SELECT name FROM Highschooler WHERE grade = 10;
+SELECT ID FROM Highschooler WHERE name = 'Kyle';
+SELECT ID FROM Highschooler WHERE name = 'Kyle';
+SELECT COUNT(*) FROM Highschooler WHERE grade = 9 OR grade = 10;
+SELECT COUNT(*) FROM Highschooler WHERE grade = 9 OR grade = 10;
+SELECT grade, COUNT(*) AS num_highschoolers FROM Highschooler GROUP BY grade;
+SELECT grade, COUNT(*) AS num_highschoolers FROM Highschooler GROUP BY grade;
+SELECT grade FROM Highschooler GROUP BY grade ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT grade FROM Highschooler GROUP BY grade ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT grade FROM Highschooler GROUP BY grade HAVING COUNT(*) >= 4;
+SELECT grade FROM Highschooler GROUP BY grade HAVING COUNT(*) >= 4;
+SELECT student_id, COUNT(*) AS num_friends FROM Friend GROUP BY student_id;
+SELECT H.name, COUNT(F.friend_id) AS num_friends FROM Highschooler AS H LEFT JOIN Friend AS F ON H.ID = F.student_id GROUP BY H.ID, H.name;
+SELECT h.name, COUNT(f.friend_id) AS num_friends FROM Highschooler AS h LEFT JOIN Friend AS f ON h.ID = f.student_id GROUP BY h.name;
+SELECT h.name, COUNT(f.friend_id) AS num_friends FROM Highschooler AS h LEFT JOIN Friend AS f ON h.ID = f.student_id GROUP BY h.ID, h.name;
+SELECT name FROM Highschooler WHERE ID = ( SELECT student_id FROM Friend GROUP BY student_id ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT name FROM Highschooler WHERE ID = ( SELECT student_id FROM Friend GROUP BY student_id ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT name FROM Highschooler WHERE ID IN ( SELECT student_id FROM Friend GROUP BY student_id HAVING COUNT(*) >= 3 );
+SELECT name FROM Highschooler WHERE ID IN ( SELECT student_id FROM Friend GROUP BY student_id HAVING COUNT(*) >= 3 );
+SELECT T1.name FROM Highschooler AS T1 INNER JOIN Friend AS T2 ON T1.ID = T2.friend_id INNER JOIN Highschooler AS T3 ON T2.student_id = T3.ID WHERE T3.name = 'Kyle';
+SELECT T1.name FROM Highschooler AS T1 INNER JOIN Friend AS T2 ON T1.ID = T2.friend_id INNER JOIN Highschooler AS T3 ON T2.student_id = T3.ID WHERE T3.name = 'Kyle';
+SELECT COUNT(*) FROM Friend WHERE student_id = ( SELECT ID FROM Highschooler WHERE name = 'Kyle' );
+SELECT COUNT(*) FROM Friend WHERE student_id = ( SELECT ID FROM Highschooler WHERE name = 'Kyle' );
+SELECT ID FROM Highschooler EXCEPT SELECT student_id FROM Friend;
+SELECT ID FROM Highschooler EXCEPT SELECT student_id FROM Friend;
+SELECT name FROM Highschooler WHERE ID NOT IN (SELECT student_id FROM Friend) AND ID NOT IN (SELECT friend_id FROM Friend);
+SELECT name FROM Highschooler WHERE ID NOT IN ( SELECT student_id FROM Friend ) AND ID NOT IN ( SELECT friend_id FROM Friend );
+SELECT ID FROM Highschooler WHERE ID IN (SELECT student_id FROM Friend) INTERSECT SELECT ID FROM Highschooler WHERE ID IN (SELECT liked_id FROM Likes);
+SELECT ID FROM Highschooler WHERE ID IN (SELECT student_id FROM Friend) AND ID IN (SELECT student_id FROM Likes);
+SELECT T1.name FROM Highschooler AS T1 INNER JOIN Friend AS T2 ON T1.ID = T2.student_id INNER JOIN Likes AS T3 ON T1.ID = T3.liked_id;
+SELECT T1.name FROM Highschooler AS T1 INNER JOIN Friend AS T2 ON T1.ID = T2.student_id INNER JOIN Likes AS T3 ON T1.ID = T3.student_id;
+SELECT student_id, COUNT(*) AS like_count FROM Likes GROUP BY student_id;
+SELECT student_id, COUNT(*) AS num_likes FROM Likes GROUP BY student_id;
+SELECT h.name, COUNT(l.liked_id) AS num_likes FROM Highschooler AS h JOIN Likes AS l ON h.ID = l.student_id GROUP BY h.name;
+SELECT h.name, COUNT(l.liked_id) AS num_likes FROM Highschooler AS h JOIN Likes AS l ON h.ID = l.student_id GROUP BY h.name;
+SELECT name FROM Highschooler WHERE ID = ( SELECT liked_id FROM Likes GROUP BY liked_id ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT name FROM Highschooler WHERE ID = ( SELECT student_id FROM Likes GROUP BY student_id ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT T1.name FROM Highschooler AS T1 INNER JOIN Likes AS T2 ON T1.ID = T2.student_id GROUP BY T1.name HAVING COUNT(*) >= 2;
+SELECT T1.name FROM Highschooler AS T1 INNER JOIN Likes AS T2 ON T1.ID = T2.student_id GROUP BY T1.name HAVING COUNT(*) >= 2;
+SELECT name FROM Highschooler WHERE grade > 5 AND ID IN ( SELECT student_id FROM Friend GROUP BY student_id HAVING COUNT(*) >= 2 );
+SELECT T1.name FROM Highschooler AS T1 INNER JOIN Friend AS T2 ON T1.ID = T2.student_id WHERE T1.grade > 5 GROUP BY T1.ID HAVING COUNT(*) >= 2;
+SELECT COUNT(*) FROM Likes WHERE student_id = ( SELECT ID FROM Highschooler WHERE name = 'Kyle' );
+SELECT COUNT(*) FROM Likes WHERE student_id = ( SELECT ID FROM Highschooler WHERE name = 'Kyle' );
+SELECT AVG(T1.grade) FROM Highschooler AS T1 INNER JOIN Friend AS T2 ON T1.ID = T2.student_id;
+SELECT AVG(T1.grade) FROM Highschooler AS T1 INNER JOIN Friend AS T2 ON T1.ID = T2.student_id;
+SELECT MIN(grade) FROM Highschooler WHERE ID NOT IN ( SELECT student_id FROM Friend ) AND ID NOT IN ( SELECT friend_id FROM Friend );
+SELECT MIN(grade) FROM Highschooler WHERE ID NOT IN ( SELECT student_id FROM Friend ) AND ID NOT IN ( SELECT friend_id FROM Friend );
+SELECT state FROM Owners INTERSECT SELECT state FROM Professionals;
+SELECT state FROM Owners INTERSECT SELECT state FROM Professionals;
+SELECT AVG(CAST(T1.age AS REAL)) FROM Dogs AS T1 INNER JOIN Treatments AS T2 ON T1.dog_id = T2.dog_id;
+SELECT AVG(CAST(T1.age AS REAL)) FROM Dogs AS T1 INNER JOIN Treatments AS T2 ON T1.dog_id = T2.dog_id;
+SELECT professional_id, last_name, cell_number FROM Professionals WHERE state = 'Indiana' UNION SELECT p.professional_id, p.last_name, p.cell_number FROM Professionals AS p JOIN Treatments AS t ON p.professional_id = t.professional_id GROUP BY p.professional_id HAVING COUNT(*) > 2;
+SELECT professional_id, last_name, cell_number FROM Professionals WHERE state = 'Indiana' UNION SELECT P.professional_id, P.last_name, P.cell_number FROM Professionals AS P JOIN Treatments AS T ON P.professional_id = T.professional_id GROUP BY P.professional_id HAVING COUNT(*) > 2;
+SELECT T1.name FROM Dogs AS T1 INNER JOIN Treatments AS T2 ON T1.dog_id = T2.dog_id GROUP BY T1.dog_id HAVING SUM(T2.cost_of_treatment) <= 1000;
+SELECT T1.name FROM Dogs AS T1 INNER JOIN Treatments AS T2 ON T1.dog_id = T2.dog_id GROUP BY T1.dog_id HAVING SUM(T2.cost_of_treatment) <= 1000;
+SELECT first_name FROM Owners UNION SELECT first_name FROM Professionals EXCEPT SELECT name FROM Dogs;
+SELECT first_name FROM Owners UNION SELECT first_name FROM Professionals EXCEPT SELECT name FROM Dogs;
+SELECT professional_id, role_code, email_address FROM Professionals EXCEPT SELECT p.professional_id, p.role_code, p.email_address FROM Professionals AS p JOIN Treatments AS t ON p.professional_id = t.professional_id;
+SELECT professional_id, role_code, email_address FROM Professionals EXCEPT SELECT P.professional_id, P.role_code, P.email_address FROM Professionals AS P JOIN Treatments AS T ON P.professional_id = T.professional_id;
+SELECT owner_id, first_name, last_name FROM Owners WHERE owner_id = ( SELECT owner_id FROM Dogs GROUP BY owner_id ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT owner_id, first_name, last_name FROM Owners WHERE owner_id = ( SELECT owner_id FROM Dogs GROUP BY owner_id ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT professional_id, role_code, first_name FROM Professionals WHERE professional_id IN ( SELECT professional_id FROM Treatments GROUP BY professional_id HAVING COUNT(*) >= 2 );
+SELECT professional_id, role_code, first_name FROM Professionals WHERE professional_id IN ( SELECT professional_id FROM Treatments GROUP BY professional_id HAVING COUNT(*) >= 2 );
+SELECT breed_name FROM Breeds WHERE breed_code = ( SELECT breed_code FROM Dogs GROUP BY breed_code ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT breed_name FROM Breeds WHERE breed_code = ( SELECT breed_code FROM Dogs GROUP BY breed_code ORDER BY COUNT(*) DESC LIMIT 1 );
+SELECT O.owner_id, O.last_name FROM Owners AS O JOIN Dogs AS D ON O.owner_id = D.owner_id JOIN Treatments AS T ON D.dog_id = T.dog_id GROUP BY O.owner_id, O.last_name ORDER BY COUNT(T.treatment_id) DESC LIMIT 1;
+SELECT owner_id, last_name FROM Owners WHERE owner_id = ( SELECT owner_id FROM Dogs WHERE dog_id IN ( SELECT dog_id FROM Treatments GROUP BY dog_id ORDER BY SUM(cost_of_treatment) DESC LIMIT 1 ) );
+SELECT T1.treatment_type_description FROM Treatment_Types AS T1 INNER JOIN Treatments AS T2 ON T1.treatment_type_code = T2.treatment_type_code GROUP BY T1.treatment_type_description ORDER BY SUM(T2.cost_of_treatment) LIMIT 1;
+SELECT treatment_type_description FROM Treatment_Types WHERE treatment_type_code = ( SELECT treatment_type_code FROM Treatments GROUP BY treatment_type_code ORDER BY SUM(cost_of_treatment) LIMIT 1 );
+SELECT Owners.owner_id, Owners.zip_code FROM Owners JOIN Dogs ON Owners.owner_id = Dogs.owner_id JOIN Treatments ON Dogs.dog_id = Treatments.dog_id GROUP BY Owners.owner_id, Owners.zip_code ORDER BY SUM(Treatments.cost_of_treatment) DESC LIMIT 1;
+SELECT owner_id, zip_code FROM Owners WHERE owner_id = ( SELECT owner_id FROM Dogs JOIN Treatments ON Dogs.dog_id = Treatments.dog_id GROUP BY owner_id ORDER BY SUM(cost_of_treatment) DESC LIMIT 1 );
+SELECT professional_id, cell_number FROM Professionals WHERE professional_id IN ( SELECT professional_id FROM Treatments GROUP BY professional_id, treatment_type_code HAVING COUNT(*) >= 2 );
+SELECT professional_id, cell_number FROM Professionals WHERE professional_id IN ( SELECT professional_id FROM Treatments GROUP BY professional_id HAVING COUNT(DISTINCT treatment_type_code) >= 2 );
+SELECT first_name, last_name FROM Professionals WHERE professional_id IN ( SELECT professional_id FROM Treatments WHERE cost_of_treatment < ( SELECT AVG(cost_of_treatment) FROM Treatments ) );
+SELECT first_name, last_name FROM Professionals WHERE professional_id IN ( SELECT professional_id FROM Treatments WHERE cost_of_treatment < ( SELECT AVG(cost_of_treatment) FROM Treatments ) );
+SELECT T1.date_of_treatment, T2.first_name FROM Treatments AS T1 INNER JOIN Professionals AS T2 ON T1.professional_id = T2.professional_id;
+SELECT T1.date_of_treatment, T2.first_name FROM Treatments AS T1 INNER JOIN Professionals AS T2 ON T1.professional_id = T2.professional_id;
+SELECT T1.cost_of_treatment, T2.treatment_type_description FROM Treatments AS T1 INNER JOIN Treatment_Types AS T2 ON T1.treatment_type_code = T2.treatment_type_code;
+SELECT T1.cost_of_treatment, T2.treatment_type_description FROM Treatments AS T1 INNER JOIN Treatment_Types AS T2 ON T1.treatment_type_code = T2.treatment_type_code;
+SELECT Owners.first_name, Owners.last_name, Sizes.size_description FROM Owners JOIN Dogs ON Owners.owner_id = Dogs.owner_id JOIN Sizes ON Dogs.size_code = Sizes.size_code;
+SELECT Owners.first_name, Owners.last_name, Sizes.size_description FROM Owners JOIN Dogs ON Owners.owner_id = Dogs.owner_id JOIN Sizes ON Dogs.size_code = Sizes.size_code;
+SELECT Owners.first_name, Dogs.name FROM Owners JOIN Dogs ON Owners.owner_id = Dogs.owner_id;
+SELECT Owners.first_name, Dogs.name FROM Owners JOIN Dogs ON Owners.owner_id = Dogs.owner_id;
+SELECT T1.name, T3.date_of_treatment FROM Dogs AS T1 INNER JOIN Breeds AS T2 ON T1.breed_code = T2.breed_code INNER JOIN Treatments AS T3 ON T1.dog_id = T3.dog_id WHERE T2.breed_code = ( SELECT breed_code FROM Dogs GROUP BY breed_code ORDER BY COUNT(*) LIMIT 1 );
+SELECT Dogs.name, Treatments.date_of_treatment FROM Dogs JOIN Treatments ON Dogs.dog_id = Treatments.dog_id JOIN Breeds ON Dogs.breed_code = Breeds.breed_code WHERE Breeds.breed_code = ( SELECT breed_code FROM Dogs GROUP BY breed_code ORDER BY COUNT(*) LIMIT 1 );
+SELECT Owners.first_name, Dogs.name FROM Owners JOIN Dogs ON Owners.owner_id = Dogs.owner_id WHERE Owners.state = 'Virginia';
+SELECT Owners.first_name, Dogs.name FROM Owners JOIN Dogs ON Owners.owner_id = Dogs.owner_id WHERE Owners.state = 'Virginia';
+SELECT T1.date_arrived, T1.date_departed FROM Dogs AS T1 INNER JOIN Treatments AS T2 ON T1.dog_id = T2.dog_id;
+SELECT T1.date_arrived, T1.date_departed FROM Dogs AS T1 INNER JOIN Treatments AS T2 ON T1.dog_id = T2.dog_id;
+SELECT last_name FROM Owners WHERE owner_id = ( SELECT owner_id FROM Dogs ORDER BY STRFTIME('%Y', date_of_birth) DESC, STRFTIME('%m', date_of_birth) DESC, STRFTIME('%d', date_of_birth) DESC LIMIT 1 );
+SELECT last_name FROM Owners WHERE owner_id = ( SELECT owner_id FROM Dogs ORDER BY STRFTIME('%Y', date_of_birth) DESC, STRFTIME('%m', date_of_birth) DESC, STRFTIME('%d', date_of_birth) DESC LIMIT 1 );
+SELECT email_address FROM Professionals WHERE state = 'Hawaii' OR state = 'Wisconsin';
+SELECT email_address FROM Professionals WHERE state = 'Hawaii' OR state = 'Wisconsin';
+SELECT date_arrived, date_departed FROM Dogs;
+SELECT date_arrived, date_departed FROM Dogs;
+SELECT COUNT(DISTINCT dog_id) FROM Treatments;
+SELECT COUNT(DISTINCT dog_id) FROM Treatments;
+SELECT COUNT(DISTINCT professional_id) FROM Treatments;
+SELECT COUNT(DISTINCT professional_id) FROM Treatments;
+SELECT p.role_code, p.street, p.city, p.state FROM Professionals AS p WHERE p.city LIKE '%West%';
+SELECT role_code, street, city, state FROM Professionals WHERE city LIKE '%West%';
+SELECT first_name, last_name, email_address FROM Owners WHERE state LIKE '%North%';
+SELECT first_name, last_name, email_address FROM Owners WHERE state LIKE '%North%';
+SELECT COUNT(*) FROM Dogs WHERE CAST(age AS REAL) < ( SELECT AVG(CAST(age AS REAL)) FROM Dogs );
+SELECT COUNT(*) FROM Dogs WHERE CAST(age AS REAL) < ( SELECT AVG(CAST(age AS REAL)) FROM Dogs );
+SELECT MAX(cost_of_treatment) FROM Treatments;
+SELECT cost_of_treatment FROM Treatments ORDER BY date_of_treatment DESC LIMIT 1;
+SELECT COUNT(*) FROM Dogs WHERE dog_id NOT IN ( SELECT dog_id FROM Treatments );
+SELECT COUNT(*) FROM Dogs WHERE dog_id NOT IN ( SELECT dog_id FROM Treatments );
+SELECT COUNT(owner_id) FROM Owners WHERE owner_id NOT IN ( SELECT owner_id FROM Dogs );
+SELECT COUNT(owner_id) FROM Owners WHERE owner_id NOT IN ( SELECT owner_id FROM Dogs );
+SELECT COUNT(*) FROM Professionals WHERE professional_id NOT IN ( SELECT professional_id FROM Treatments );
+SELECT COUNT(*) FROM Professionals WHERE professional_id NOT IN ( SELECT professional_id FROM Treatments );
+SELECT name, age, weight FROM Dogs WHERE abandoned_yn = '1';
+SELECT name, age, weight FROM Dogs WHERE abandoned_yn = '1';
+SELECT AVG(CAST(REPLACE(age, ' years', '') AS REAL)) FROM Dogs;
+SELECT AVG(CAST(REPLACE(age, ' years', '') AS REAL)) FROM Dogs;
+SELECT MAX(STRFTIME('%Y', 'now') - STRFTIME('%Y', date_of_birth)) FROM Dogs;
+SELECT MAX(STRFTIME('%Y', 'now') - STRFTIME('%Y', date_of_birth)) FROM Dogs;
+SELECT charge_type, SUM(charge_amount) FROM Charges GROUP BY charge_type;
+SELECT charge_type, charge_amount FROM Charges;
+SELECT MAX(charge_amount) FROM Charges;
+SELECT MAX(charge_amount) FROM Charges;
+SELECT email_address, cell_number, home_phone FROM Professionals;
+SELECT email_address, cell_number, home_phone FROM Professionals;
+SELECT B.breed_name, S.size_description FROM Breeds AS B JOIN Dogs AS D ON B.breed_code = D.breed_code JOIN Sizes AS S ON D.size_code = S.size_code;
+SELECT DISTINCT B.breed_name, S.size_description FROM Dogs AS D JOIN Breeds AS B ON D.breed_code = B.breed_code JOIN Sizes AS S ON D.size_code = S.size_code;
+SELECT p.first_name, tt.treatment_type_description FROM Professionals AS p JOIN Treatments AS t ON p.professional_id = t.professional_id JOIN Treatment_Types AS tt ON t.treatment_type_code = tt.treatment_type_code;
+SELECT p.first_name, tt.treatment_type_description FROM Professionals AS p JOIN Treatments AS t ON p.professional_id = t.professional_id JOIN Treatment_Types AS tt ON t.treatment_type_code = tt.treatment_type_code;
+SELECT COUNT(*) FROM singer;
+SELECT COUNT(*) FROM singer;
+SELECT Name FROM singer ORDER BY Net_Worth_Millions ASC;
+SELECT Name FROM singer ORDER BY Net_Worth_Millions ASC;
+SELECT Birth_Year, Citizenship FROM singer;
+SELECT Birth_Year, Citizenship FROM singer;
+SELECT Name FROM singer WHERE Citizenship <> 'France';
+SELECT Name FROM singer WHERE Citizenship <> 'French';
+SELECT Name FROM singer WHERE Birth_Year = 1948 OR Birth_Year = 1949;
+SELECT Name FROM singer WHERE Birth_Year = 1948 OR Birth_Year = 1949;
+SELECT Name FROM singer ORDER BY Net_Worth_Millions DESC LIMIT 1;
+SELECT Name FROM singer ORDER BY Net_Worth_Millions DESC LIMIT 1;
+SELECT Citizenship, COUNT(*) AS Number_of_Singers FROM singer GROUP BY Citizenship;
+SELECT Citizenship, COUNT(*) AS Number_of_Singers FROM singer GROUP BY Citizenship;
+SELECT Citizenship FROM singer GROUP BY Citizenship ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT Citizenship FROM singer GROUP BY Citizenship ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT Citizenship, MAX(Net_Worth_Millions) FROM singer GROUP BY Citizenship;
+SELECT Citizenship, MAX(Net_Worth_Millions) FROM singer GROUP BY Citizenship;
+SELECT song.Title, singer.Name FROM song JOIN singer ON song.Singer_ID = singer.Singer_ID;
+SELECT T1.Title, T2.Name FROM song AS T1 INNER JOIN singer AS T2 ON T1.Singer_ID = T2.Singer_ID;
+SELECT DISTINCT Name FROM singer WHERE Singer_ID IN ( SELECT Singer_ID FROM song WHERE Sales > 300000 );
+SELECT T1.Name FROM singer AS T1 INNER JOIN song AS T2 ON T1.Singer_ID = T2.Singer_ID WHERE T2.Sales > 300000;
+SELECT Name FROM singer WHERE Singer_ID IN ( SELECT Singer_ID FROM song GROUP BY Singer_ID HAVING COUNT(*) > 1 );
+SELECT Name FROM singer WHERE Singer_ID IN ( SELECT Singer_ID FROM song GROUP BY Singer_ID HAVING COUNT(*) > 1 );
+SELECT s.Name, SUM(so.Sales) AS TotalSales FROM singer AS s JOIN song AS so ON s.Singer_ID = so.Singer_ID GROUP BY s.Name;
+SELECT s.Name, SUM(so.Sales) AS TotalSales FROM singer AS s JOIN song AS so ON s.Singer_ID = so.Singer_ID GROUP BY s.Name;
+SELECT Name FROM singer EXCEPT SELECT s.Name FROM singer AS s JOIN song AS so ON s.Singer_ID = so.Singer_ID;
+SELECT Name FROM singer EXCEPT SELECT s.Name FROM singer AS s JOIN song AS so ON s.Singer_ID = so.Singer_ID;
+SELECT Citizenship FROM singer WHERE Birth_Year < 1945 INTERSECT SELECT Citizenship FROM singer WHERE Birth_Year > 1955;
+SELECT Citizenship FROM singer WHERE Birth_Year < 1945 INTERSECT SELECT Citizenship FROM singer WHERE Birth_Year > 1955;
+SELECT COUNT(*) FROM Other_Available_Features;
+SELECT feature_type_name FROM Ref_Feature_Types WHERE feature_type_code = ( SELECT feature_type_code FROM Other_Available_Features WHERE feature_name = 'AirCon' );
+SELECT property_type_description FROM Ref_Property_Types WHERE property_type_code IN ( SELECT property_type_code FROM Properties );
+SELECT property_name FROM Properties WHERE property_type_code IN ( SELECT property_type_code FROM Ref_Property_Types WHERE property_type_description LIKE '%house%' OR property_type_description LIKE '%apartment%' ) AND room_count > 1;
