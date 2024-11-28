@@ -37,7 +37,7 @@ def normalize_query_from_llama(query):
     if sql_code_block:
         sql_query = sql_code_block.group(1).strip()
     else:
-        sql_query = ''
+        sql_query = query
     
     sql_query = re.sub(r'\s+', ' ', sql_query).strip()
     
@@ -82,12 +82,16 @@ def get_sql_query_from_gemini(question, schema, prompt_template):
         return None
 
 def get_sql_query_from_ollama_llama(schema, question, prompt_template):
-    ollama = Ollama(model="llama3.1")
+    ollama = Ollama(model="llama3.1",
+                    temperature=0,
+                    top_p=0.95,
+                    top_k=64)
     prompt = prompt_template.format(schema=schema, question=question)
     print(prompt)
     try:
         # Make the request ursing the Ollama wrapper
         response = ollama.invoke(prompt)
+        print(f"RESPONSE from Llama: {response}")
         return response
     except Exception as e:
         print(f"Error querying llama: {e}")
@@ -166,7 +170,7 @@ def generate_sql_queries(dataset_name, prompt_templates, model, limit=5):
         base_filename_gold = f'gold_{prompt_key}_{model}.txt'
         # Loop through the dataset examples
         for idx, example in enumerate(factory.dataset):
-            # if idx < 748:  # last = idx = 1033
+            # if idx < 488:  # last = idx = 1033
             #     continue
             if idx > limit:
                 break
@@ -204,7 +208,7 @@ def generate_sql_queries(dataset_name, prompt_templates, model, limit=5):
             )
 
             print("-" * 40)
-            time.sleep(30)  # Sleep to avoid API rate limits; value can be adjusted
+            #time.sleep(30)  # Sleep to avoid API rate limits; value can be adjusted
         break    
 
 if __name__ == "__main__":
@@ -212,21 +216,17 @@ if __name__ == "__main__":
         prompt_schemas = json.load(f)
     
     # For SPIDER dataset and Gemini model
-    generate_sql_queries(
-        dataset_name='spider',
-        prompt_templates=prompt_schemas,
-        model='gemini',
-        limit=1034
-    )
-
-    # For SPIDER dataset and llama model
     # generate_sql_queries(
     #     dataset_name='spider',
     #     prompt_templates=prompt_schemas,
-    #     model='llama',
-    #     limit=1
+    #     model='gemini',
+    #     limit=1034
     # )
 
-
-
-    # "prompt_2": "/* Given the following database schema : */\n{schema}\n\n/* Answer the following :\n{question}*/"
+    # For SPIDER dataset and llama model
+    generate_sql_queries(
+        dataset_name='spider',
+        prompt_templates=prompt_schemas,
+        model='llama',
+        limit=1034
+    )
