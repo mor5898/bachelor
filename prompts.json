@@ -1,3 +1,3 @@
 {
-    "prompt_CR_zero_shot": "/* Given the following database schema : */\n{schema}\n\n/* Answer the following :\n{question}*/"
+    "prompt_CR_one_shot": "/* Given the following database schema : */\n{schema}\n\n/* Example: Answer the following:{example_question} */ {example_gold}\n\n/* Answer the following:{question}*/"
 }

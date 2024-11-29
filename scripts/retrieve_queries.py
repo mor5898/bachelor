@@ -21,7 +21,7 @@ generation_config = {
 
 # Define Gemini model 
 model = genai.GenerativeModel(
-    model_name='gemini-1.5-pro',
+    model_name='gemini-1.5-flash',
     generation_config=generation_config
     # Safety settings could be set here
 )
@@ -64,8 +64,11 @@ def create_eval_files(gen_query, gold_query, db_id, gen_file='gen.txt', gold_fil
 
     print(f"Successfully written to files {gen_file} and {gold_file}.")
 
-def get_sql_query_from_gemini(question, schema, prompt_template):
-    prompt = prompt_template.format(schema=schema, question=question)
+def get_sql_query_from_gemini(question, schema, prompt_template, example_question, example_gold):
+    prompt = prompt_template.format(schema=schema, 
+                                    question=question, 
+                                    example_question=example_question,
+                                    example_gold=example_gold)
     print(prompt)
     try:
         response = model.generate_content(prompt)
@@ -81,12 +84,15 @@ def get_sql_query_from_gemini(question, schema, prompt_template):
         print(f"Error during query generation: {e}")
         return None
 
-def get_sql_query_from_ollama_llama(schema, question, prompt_template):
+def get_sql_query_from_ollama_llama(schema, question, prompt_template, example_question, example_gold):
     ollama = Ollama(model="llama3.1",
                     temperature=0,
                     top_p=0.95,
                     top_k=64)
-    prompt = prompt_template.format(schema=schema, question=question)
+    prompt = prompt_template.format(schema=schema, 
+                                    question=question, 
+                                    example_question=example_question,
+                                    example_gold=example_gold)
     print(prompt)
     try:
         # Make the request ursing the Ollama wrapper
@@ -159,7 +165,7 @@ class DatasetFactory:
             return None
 
 # Main function to run SQL generation
-def generate_sql_queries(dataset_name, prompt_templates, model, limit=5):
+def generate_sql_queries(dataset_name, prompt_templates, model, one_shot_examples, limit=5):
     factory = DatasetFactory(dataset_name)
     
     # Loop through different prompts
@@ -176,6 +182,10 @@ def generate_sql_queries(dataset_name, prompt_templates, model, limit=5):
                 break
             
             db_id = example['db_id']
+            for entry in one_shot_examples:
+                if entry.get('db_id') == db_id:
+                    example_question = entry.get('question')
+                    example_gold = entry.get('gold_query')
             question = example['question']
             gold_sql_query = factory.get_gold_query_for_instance(example)
             # Get the schema for the current database
@@ -186,12 +196,16 @@ def generate_sql_queries(dataset_name, prompt_templates, model, limit=5):
                 generated_sql_query = normalize_query(get_sql_query_from_gemini(
                     question=question, 
                     schema=schema, 
-                    prompt_template=prompt_template))
+                    prompt_template=prompt_template,
+                    example_question=example_question,
+                    example_gold=example_gold))
             elif model == 'llama':
                 generated_sql_query = normalize_query_from_llama(get_sql_query_from_ollama_llama(
                     question=question, 
                     schema=schema, 
-                    prompt_template=prompt_template))
+                    prompt_template=prompt_template,
+                    example_question=example_question,
+                    example_gold=example_gold))
 
             print(f"DB ID: {db_id}")
             print(f"Question: {question}")
@@ -208,25 +222,30 @@ def generate_sql_queries(dataset_name, prompt_templates, model, limit=5):
             )
 
             print("-" * 40)
-            #time.sleep(30)  # Sleep to avoid API rate limits; value can be adjusted
+            time.sleep(30)  # Sleep to avoid API rate limits; value can be adjusted
         break    
 
 if __name__ == "__main__":
     with open('prompts.json', 'r') as f:
         prompt_schemas = json.load(f)
+
+    with open('one_shot_examples.json', 'r') as f:
+        one_shot_examples = json.load(f)
     
     # For SPIDER dataset and Gemini model
-    # generate_sql_queries(
-    #     dataset_name='spider',
-    #     prompt_templates=prompt_schemas,
-    #     model='gemini',
-    #     limit=1034
-    # )
-
-    # For SPIDER dataset and llama model
     generate_sql_queries(
         dataset_name='spider',
         prompt_templates=prompt_schemas,
-        model='llama',
+        model='gemini',
+        one_shot_examples=one_shot_examples,
         limit=1034
     )
+
+    # For SPIDER dataset and llama model
+    # generate_sql_queries(
+    #     dataset_name='spider',
+    #     prompt_templates=prompt_schemas,
+    #     model='llama',
+    #     one_shot_examples=one_shot_examples,
+    #     limit=1034
+    # )
