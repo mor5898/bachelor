@@ -1,45 +1,36 @@
-import sqlite3
-import os
+import json
+from datasets import load_dataset
 
-def get_sqlite_schema(db_file_path):
-    if not os.path.isfile(db_file_path):
-        raise FileNotFoundError(f"Die SQLite-Datei wurde nicht gefunden: {db_file_path}")
+dataset = load_dataset('xlangai/spider', split="validation")
 
-    conn = sqlite3.connect(db_file_path)
-    cursor = conn.cursor()
+data = dataset
 
-    cursor.execute("SELECT sql FROM sqlite_master WHERE type IN ('table', 'index', 'trigger', 'view') AND sql NOT NULL;")
-    schema_items = cursor.fetchall()
+def get_queries_by_db_id(data):
+    results = []
+    db_dict = {}
+    for entry in data:
+        db_id = entry.get('db_id')
+        question = entry.get('question')
+        gold_query = entry.get('query')  
+        if question and gold_query:
+            if db_id not in db_dict:
+                db_dict[db_id] = 0
+            if db_dict[db_id] < 3:
+                db_dict[db_id] += 1
+                results.append({
+                    "db_id": db_id,
+                    "question": question,
+                    "gold_query": gold_query
+                })
+    return results
 
-    conn.close()
+queries = get_queries_by_db_id(data)
 
-    schema = "\n\n".join(item[0] for item in schema_items)
-    return schema
+with open('queries.json', 'w', encoding='utf-8') as f:
+    json.dump(queries, f, ensure_ascii=False, indent=4)
 
-def remove_insert_statements(schema):
-    import re
-
-    insert_pattern = re.compile(r'INSERT\s+INTO\s+.*?;', re.IGNORECASE | re.DOTALL)
-
-    cleaned_content = re.sub(insert_pattern, '', schema)
-
-    cleaned_content = re.sub(r'\n\s*\n', '\n\n', cleaned_content)
-
-    return cleaned_content
-
-if __name__ == "__main__":
-    sqlite_file = 'spider/database/voter_1/voter_1.sqlite'
-
-    try:
-        schema = get_sqlite_schema(sqlite_file)
-        print("Originales Schema:")
-        print(schema)
-
-        cleaned_schema = remove_insert_statements(schema)
-        print("\nBereinigtes Schema (ohne INSERT INTO Statements):")
-        print(cleaned_schema)
-
-    except FileNotFoundError as e:
-        print(e)
-    except sqlite3.Error as e:
-        print(f"SQLite-Fehler: {e}")
+for idx, query in enumerate(queries, start=1):
+    print(f"Beispiel {idx}:")
+    print(f"db_id: {query['db_id']}")
+    print(f"Frage: {query['question']}")
+    print(f"Gold Query: {query['gold_query']}\n")
