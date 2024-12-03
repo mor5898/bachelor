@@ -1,3 +1,3 @@
 {
-    "prompt_CR_one_shot": "/* Given the following database schema : */\n{schema}\n\n/* Example: {example_question_1} */ {example_gold_1}\n\n/* Example: {example_question_2} */ {example_gold_2}\n\n/* Example: {example_question_3} */ {example_gold_3}\n\n/* Answer the following:{question}*/"
+    "prompt_CR_few_shot": "/* Given the following database schema : */\n{schema}\n\n/* Example: {example_question_1} */ {example_gold_1}\n\n/* Example: {example_question_2} */ {example_gold_2}\n\n/* Example: {example_question_3} */ {example_gold_3}\n\n/* Answer the following:{question}*/"
 }

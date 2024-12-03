@@ -253,7 +253,7 @@ def generate_sql_queries(dataset_name, prompt_templates, model, one_shot_example
             )
 
             print("-" * 40)
-            time.sleep(30)  # Sleep to avoid API rate limits; value can be adjusted
+           # time.sleep(30)  # Sleep to avoid API rate limits; value can be adjusted
         break    
 
 if __name__ == "__main__":
@@ -264,19 +264,19 @@ if __name__ == "__main__":
         one_shot_examples = json.load(f)
     
     # For SPIDER dataset and Gemini model
-    generate_sql_queries(
-        dataset_name='spider',
-        prompt_templates=prompt_schemas,
-        model='gemini',
-        one_shot_examples=one_shot_examples,
-        limit=1034
-    )
-
-    # For SPIDER dataset and llama model
     # generate_sql_queries(
     #     dataset_name='spider',
     #     prompt_templates=prompt_schemas,
-    #     model='llama',
+    #     model='gemini',
     #     one_shot_examples=one_shot_examples,
     #     limit=1034
     # )
+
+    # For SPIDER dataset and llama model
+    generate_sql_queries(
+        dataset_name='spider',
+        prompt_templates=prompt_schemas,
+        model='llama',
+        one_shot_examples=one_shot_examples,
+        limit=1034
+    )
