@@ -5,7 +5,7 @@ SELECT name, country, age FROM singer ORDER BY age DESC;
 SELECT AVG(age) AS Average_Age, MIN(age) AS Min_Age, MAX(age) AS Max_Age FROM singer WHERE Country = 'France';
 SELECT AVG(age) AS Average_Age, MIN(age) AS Min_Age, MAX(age) AS Max_Age FROM singer WHERE Country = 'France';
 SELECT s.Name, sc.Song_Name, sc."Song_release_year" FROM singer s JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID JOIN concert c ON sic.concert_ID = c.concert_ID JOIN song sc ON sic.concert_ID = sc.concert_ID WHERE s.Age = (SELECT MIN(age) FROM singer)
--- Step 1: Find the ID of the youngest singer SELECT Singer_ID FROM singer ORDER BY Age ASC LIMIT 1; -- Step 2: Get the IDs of all concerts where this singer performed SELECT concert_id FROM singer_in_concert WHERE Singer_ID = <youngest_singer_id>; -- Step 3: For each concert, get the name and release year of the song SELECT s.Name AS Song_Name, sc.Song_release_year FROM singer s JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID JOIN concert c ON sic.concert_ID = c.concert_ID;
+SELECT s.Name AS Song_Name, sc.Song_release_year FROM singer s JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID JOIN concert c ON sic.concert_ID = c.concert_ID;
 SELECT DISTINCT Country FROM singer WHERE Age > 20;
 SELECT DISTINCT Country FROM singer WHERE Age > 20;
 SELECT Country, COUNT(*) as Number_of_singers FROM singer GROUP BY Country;
@@ -973,7 +973,7 @@ SELECT P.role_code, P.street, P.city, P.state FROM Professionals P WHERE P.city 
 SELECT first_name, last_name, email_address FROM Owners WHERE state LIKE '%North%';
 SELECT first_name, last_name, email_address FROM Owners WHERE state LIKE '%North%';
 SELECT COUNT(*) FROM Dogs WHERE age < ( SELECT AVG(age) FROM Dogs );
--- Calculate the average age of all dogs SELECT avg(age) FROM Dogs; -- Count the number of dogs with an age below the average SELECT COUNT(*) FROM Dogs WHERE age < (SELECT avg(age) FROM Dogs);
+SELECT COUNT(*) FROM Dogs WHERE age < (SELECT avg(age) FROM Dogs);
 SELECT MAX(cost_of_treatment) AS max_cost FROM Treatments;
 SELECT MAX(cost_of_treatment) FROM Treatments;
 SELECT COUNT(*) FROM Dogs WHERE dog_id NOT IN ( SELECT dog_id FROM Treatments )

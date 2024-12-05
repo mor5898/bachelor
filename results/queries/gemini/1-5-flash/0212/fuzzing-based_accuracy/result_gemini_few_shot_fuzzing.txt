@@ -1,0 +1,44 @@
+                     easy                 medium               hard                 extra                all                 
+count                248                  446                  174                  166                  1034                
+=====================   EXECUTION ACCURACY     =====================
+execution            0.903                0.753                0.586                0.464                0.715               
+
+====================== EXACT MATCHING ACCURACY =====================
+exact match          0.835                0.471                0.345                0.114                0.480               
+
+---------------------PARTIAL MATCHING ACCURACY----------------------
+select               0.973                0.928                0.946                0.944                0.947               
+select(no AGG)       0.977                0.945                0.955                0.944                0.957               
+where                0.915                0.613                0.508                0.246                0.604               
+where(no OP)         0.936                0.620                0.607                0.290                0.636               
+group(no Having)     0.944                0.880                0.926                0.708                0.862               
+group                0.944                0.760                0.926                0.708                0.830               
+order                0.955                0.956                1.000                0.783                0.938               
+and/or               1.000                0.980                0.953                0.911                0.970               
+IUEN                 0.000                0.000                0.429                0.833                0.476               
+keywords             0.963                0.837                0.696                0.489                0.784               
+---------------------- PARTIAL MATCHING RECALL ----------------------
+select               0.871                0.608                0.609                0.512                0.656               
+select(no AGG)       0.875                0.619                0.615                0.512                0.662               
+where                0.796                0.505                0.330                0.181                0.473               
+where(no OP)         0.815                0.511                0.394                0.213                0.498               
+group(no Having)     0.850                0.165                0.641                0.215                0.299               
+group                0.850                0.143                0.641                0.215                0.288               
+order                0.955                0.867                0.582                0.228                0.589               
+and/or               0.996                1.000                0.982                0.941                0.987               
+IUEN                 0.000                0.000                0.357                0.147                0.263               
+keywords             0.860                0.516                0.448                0.265                0.514               
+---------------------- PARTIAL MATCHING F1 --------------------------
+select               0.919                0.734                0.741                0.664                0.775               
+select(no AGG)       0.923                0.748                0.748                0.664                0.783               
+where                0.851                0.554                0.400                0.209                0.531               
+where(no OP)         0.871                0.560                0.477                0.245                0.559               
+group(no Having)     0.895                0.278                0.758                0.330                0.444               
+group                0.895                0.241                0.758                0.330                0.427               
+order                0.955                0.909                0.736                0.353                0.723               
+and/or               0.998                0.990                0.967                0.926                0.978               
+IUEN                 1.000                1.000                0.390                0.250                0.339               
+keywords             0.908                0.638                0.545                0.344                0.621               
+---------------------------------------------------------------------------------------------------------------
+prompt = "/* Given the following database schema : */\n{schema}\n\n/* Example: {example_question_1} */ {example_gold_1}\n\n/* Example: {example_question_2} */ {example_gold_2}\n\n/* Example: {example_question_3} */ {example_gold_3}\n\n/* Answer the following:{question}*/"
+model = gemini-1.5-flash (Temperature = 0) 
