@@ -7,8 +7,7 @@ import time
 import json
 import sqlite3
 
-# Configure the Gemini API key
-genai.configure(api_key="AIzaSyCpD91ZQhn_GKxWlhK8sUqGq3Op3utpa1Y")
+genai.configure(api_key="AI...")
 
 # Model config
 generation_config = {
@@ -16,14 +15,12 @@ generation_config = {
   "top_p": 0.95, # Implements nucleus sampling
   "top_k": 64, # Tokens are taken from the top k most probable tokens -> K-Nearest Neighbour
   "max_output_tokens": 8192,
-  "response_mime_type": "text/plain", # JSON?
+  "response_mime_type": "text/plain", 
 }
 
-# Define Gemini model 
 model = genai.GenerativeModel(
     model_name='gemini-1.5-flash',
     generation_config=generation_config
-    # Safety settings could be set here
 )
     
 def normalize_query(query):
@@ -44,16 +41,6 @@ def normalize_query_from_llama(query):
     return sql_query
 
 def create_eval_files(gen_query, gold_query, db_id, gen_file='gen.txt', gold_file='gold.txt'):
-    """
-    Creates gen.txt and gold.txt for evaluation based on generated and gold SQL queries.
-    
-    :param gen_query: generated SQL query
-    :param gold_query: gold SQL query
-    :param db_id: Database identifier (same for all queries)
-    :param gen_file: File name for generated queries (default: gen.txt)
-    :param gold_file: File name for gold queries (default: gold.txt)
-    """
-
     # gen
     with open(gen_file, 'a') as gen_f:
         gen_f.write(f"{gen_query.strip()}\n")
@@ -79,8 +66,6 @@ def get_sql_query_from_gemini(question, schema, prompt_template,
     print(prompt)
     try:
         response = model.generate_content(prompt)
-        #print(f"Raw API Response: {response}")
-        #print(response)
         if response and hasattr(response, 'text'):
             print(response.text)
             return response.text
@@ -109,7 +94,6 @@ def get_sql_query_from_ollama_llama(schema, question, prompt_template,
                                     example_gold_3=example_gold_3)
     print(prompt)
     try:
-        # Make the request ursing the Ollama wrapper
         response = ollama.invoke(prompt)
         print(f"RESPONSE from Llama: {response}")
         return response
@@ -117,7 +101,6 @@ def get_sql_query_from_ollama_llama(schema, question, prompt_template,
         print(f"Error querying llama: {e}")
         return None
     
-# Factory for handling dataset-specific logic
 class DatasetFactory:
     def __init__(self, dataset_name):
         self.dataset_name = dataset_name
@@ -125,7 +108,7 @@ class DatasetFactory:
 
     def load_dataset(self):
         if self.dataset_name == "spider":
-            return load_dataset("xlangai/spider")['validation'] # Should be changed!!!
+            return load_dataset("xlangai/spider")['validation'] 
         else:
             raise ValueError(f"Unknown dataset: {self.dataset_name}")
 
@@ -190,8 +173,6 @@ def generate_sql_queries(dataset_name, prompt_templates, model, one_shot_example
         base_filename_gold = f'gold_{prompt_key}_{model}.txt'
         # Loop through the dataset examples
         for idx, example in enumerate(factory.dataset):
-            # if idx < 488:  # last = idx = 1033
-            #     continue
             if idx > limit:
                 break
             
@@ -211,7 +192,6 @@ def generate_sql_queries(dataset_name, prompt_templates, model, one_shot_example
                 continue
             question = example['question']
             gold_sql_query = factory.get_gold_query_for_instance(example)
-            # Get the schema for the current database
             schema = factory.get_database_schema(db_id) 
             
             # Generate SQL query from model
